@@ -1,0 +1,38 @@
+Package: annsearchR
+Title: Fast Approximate Nearest Neighbour Search
+Version: 0.0.1
+Authors@R: 
+    c(
+        person(
+            given = "Gregor", 
+            family = "Lueg", 
+            email = "gregorlueg@me.com", 
+            role = c("aut", "cre")
+        )
+    )
+Description: 
+    R interface to the Rust crate 'ann-search-rs'. Build an exact or
+    approximate nearest neighbour index once (HNSW, Annoy, IVF, NNDescent,
+    Vamana and more), keep it in memory behind an R6 object and query it as
+    often as you like. Multi-threaded via Rayon, with f32 or f64 storage.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Imports: 
+    checkmate,
+    lifecycle,
+    methods,
+    R6,
+    stats
+Config/rextendr/version: 0.5.0
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.90, xz
+Depends: 
+    R (>= 4.2)
+Suggests: 
+    BiocNeighbors,
+    data.table,
+    hdf5r,
+    RcppAnnoy,
+    RcppHNSW,
+    tinytest
+Config/roxygen2/version: 8.1.0
