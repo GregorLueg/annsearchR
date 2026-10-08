@@ -9,7 +9,9 @@
 # ef_construction = 200; Annoy 50 trees), then the search-time knob is swept.
 # Compare libraries at equal recall, not at equal settings: the summary gives
 # the best queries per second each library reaches at recall >= 0.9 / 0.95 /
-# 0.99. RcppAnnoy, FNN and RANN are single-threaded whatever `threads` says.
+# 0.99. FNN and RANN are single-threaded whatever `threads` says. RcppAnnoy
+# builds single-threaded; with threads > 1 its queries are forked over chunks
+# via parallel::mclapply (not available on Windows), fork cost included.
 # FNN and RANN are exact kd-trees and run on a query subset; QPS normalises.
 # BiocNeighbors bakes the search knob into the prebuilt index, so its HNSW and
 # Annoy get one matched point each rather than a sweep.
@@ -120,11 +122,21 @@ exact <- list(
 )
 cat(sprintf("  sanity: exhaustive recall vs file truth = %.4f\n", exact[[1]]$recall))
 
+b <- timed_build("annsearchR kmknn", annsearchR::KmknnIndex$new(ds$train))
+exact[[length(exact) + 1L]] <- sweep_point(
+  "annsearchR",
+  "kmknn",
+  b$build_s,
+  "-",
+  \() b$index$predict(ds$test, k = k, return_dist = FALSE)$idx,
+  all_rows
+)
+
 b <- timed_build(
   "BiocNeighbors kmknn",
   BiocNeighbors::buildIndex(ds$train, BNPARAM = BiocNeighbors::KmknnParam())
 )
-exact[[2]] <- sweep_point(
+exact[[length(exact) + 1L]] <- sweep_point(
   "BiocNeighbors",
   "kmknn",
   b$build_s,
@@ -142,7 +154,7 @@ exact[[2]] <- sweep_point(
 )
 
 sub_rows <- seq_len(n_exact_tree_queries)
-exact[[3]] <- sweep_point(
+exact[[length(exact) + 1L]] <- sweep_point(
   "FNN",
   "kd_tree",
   0,
@@ -157,7 +169,7 @@ exact[[3]] <- sweep_point(
   },
   sub_rows
 )
-exact[[4]] <- sweep_point(
+exact[[length(exact) + 1L]] <- sweep_point(
   "RANN",
   "kd_tree",
   0,
@@ -280,26 +292,39 @@ b <- timed_build("RcppAnnoy annoy", {
   a$build(annoy_trees)
   a
 })
+rcppannoy_query <- function(rows, sk) {
+  res <- matrix(NA_integer_, length(rows), k)
+  for (j in seq_along(rows)) {
+    res[j, ] <- b$index$getNNsByVectorList(ds$test[rows[j], ], k, sk, FALSE)$item +
+      1L
+  }
+  res
+}
+# RcppAnnoy has no threaded or batch query; the only route to more cores from
+# R is forking over query chunks. Forks inherit the built index.
+rcppannoy_label <- if (threads > 1L) "RcppAnnoy (fork)" else "RcppAnnoy"
+query_chunks <- split(all_rows, cut(all_rows, threads, labels = FALSE))
 annoy <- c(
   annoy,
   lapply(search_k_grid, \(sk) {
     sweep_point(
-      "RcppAnnoy",
+      rcppannoy_label,
       "annoy",
       b$build_s,
       sprintf("search_k=%d", sk),
       \() {
-        res <- matrix(NA_integer_, n_query, k)
-        for (i in all_rows) {
-          res[i, ] <- b$index$getNNsByVectorList(
-            ds$test[i, ],
-            k,
-            sk,
-            FALSE
-          )$item +
-            1L
+        if (threads == 1L) {
+          return(rcppannoy_query(all_rows, sk))
         }
-        res
+        do.call(
+          rbind,
+          parallel::mclapply(
+            query_chunks,
+            rcppannoy_query,
+            sk = sk,
+            mc.cores = threads
+          )
+        )
       },
       all_rows
     )
