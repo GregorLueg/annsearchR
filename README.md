@@ -62,9 +62,21 @@ rustc --version
 
 ### Install annsearchR
 
-Install from source. That will compile all of the Rust crates from scratch.
+You can install the package from [r-universe.dev](https://gregorlueg.r-universe.dev/annsearchR)
+as a pre-compiled binary.
 
 ```r
+# Install from r-universe (pre-compiled)
+install.packages(
+  'annsearchR',
+  repos = c('https://gregorlueg.r-universe.dev', 'https://cloud.r-project.org')
+)
+```
+
+Or install from source. That will compile all of the Rust crates from scratch.
+
+```r
+# Install from source
 remotes::install_github("GregorLueg/annsearchR")
 ```
 
