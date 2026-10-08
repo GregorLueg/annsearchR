@@ -13,3 +13,7 @@
 ^scratch.*\.R$
 ^inst/benchmarks/cache$
 ^\.git$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes/articles$

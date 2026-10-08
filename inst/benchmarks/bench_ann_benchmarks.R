@@ -317,7 +317,7 @@ rcppannoy_query <- function(rows, sk) {
 # RcppAnnoy has no threaded or batch query; the only route to more cores from
 # R is forking over query chunks. Forks inherit the built index.
 rcppannoy_label <- if (threads > 1L) "RcppAnnoy (fork)" else "RcppAnnoy"
-query_chunks <- split(all_rows, cut(all_rows, threads, labels = FALSE))
+query_chunks <- parallel::splitIndices(n_query, threads)
 annoy <- c(
   annoy,
   lapply(search_k_grid, \(sk) {

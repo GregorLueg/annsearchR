@@ -31,9 +31,17 @@ Depends:
 Suggests: 
     BiocNeighbors,
     data.table,
+    FNN,
+    ggplot2,
     hdf5r,
+    knitr,
+    RANN,
     RcppAnnoy,
     RcppHNSW,
+    rmarkdown,
     rnndescent,
+    scales,
     tinytest
 Config/roxygen2/version: 8.1.0
+VignetteBuilder: knitr
+URL: https://gregorlueg.github.io/annsearchR/, https://github.com/GregorLueg/annsearchR

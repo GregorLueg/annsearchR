@@ -1,0 +1,72 @@
+url: https://gregorlueg.github.io/annsearchR/
+
+template:
+  bootstrap: 5
+  light-switch: true
+  theme: atom-one-light
+  theme-dark: atom-one-dark
+  bslib:
+    primary: "#3F51B5"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+home:
+  title: "annsearchR"
+  description:
+    "Fast exact and approximate nearest neighbour search for R. Build an index
+    once (HNSW, Annoy, IVF, NN-Descent and more), keep it in memory and query
+    it as often as you like. Backed by the Rust crate ann-search-rs."
+navbar:
+  structure:
+    left: [intro, reference, news, articles]
+    right: [search, lightswitch, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/GregorLueg/annsearchR
+      aria-label: GitHub
+
+articles:
+  - title: "Articles"
+    navbar: ~
+    contents:
+      - annsearchR
+      - articles/benchmarks
+
+reference:
+  - title: "Exact indices"
+    desc: "Recall 1 by construction"
+    contents:
+      - ExhaustiveIndex
+      - KmknnIndex
+  - title: "Tree indices"
+    desc: "Random projection and space partitioning forests"
+    contents:
+      - AnnoyIndex
+      - KdTreeIndex
+      - BallTreeIndex
+  - title: "Partition indices"
+    desc: "k-means cells and hashing"
+    contents:
+      - IvfIndex
+      - SoarIndex
+      - LshIndex
+  - title: "Graph indices"
+    desc: "Navigable neighbour graphs"
+    contents:
+      - HnswIndex
+      - NNDescentIndex
+      - VamanaIndex
+      - NsgIndex
+      - RnnDescentIndex
+  - title: "Shared interface"
+    desc: "Querying, saving and loading any index"
+    contents:
+      - AnnIndex
+      - predict.AnnIndex
+      - load_ann_index
+  - title: "Utilities"
+    contents:
+      - ann_set_threads
+      - ann_get_threads
+      - knn_recall
+      - generate_clustered_data

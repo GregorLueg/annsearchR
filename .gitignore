@@ -13,7 +13,8 @@ vendor.tar.xz
 scratch.R
 scratch_*.R
 inst/benchmarks/cache/
-inst/benchmarks/results/
 
 # Claude
 .claude/worktrees/*
+docs
+inst/doc
