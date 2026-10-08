@@ -1,0 +1,22 @@
+# R
+.Rproj.user
+.Rhistory
+
+# Apple
+.DS_Store
+src/rust/vendor
+src/Makevars
+src/Makevars.win
+vendor.tar.xz
+
+# others
+scratch.R
+scratch_*.R
+inst/benchmarks/cache/
+
+# Claude
+.claude/worktrees/*
+docs
+inst/doc
+/doc/
+/Meta/

@@ -1,0 +1,276 @@
+---
+title: "Getting started with annsearchR"
+date: last-modified
+date-format: YYYY-MM-DD
+vignette: >
+  %\VignetteIndexEntry{Getting started with annsearchR}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: '#>'
+author:
+  - name: Gregor Lueg
+---
+
+```{r}
+#| label: threads
+#| include: false
+annsearchR::ann_set_threads(2L)
+```
+
+annsearchR gives R the CPU indices of the Rust crate
+[ann-search-rs](https://github.com/GregorLueg/ann-search-rs). You build an
+index once, it lives in Rust memory behind an R6 object, and you query it as
+often as you like. Thirteen index types share one interface, so swapping HNSW
+for IVF is a one-word change.
+
+```{r}
+#| label: setup
+library(annsearchR)
+```
+
+## Build and query
+
+We need some data. `generate_clustered_data()` is the same Gaussian cluster
+generator the Rust crate uses for its own benchmarks. We hold back a few rows
+as queries.
+
+```{r}
+#| label: data
+dat <- generate_clustered_data(20000L, 32L, n_clusters = 20L, seed = 42L)$data
+query <- dat[1:500, ]
+train <- dat[-(1:500), ]
+```
+
+Build an HNSW index and ask for the 10 nearest neighbours of each query:
+
+```{r}
+#| label: build-hnsw
+hnsw <- HnswIndex$new(train, metric = "euclidean")
+hnsw
+
+res <- hnsw$predict(query, k = 10L)
+str(res)
+```
+
+`idx` holds 1-based row indices into `train`, `dist` the distances. Both are
+queries x k matrices. Euclidean comes back as true Euclidean distance; use
+`metric = "sqeuclidean"` if you want the squared version and save the square
+root. Don't need the distances? `return_dist = FALSE` skips them.
+
+Prefer functions over methods? `predict()` works too:
+
+```{r}
+#| label: predict-s3
+identical(predict(hnsw, query, k = 10L), res)
+```
+
+## Is it right? Measure recall
+
+Approximate means approximate. `ExhaustiveIndex` compares every query to every
+point, so it gives the exact answer, and `knn_recall()` tells you what
+fraction of the true neighbours the approximate index found.
+
+```{r}
+#| label: recall
+truth <- ExhaustiveIndex$new(train)$predict(query, k = 10L)$idx
+knn_recall(truth, res$idx)
+```
+
+Brute force is no slouch here either: it is SIMD accelerated, multi-threaded
+and, on macOS, runs large batches through Apple Accelerate. Up to a few hundred
+thousand points it's worth timing before reaching for anything approximate.
+
+## Tune at query time
+
+Every approximate index has a search-time knob, exposed as a field you can
+change after the build. For HNSW it's `ef_search`, the width of the beam that
+walks the graph. Wider beam, better recall, slower queries:
+
+```{r}
+#| label: ef-search-sweep
+for (ef in c(10L, 20L, 50L, 100L)) {
+  hnsw$ef_search <- ef
+  t <- system.time(r <- hnsw$predict(query, k = 10L))[["elapsed"]]
+  cat(sprintf(
+    "ef_search = %3d   recall %.3f   %.3fs\n",
+    ef,
+    knn_recall(truth, r$idx),
+    t
+  ))
+}
+```
+
+The knobs per index:
+
+| Index | Knob(s) |
+|---|---|
+| `HnswIndex` | `ef_search` |
+| `NNDescentIndex`, `VamanaIndex`, `NsgIndex` | `ef_search` |
+| `RnnDescentIndex` | `ef_search`, `k_search` |
+| `AnnoyIndex`, `KdTreeIndex`, `BallTreeIndex` | `search_budget` |
+| `IvfIndex`, `SoarIndex` | `nprobe` |
+| `LshIndex` | `n_probe`, `max_candidates` |
+
+`NULL` lets the Rust crate pick its own default. Build-time parameters (graph
+degree, number of trees, number of cells) are constructor arguments and need a
+rebuild.
+
+## Which index?
+
+```{r}
+#| label: compare-indices
+indices <- list(
+  exhaustive = ExhaustiveIndex,
+  kmknn = KmknnIndex,
+  annoy = AnnoyIndex,
+  kdtree = KdTreeIndex,
+  balltree = BallTreeIndex,
+  hnsw = HnswIndex,
+  ivf = IvfIndex,
+  soar = SoarIndex,
+  lsh = LshIndex,
+  nndescent = NNDescentIndex,
+  vamana = VamanaIndex,
+  nsg = NsgIndex,
+  rnndescent = RnnDescentIndex
+)
+
+comparison <- do.call(
+  rbind,
+  lapply(names(indices), \(nm) {
+    t_build <- system.time(idx <- indices[[nm]]$new(train))[["elapsed"]]
+    t_query <- system.time(r <- idx$predict(query, k = 10L))[["elapsed"]]
+    data.frame(
+      index = nm,
+      build_s = t_build,
+      query_s = t_query,
+      recall = round(knn_recall(truth, r$idx), 3)
+    )
+  })
+)
+comparison
+```
+
+These are default settings on small, easy data with two threads, so read the
+table for the shape of things, not as a benchmark. For that, see the
+[benchmarks article](https://gregorlueg.github.io/annsearchR/articles/benchmarks.html), which compares annsearchR
+against RcppHNSW, RcppAnnoy, BiocNeighbors, rnndescent, FNN and RANN at equal
+recall on Fashion-MNIST and SIFT.
+
+What each family does:
+
+* **Exact:** `ExhaustiveIndex` scores every point. `KmknnIndex` prunes whole
+  k-means clusters by the triangle inequality, with the same answers. On
+  Fashion-MNIST and SIFT brute force won, so time both on your data.
+* **Graphs:** `HnswIndex`, `VamanaIndex`, `NsgIndex` and `RnnDescentIndex`
+  build a navigable neighbour graph and walk it. `NNDescentIndex` builds the
+  kNN graph directly, which makes it the one to use when you want the graph of
+  the data itself (see below). In the benchmarks HNSW had the best recall per
+  query time.
+* **Partitions:** `IvfIndex` cuts the space into k-means cells and searches the
+  closest `nprobe` of them. `SoarIndex` adds a second cell per point.
+  `LshIndex` buckets points by random projections.
+* **Trees:** `AnnoyIndex` and `KdTreeIndex` are forests of random splits.
+  `BallTreeIndex` is a metric tree whose default `search_budget` (5% of the
+  points) is approximate; raise it for recall.
+
+## The kNN graph of the data itself
+
+UMAP, clustering, graph diffusion: often you want the neighbours of every point
+in the index, not of new queries. `$query_self()` does that through each
+index's own fast path, and counts each point as its own first neighbour:
+
+```{r}
+#| label: query-self
+knn <- hnsw$query_self(k = 15L)
+dim(knn$idx)
+all(knn$idx[, 1] == seq_len(nrow(train)))
+```
+
+`NNDescentIndex` goes one better. NN-Descent builds the kNN graph directly, so
+`$extract_knn()` hands it back without any search at all:
+
+```{r}
+#| label: extract-knn
+nnd <- NNDescentIndex$new(train, k_graph = 15L)
+graph <- nnd$extract_knn()
+
+truth_self <- ExhaustiveIndex$new(train)$query_self(k = 15L)$idx
+knn_recall(truth_self, graph$idx)
+```
+
+Leave `diversify_prob` at 0 if extraction is the point: pruning edges makes a
+better search graph and a worse kNN graph.
+
+## Metrics and precision
+
+Four metrics: `"euclidean"`, `"sqeuclidean"`, `"cosine"` (returned as
+`1 - cosine similarity`) and `"manhattan"`. Annoy, BallTree, KMKNN, IVF, SOAR
+and LSH don't support Manhattan, and say so:
+
+```{r}
+#| label: manhattan-error
+#| error: true
+AnnoyIndex$new(train, metric = "manhattan")
+```
+
+Data is stored as 32-bit floats by default, which halves the memory against R's
+doubles. `precision = "double"` keeps 64 bits if you need them:
+
+```{r}
+#| label: precision
+hnsw64 <- HnswIndex$new(train, precision = "double")
+hnsw64$precision
+```
+
+## Threads
+
+Builds and queries are parallel over all cores by default.
+`ann_set_threads()` installs a dedicated pool and can be called as often as you
+like:
+
+```{r}
+#| label: set-threads
+old <- ann_set_threads(1L)
+ann_get_threads()
+ann_set_threads(0L) # back to all cores
+```
+
+HNSW inserts nodes in parallel, so two multi-threaded builds with the same seed
+give slightly different graphs. Need bit-identical results? Build on one
+thread.
+
+## Saving and loading
+
+The index lives in Rust memory, so `saveRDS()` can't see it. A restored object
+holds a dead pointer and tells you so instead of crashing:
+
+```{r}
+#| label: dead-pointer
+#| error: true
+restored <- unserialize(serialize(hnsw, NULL))
+restored$predict(query, k = 10L)
+```
+
+Use `$save()` and `load_ann_index()` instead. The search knobs and metric
+travel with the index:
+
+```{r}
+#| label: save-load
+dir <- tempfile()
+hnsw$ef_search <- 80L
+hnsw$save(dir)
+
+loaded <- load_ann_index(dir)
+loaded
+identical(loaded$predict(query, k = 10L), hnsw$predict(query, k = 10L))
+```
+
+```{r}
+#| label: reset-threads
+#| include: false
+annsearchR::ann_set_threads(0L)
+```
