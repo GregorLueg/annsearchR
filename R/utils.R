@@ -64,37 +64,3 @@ knn_recall <- function(truth, approx, k = NULL) {
   storage.mode(approx) <- "integer"
   rs_knn_recall(truth, approx)
 }
-
-# synthetic data ---------------------------------------------------------------
-
-#' Generate clustered synthetic data
-#'
-#' @description
-#' Gaussian clusters with random centres and per-cluster spread. The same
-#' generator the Rust crate uses for its own benchmarks, so results line up
-#' with `cargo run --example gridsearch_*`.
-#'
-#' @param n Integer. Number of samples.
-#' @param dim Integer. Number of features.
-#' @param n_clusters Integer. Number of clusters.
-#' @param seed Integer. Random seed.
-#'
-#' @returns A list with:
-#' \itemize{
-#'   \item data - Numeric matrix, n x dim.
-#'   \item labels - Integer vector of 1-based cluster labels.
-#' }
-#'
-#' @export
-generate_clustered_data <- function(n, dim, n_clusters = 25L, seed = 42L) {
-  checkmate::qassert(n, "X1[1,)")
-  checkmate::qassert(dim, "X1[1,)")
-  checkmate::qassert(n_clusters, "X1[1,)")
-  checkmate::qassert(seed, "X1[0,)")
-  rs_data_clustered(
-    as.integer(n),
-    as.integer(dim),
-    as.integer(n_clusters),
-    as.integer(seed)
-  )
-}

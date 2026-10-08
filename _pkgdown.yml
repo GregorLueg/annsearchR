@@ -69,7 +69,14 @@ reference:
       - ann_set_threads
       - ann_get_threads
       - knn_recall
+  - title: "Synthetic data"
+    desc: "The generators behind the ann-search-rs benchmark tables"
+    contents:
       - generate_clustered_data
+      - generate_correlated_data
+      - generate_low_rank_data
+      - generate_cell_embeddings
+      - subsample_queries
   - title: "Rust wrappers"
     desc: "Everything rusty - only use this if you know what you are doing..."
     contents:

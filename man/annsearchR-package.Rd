@@ -6,6 +6,8 @@
 \alias{annsearchR-package}
 \title{annsearchR: Fast Approximate Nearest Neighbour Search}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 R interface to the Rust crate 'ann-search-rs'. Build an exact or approximate nearest neighbour index once (HNSW, Annoy, IVF, NNDescent, Vamana and more), keep it in memory behind an R6 object and query it as often as you like. Multi-threaded via Rayon, with f32 or f64 storage.
 }
 \seealso{

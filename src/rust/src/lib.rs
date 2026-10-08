@@ -7,6 +7,7 @@
 pub mod convert;
 pub mod handle;
 pub mod pool;
+pub mod synthetic;
 pub mod utils;
 
 pub mod annoy;
@@ -29,6 +30,7 @@ extendr_module! {
     mod annsearchR;
     use handle;
     use pool;
+    use synthetic;
     use utils;
     use exhaustive;
     use kmknn;

@@ -77,6 +77,99 @@ rs_set_threads <- function(n) .Call(wrap__rs_set_threads, n)
 #' @keywords internal
 rs_get_threads <- function() .Call(wrap__rs_get_threads)
 
+#' Generate clustered synthetic data
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Separated Gaussian clusters joined by inter-cluster bridges. Use
+#' [generate_clustered_data()] instead.
+#'
+#' @param n Integer. Number of samples.
+#' @param dim Integer. Number of features.
+#' @param n_clusters Integer. Number of clusters.
+#' @param seed Integer. Random seed.
+#'
+#' @returns A list with `data` (n x dim numeric matrix) and `labels` (1-based
+#' integer cluster labels).
+#'
+#' @keywords internal
+rs_data_clustered <- function(n, dim, n_clusters, seed) .Call(wrap__rs_data_clustered, n, dim, n_clusters, seed)
+
+#' Generate correlated synthetic data
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Clusters with local anisotropy plus a globally shared off-axis subspace.
+#' Use [generate_correlated_data()] instead.
+#'
+#' @param n Integer. Number of samples.
+#' @param dim Integer. Number of features.
+#' @param n_clusters Integer. Number of clusters.
+#' @param cor_strength Numeric. Share of structured variance in the shared
+#' off-axis subspace, 0 to 1.
+#' @param seed Integer. Random seed.
+#'
+#' @returns A list with `data` (n x dim numeric matrix) and `labels` (1-based
+#' integer cluster labels).
+#'
+#' @keywords internal
+rs_data_correlated <- function(n, dim, n_clusters, cor_strength, seed) .Call(wrap__rs_data_correlated, n, dim, n_clusters, cor_strength, seed)
+
+#' Generate low-rank synthetic data
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Cell types on a low-dimensional manifold inside a higher-dimensional
+#' space, with trajectories between them. Use [generate_low_rank_data()]
+#' instead.
+#'
+#' @param n Integer. Number of samples.
+#' @param dim Integer. Ambient number of features.
+#' @param intrinsic_dim Integer. Dimensionality of the manifold. Must not
+#' exceed `dim`; the crate panics otherwise.
+#' @param n_clusters Integer. Number of cell types.
+#' @param seed Integer. Random seed.
+#'
+#' @returns A list with `data` (n x dim numeric matrix) and `labels` (1-based
+#' integer cluster labels).
+#'
+#' @keywords internal
+rs_data_low_rank <- function(n, dim, intrinsic_dim, n_clusters, seed) .Call(wrap__rs_data_low_rank, n, dim, intrinsic_dim, n_clusters, seed)
+
+#' Generate synthetic cell embeddings
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Foundation-model style cell embeddings: anisotropy cone, rogue dimensions
+#' and heavy-tailed spectrum. Use [generate_cell_embeddings()] instead.
+#'
+#' @param n Integer. Number of cells.
+#' @param dim Integer. Embedding width.
+#' @param n_clusters Integer. Number of cell types.
+#' @param seed Integer. Random seed.
+#'
+#' @returns A list with `data` (n x dim numeric matrix) and `labels` (1-based
+#' integer cluster labels).
+#'
+#' @keywords internal
+rs_data_cell_embeddings <- function(n, dim, n_clusters, seed) .Call(wrap__rs_data_cell_embeddings, n, dim, n_clusters, seed)
+
+#' Subsample queries with noise
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Draws rows from `x` and adds light Gaussian noise. Use
+#' [subsample_queries()] instead.
+#'
+#' @param x Numeric matrix, samples x features. Cast to f32.
+#' @param n Integer. Rows to draw, capped at `nrow(x)`.
+#' @param seed Integer. Random seed.
+#'
+#' @returns A numeric matrix with `min(n, nrow(x))` rows.
+#'
+#' @keywords internal
+rs_subsample_queries <- function(x, n, seed) .Call(wrap__rs_subsample_queries, x, n, seed)
+
 #' Recall of an approximate kNN result against ground truth
 #'
 #' @description
@@ -92,25 +185,6 @@ rs_get_threads <- function() .Call(wrap__rs_get_threads)
 #'
 #' @keywords internal
 rs_knn_recall <- function(truth, approx) .Call(wrap__rs_knn_recall, truth, approx)
-
-#' Generate clustered synthetic data
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' Gaussian clusters with random centres and per-cluster spread, the same
-#' generator the crate's own benchmarks use. Use
-#' [generate_clustered_data()] instead.
-#'
-#' @param n Integer. Number of samples.
-#' @param dim Integer. Number of features.
-#' @param n_clusters Integer. Number of clusters.
-#' @param seed Integer. Random seed.
-#'
-#' @returns A list with `data` (n x dim numeric matrix) and `labels` (1-based
-#' integer cluster labels).
-#'
-#' @keywords internal
-rs_data_clustered <- function(n, dim, n_clusters, seed) .Call(wrap__rs_data_clustered, n, dim, n_clusters, seed)
 
 #' Build an exhaustive index
 #'
