@@ -38,6 +38,7 @@ generator the Rust crate uses for its own benchmarks. We hold back a few rows
 as queries.
 
 ```{r}
+#| label: data
 dat <- generate_clustered_data(20000L, 32L, n_clusters = 20L, seed = 42L)$data
 query <- dat[1:500, ]
 train <- dat[-(1:500), ]
@@ -46,6 +47,7 @@ train <- dat[-(1:500), ]
 Build an HNSW index and ask for the 10 nearest neighbours of each query:
 
 ```{r}
+#| label: build-hnsw
 hnsw <- HnswIndex$new(train, metric = "euclidean")
 hnsw
 
@@ -61,6 +63,7 @@ root. Don't need the distances? `return_dist = FALSE` skips them.
 Prefer functions over methods? `predict()` works too:
 
 ```{r}
+#| label: predict-s3
 identical(predict(hnsw, query, k = 10L), res)
 ```
 
@@ -71,6 +74,7 @@ point, so it gives the exact answer, and `knn_recall()` tells you what
 fraction of the true neighbours the approximate index found.
 
 ```{r}
+#| label: recall
 truth <- ExhaustiveIndex$new(train)$predict(query, k = 10L)$idx
 knn_recall(truth, res$idx)
 ```
@@ -86,6 +90,7 @@ change after the build. For HNSW it's `ef_search`, the width of the beam that
 walks the graph. Wider beam, better recall, slower queries:
 
 ```{r}
+#| label: ef-search-sweep
 for (ef in c(10L, 20L, 50L, 100L)) {
   hnsw$ef_search <- ef
   t <- system.time(r <- hnsw$predict(query, k = 10L))[["elapsed"]]
@@ -116,6 +121,7 @@ rebuild.
 ## Which index?
 
 ```{r}
+#| label: compare-indices
 indices <- list(
   exhaustive = ExhaustiveIndex,
   kmknn = KmknnIndex,
@@ -178,6 +184,7 @@ in the index, not of new queries. `$query_self()` does that through each
 index's own fast path, and counts each point as its own first neighbour:
 
 ```{r}
+#| label: query-self
 knn <- hnsw$query_self(k = 15L)
 dim(knn$idx)
 all(knn$idx[, 1] == seq_len(nrow(train)))
@@ -187,6 +194,7 @@ all(knn$idx[, 1] == seq_len(nrow(train)))
 `$extract_knn()` hands it back without any search at all:
 
 ```{r}
+#| label: extract-knn
 nnd <- NNDescentIndex$new(train, k_graph = 15L)
 graph <- nnd$extract_knn()
 
@@ -204,6 +212,7 @@ Four metrics: `"euclidean"`, `"sqeuclidean"`, `"cosine"` (returned as
 and LSH don't support Manhattan, and say so:
 
 ```{r}
+#| label: manhattan-error
 #| error: true
 AnnoyIndex$new(train, metric = "manhattan")
 ```
@@ -212,6 +221,7 @@ Data is stored as 32-bit floats by default, which halves the memory against R's
 doubles. `precision = "double"` keeps 64 bits if you need them:
 
 ```{r}
+#| label: precision
 hnsw64 <- HnswIndex$new(train, precision = "double")
 hnsw64$precision
 ```
@@ -223,6 +233,7 @@ Builds and queries are parallel over all cores by default.
 like:
 
 ```{r}
+#| label: set-threads
 old <- ann_set_threads(1L)
 ann_get_threads()
 ann_set_threads(0L) # back to all cores
@@ -238,6 +249,7 @@ The index lives in Rust memory, so `saveRDS()` can't see it. A restored object
 holds a dead pointer and tells you so instead of crashing:
 
 ```{r}
+#| label: dead-pointer
 #| error: true
 restored <- unserialize(serialize(hnsw, NULL))
 restored$predict(query, k = 10L)
@@ -247,6 +259,7 @@ Use `$save()` and `load_ann_index()` instead. The search knobs and metric
 travel with the index:
 
 ```{r}
+#| label: save-load
 dir <- tempfile()
 hnsw$ef_search <- 80L
 hnsw$save(dir)
