@@ -6,7 +6,9 @@
 #' Exact search: every query is compared to every indexed sample, SIMD
 #' accelerated and multi-threaded. The ground truth to measure the approximate
 #' indices against, and faster than you might think up to a few hundred
-#' thousand samples.
+#' thousand samples. Large query batches go through a blocked GEMM path, which
+#' on macOS runs on Apple Accelerate, so it can outrun the thread count set by
+#' [ann_set_threads()].
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -136,8 +138,7 @@ AnnoyIndex <- R6::R6Class(
       if (missing(value)) {
         return(private$.search_budget)
       }
-      checkmate::qassert(value, c("0", "X1[1,)"))
-      private$.search_budget <- if (is.null(value)) NULL else as.integer(value)
+      private$.search_budget <- .as_knob(value, .var.name = "search_budget")
     }
   ),
   private = list(
@@ -256,8 +257,11 @@ HnswIndex <- R6::R6Class(
       if (missing(value)) {
         return(private$.ef_search)
       }
-      checkmate::qassert(value, "X1[1,)")
-      private$.ef_search <- as.integer(value)
+      private$.ef_search <- .as_knob(
+        value,
+        null_ok = FALSE,
+        .var.name = "ef_search"
+      )
     }
   ),
   private = list(

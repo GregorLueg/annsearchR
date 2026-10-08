@@ -60,6 +60,24 @@
   x
 }
 
+#' Validate a search-time knob
+#'
+#' @param value Positive integer, or `NULL` if `null_ok`.
+#' @param null_ok Boolean. Whether `NULL` (let the crate pick) is allowed.
+#' @param .var.name String. Name used in error messages.
+#'
+#' @returns `value` as integer, or `NULL`.
+#'
+#' @keywords internal
+.as_knob <- function(value, null_ok = TRUE, .var.name = "value") {
+  checkmate::qassert(
+    value,
+    if (null_ok) c("0", "X1[1,)") else "X1[1,)",
+    .var.name = .var.name
+  )
+  if (is.null(value)) NULL else as.integer(value)
+}
+
 #' Is this an external pointer, alive or dead
 #'
 #' @param x Any R object.

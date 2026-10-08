@@ -11,8 +11,18 @@
 //! module.
 
 use ann_search_rs::cpu::annoy::AnnoyIndex;
+use ann_search_rs::cpu::ball_tree::BallTreeIndex;
 use ann_search_rs::cpu::exhaustive::ExhaustiveIndex;
 use ann_search_rs::cpu::hnsw::HnswIndex;
+use ann_search_rs::cpu::ivf::IvfIndex;
+use ann_search_rs::cpu::kd_forest::KdTreeIndex;
+use ann_search_rs::cpu::kmknn::KmknnIndex;
+use ann_search_rs::cpu::lsh::LSHIndex;
+use ann_search_rs::cpu::nndescent::NNDescent;
+use ann_search_rs::cpu::nsg::NsgIndex;
+use ann_search_rs::cpu::rnn_descent::RnnDescentIndex;
+use ann_search_rs::cpu::soar::SoarIndex;
+use ann_search_rs::cpu::vamana::VamanaIndex;
 use ann_search_rs::prelude::AnnSearchErrors;
 use ann_search_rs::serialise::IndexIo;
 use ann_search_rs::{load_index, save_index};
@@ -155,8 +165,18 @@ macro_rules! ann_indices {
 
 ann_indices! {
     Exhaustive => ExhaustiveIndex, "exhaustive";
+    Kmknn => KmknnIndex, "kmknn";
     Annoy => AnnoyIndex, "annoy";
+    KdTree => KdTreeIndex, "kdtree";
+    BallTree => BallTreeIndex, "balltree";
     Hnsw => HnswIndex, "hnsw";
+    Ivf => IvfIndex, "ivf";
+    Soar => SoarIndex, "soar";
+    Lsh => LSHIndex, "lsh";
+    NNDescent => NNDescent, "nndescent";
+    Vamana => VamanaIndex, "vamana";
+    Nsg => NsgIndex, "nsg";
+    RnnDescent => RnnDescentIndex, "rnndescent";
 }
 
 /// Error for a pointer that holds a different algorithm than expected.

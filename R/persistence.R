@@ -7,8 +7,18 @@
 .ann_classes <- function() {
   list(
     exhaustive = ExhaustiveIndex,
+    kmknn = KmknnIndex,
     annoy = AnnoyIndex,
-    hnsw = HnswIndex
+    kdtree = KdTreeIndex,
+    balltree = BallTreeIndex,
+    hnsw = HnswIndex,
+    ivf = IvfIndex,
+    soar = SoarIndex,
+    lsh = LshIndex,
+    nndescent = NNDescentIndex,
+    vamana = VamanaIndex,
+    nsg = NsgIndex,
+    rnndescent = RnnDescentIndex
   )
 }
 

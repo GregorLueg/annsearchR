@@ -164,6 +164,63 @@ rs_exhaustive_query <- function(ptr, data, k, sqrt, return_dist, verbose) .Call(
 #' @keywords internal
 rs_exhaustive_self <- function(ptr, k, sqrt, return_dist, verbose) .Call(wrap__rs_exhaustive_self, ptr, k, sqrt, return_dist, verbose)
 
+#' Build a kMkNN index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [KmknnIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine")`.
+#' @param nlist Integer or `NULL`. Number of k-means clusters.
+#' @param kmeans_iters Integer or `NULL`. Lloyd iterations.
+#' @param kmeans_balanced Boolean. Reseed starved centroids.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_kmknn_build <- function(data, metric, nlist, kmeans_iters, kmeans_balanced, seed, precision, verbose) .Call(wrap__rs_kmknn_build, data, metric, nlist, kmeans_iters, kmeans_balanced, seed, precision, verbose)
+
+#' Query a kMkNN index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_kmknn_query <- function(ptr, data, k, sqrt, return_dist, verbose) .Call(wrap__rs_kmknn_query, ptr, data, k, sqrt, return_dist, verbose)
+
+#' Self-query a kMkNN index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_kmknn_self <- function(ptr, k, sqrt, return_dist, verbose) .Call(wrap__rs_kmknn_self, ptr, k, sqrt, return_dist, verbose)
+
 #' Build an Annoy index
 #'
 #' @description
@@ -220,6 +277,117 @@ rs_annoy_query <- function(ptr, data, k, search_budget, sqrt, return_dist, verbo
 #'
 #' @keywords internal
 rs_annoy_self <- function(ptr, k, search_budget, sqrt, return_dist, verbose) .Call(wrap__rs_annoy_self, ptr, k, search_budget, sqrt, return_dist, verbose)
+
+#' Build a kd forest index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [KdTreeIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param n_trees Integer. Number of trees.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_kdtree_build <- function(data, metric, n_trees, seed, precision) .Call(wrap__rs_kdtree_build, data, metric, n_trees, seed, precision)
+
+#' Query a kd forest index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param search_budget Integer or `NULL`. Candidates inspected per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_kdtree_query <- function(ptr, data, k, search_budget, sqrt, return_dist, verbose) .Call(wrap__rs_kdtree_query, ptr, data, k, search_budget, sqrt, return_dist, verbose)
+
+#' Self-query a kd forest index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param search_budget Integer or `NULL`. Candidates inspected per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_kdtree_self <- function(ptr, k, search_budget, sqrt, return_dist, verbose) .Call(wrap__rs_kdtree_self, ptr, k, search_budget, sqrt, return_dist, verbose)
+
+#' Build a ball tree index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [BallTreeIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine")`.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_balltree_build <- function(data, metric, seed, precision) .Call(wrap__rs_balltree_build, data, metric, seed, precision)
+
+#' Query a ball tree index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param search_budget Integer or `NULL`. Points inspected per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_balltree_query <- function(ptr, data, k, search_budget, sqrt, return_dist, verbose) .Call(wrap__rs_balltree_query, ptr, data, k, search_budget, sqrt, return_dist, verbose)
+
+#' Self-query a ball tree index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param search_budget Integer or `NULL`. Points inspected per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_balltree_self <- function(ptr, k, search_budget, sqrt, return_dist, verbose) .Call(wrap__rs_balltree_self, ptr, k, search_budget, sqrt, return_dist, verbose)
 
 #' Build an HNSW index
 #'
@@ -278,5 +446,452 @@ rs_hnsw_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose) .
 #'
 #' @keywords internal
 rs_hnsw_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_hnsw_self, ptr, k, ef_search, sqrt, return_dist, verbose)
+
+#' Build an IVF index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [IvfIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine")`.
+#' @param nlist Integer or `NULL`. Number of Voronoi cells.
+#' @param kmeans_iters Integer or `NULL`. Lloyd iterations.
+#' @param kmeans_balanced Boolean. Reseed starved centroids.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_ivf_build <- function(data, metric, nlist, kmeans_iters, kmeans_balanced, seed, precision, verbose) .Call(wrap__rs_ivf_build, data, metric, nlist, kmeans_iters, kmeans_balanced, seed, precision, verbose)
+
+#' Query an IVF index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param nprobe Integer or `NULL`. Cells visited per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_ivf_query <- function(ptr, data, k, nprobe, sqrt, return_dist, verbose) .Call(wrap__rs_ivf_query, ptr, data, k, nprobe, sqrt, return_dist, verbose)
+
+#' Self-query an IVF index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param nprobe Integer or `NULL`. Cells visited per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_ivf_self <- function(ptr, k, nprobe, sqrt, return_dist, verbose) .Call(wrap__rs_ivf_self, ptr, k, nprobe, sqrt, return_dist, verbose)
+
+#' Build a SOAR index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [SoarIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine")`.
+#' @param nlist Integer or `NULL`. Number of Voronoi cells.
+#' @param rule String or `NULL`. Spilling rule.
+#' @param rule_param Numeric or `NULL`. `mu` (shifted) or `lambda`
+#' (orthogonal).
+#' @param kmeans_iters Integer or `NULL`. Lloyd iterations.
+#' @param kmeans_balanced Boolean. Reseed starved centroids.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_soar_build <- function(data, metric, nlist, rule, rule_param, kmeans_iters, kmeans_balanced, seed, precision, verbose) .Call(wrap__rs_soar_build, data, metric, nlist, rule, rule_param, kmeans_iters, kmeans_balanced, seed, precision, verbose)
+
+#' Query a SOAR index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param nprobe Integer or `NULL`. Cells visited per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_soar_query <- function(ptr, data, k, nprobe, sqrt, return_dist, verbose) .Call(wrap__rs_soar_query, ptr, data, k, nprobe, sqrt, return_dist, verbose)
+
+#' Self-query a SOAR index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param nprobe Integer or `NULL`. Cells visited per query.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_soar_self <- function(ptr, k, nprobe, sqrt, return_dist, verbose) .Call(wrap__rs_soar_self, ptr, k, nprobe, sqrt, return_dist, verbose)
+
+#' Build an LSH index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [LshIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine")`.
+#' @param num_tables Integer. Independent hash tables.
+#' @param bits_per_hash Integer. Bits per bucket code.
+#' @param slot_bits Integer or `NULL`. Bits per quantised projection.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_lsh_build <- function(data, metric, num_tables, bits_per_hash, slot_bits, seed, precision) .Call(wrap__rs_lsh_build, data, metric, num_tables, bits_per_hash, slot_bits, seed, precision)
+
+#' Query an LSH index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param n_probe Integer or `NULL`. Buckets probed per table. `NULL` means
+#' one per projection.
+#' @param max_candidates Integer or `NULL`. Cap on candidates scored.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_lsh_query <- function(ptr, data, k, n_probe, max_candidates, sqrt, return_dist, verbose) .Call(wrap__rs_lsh_query, ptr, data, k, n_probe, max_candidates, sqrt, return_dist, verbose)
+
+#' Self-query an LSH index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param n_probe Integer or `NULL`. Buckets probed per table.
+#' @param max_candidates Integer or `NULL`. Cap on candidates scored.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_lsh_self <- function(ptr, k, n_probe, max_candidates, sqrt, return_dist, verbose) .Call(wrap__rs_lsh_self, ptr, k, n_probe, max_candidates, sqrt, return_dist, verbose)
+
+#' Build an NN-Descent index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [NNDescentIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param k_graph Integer. Neighbours per node in the graph.
+#' @param delta Numeric. Convergence threshold.
+#' @param diversify_prob Numeric. Edge pruning probability after descent.
+#' @param max_iter Integer or `NULL`. Iteration cap.
+#' @param max_candidates Integer or `NULL`. Candidates sampled per local join.
+#' @param n_trees Integer or `NULL`. Random projection trees for the seed
+#' graph.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_nndescent_build <- function(data, metric, k_graph, delta, diversify_prob, max_iter, max_candidates, n_trees, seed, precision, verbose) .Call(wrap__rs_nndescent_build, data, metric, k_graph, delta, diversify_prob, max_iter, max_candidates, n_trees, seed, precision, verbose)
+
+#' Query an NN-Descent index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nndescent_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_nndescent_query, ptr, data, k, ef_search, sqrt, return_dist, verbose)
+
+#' Self-query an NN-Descent index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nndescent_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_nndescent_self, ptr, k, ef_search, sqrt, return_dist, verbose)
+
+#' Extract the converged NN-Descent graph
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$extract_knn()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Row length, including the point itself when
+#' `include_self = TRUE`. At most the graph degree (plus one with self).
+#' @param include_self Boolean. Prepend each point at distance 0.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nndescent_extract <- function(ptr, k, include_self, sqrt, return_dist) .Call(wrap__rs_nndescent_extract, ptr, k, include_self, sqrt, return_dist)
+
+#' Build a Vamana index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [VamanaIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param r Integer. Maximum out-degree.
+#' @param l_build Integer. Candidate list width during the build.
+#' @param alpha_pass1 Numeric. Relaxation factor on the first pass.
+#' @param alpha_pass2 Numeric. Relaxation factor on the second pass.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_vamana_build <- function(data, metric, r, l_build, alpha_pass1, alpha_pass2, seed, precision) .Call(wrap__rs_vamana_build, data, metric, r, l_build, alpha_pass1, alpha_pass2, seed, precision)
+
+#' Query a Vamana index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_vamana_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_vamana_query, ptr, data, k, ef_search, sqrt, return_dist, verbose)
+
+#' Self-query a Vamana index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_vamana_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_vamana_self, ptr, k, ef_search, sqrt, return_dist, verbose)
+
+#' Build an NSG index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [NsgIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param r Integer. Maximum out-degree of the refined graph.
+#' @param l_build Integer. Candidate list width while refining.
+#' @param c Integer. Candidate pool size per node before pruning.
+#' @param knn_k Integer. Degree of the NN-Descent graph built first.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_nsg_build <- function(data, metric, r, l_build, c, knn_k, seed, precision, verbose) .Call(wrap__rs_nsg_build, data, metric, r, l_build, c, knn_k, seed, precision, verbose)
+
+#' Query an NSG index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nsg_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_nsg_query, ptr, data, k, ef_search, sqrt, return_dist, verbose)
+
+#' Self-query an NSG index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nsg_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wrap__rs_nsg_self, ptr, k, ef_search, sqrt, return_dist, verbose)
+
+#' Build a relative NN-Descent index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [RnnDescentIndex] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param s Integer. Neighbours sampled per node per local join.
+#' @param r Integer. Maximum out-degree after pruning.
+#' @param t1 Integer. Outer iterations.
+#' @param t2 Integer. Inner iterations per outer one.
+#' @param n_trees Integer or `NULL`. Random projection trees for the seed
+#' graph.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns External pointer to the index.
+#'
+#' @keywords internal
+rs_rnndescent_build <- function(data, metric, s, r, t1, t2, n_trees, seed, precision, verbose) .Call(wrap__rs_rnndescent_build, data, metric, s, r, t1, t2, n_trees, seed, precision, verbose)
+
+#' Query a relative NN-Descent index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$predict()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param data Numeric matrix. Queries x features.
+#' @param k Integer. Number of neighbours.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param k_search Integer or `NULL`. Neighbours expanded per hop.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_rnndescent_query <- function(ptr, data, k, ef_search, k_search, sqrt, return_dist, verbose) .Call(wrap__rs_rnndescent_query, ptr, data, k, ef_search, k_search, sqrt, return_dist, verbose)
+
+#' Self-query a relative NN-Descent index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use the `$query_self()` method instead.
+#'
+#' @param ptr External pointer to the index.
+#' @param k Integer. Number of neighbours, including the point itself.
+#' @param ef_search Integer or `NULL`. Beam width at query time.
+#' @param k_search Integer or `NULL`. Neighbours expanded per hop.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param verbose Boolean. Print progress.
+#'
+#' @returns A list with `idx` (1-based integer matrix) and `dist` (double
+#' matrix or `NULL`).
+#'
+#' @keywords internal
+rs_rnndescent_self <- function(ptr, k, ef_search, k_search, sqrt, return_dist, verbose) .Call(wrap__rs_rnndescent_self, ptr, k, ef_search, k_search, sqrt, return_dist, verbose)
 
 # nolint end

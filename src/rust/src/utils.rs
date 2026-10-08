@@ -1,11 +1,37 @@
 //! Helpers outside any single index: recall against ground truth and the
 //! crate's synthetic data generator.
 
+use ann_search_rs::prelude::KMeansTrainingParams;
 use ann_search_rs::synthetic::generate_clustered_data;
 use extendr_api::prelude::*;
 use extendr_api::{Error, Result};
 use faer::Mat;
 use rayon::prelude::*;
+
+/// Assemble k-means training parameters for the IVF-family builders.
+///
+/// `None` lets the crate pick its own heuristic, which is not the same as
+/// passing its defaults explicitly, so a struct is only built when the caller
+/// asked for something.
+///
+/// ### Params
+///
+/// * `iters` - Lloyd iterations, or `None` for the crate default.
+/// * `balanced` - Reseed starved centroids each iteration.
+///
+/// ### Returns
+///
+/// `None` if nothing was asked for, the parameters otherwise.
+pub fn kmeans_params(iters: Option<usize>, balanced: bool) -> Option<KMeansTrainingParams> {
+    if iters.is_none() && !balanced {
+        return None;
+    }
+    let base = match iters {
+        Some(i) => KMeansTrainingParams::new(i, None, None),
+        None => KMeansTrainingParams::default(),
+    };
+    Some(base.with_balancing(balanced))
+}
 
 /// Recall of an approximate kNN result against ground truth
 ///

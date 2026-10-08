@@ -1,35 +1,38 @@
-# save / load round trip -------------------------------------------------------
+# save / load round trip for every index ---------------------------------------
 
 dat <- generate_clustered_data(500L, 8L, n_clusters = 5L)$data
 q <- dat[1:20, ]
 
-indices <- list(
-  ExhaustiveIndex$new(dat, metric = "cosine"),
-  AnnoyIndex$new(dat, search_budget = 2000L, precision = "double"),
-  HnswIndex$new(dat, ef_search = 80L)
-)
+classes <- annsearchR:::.ann_classes()
 
-for (idx in indices) {
+for (nm in names(classes)) {
+  idx <- classes[[nm]]$new(dat, metric = "cosine", precision = "double")
   dir <- tempfile()
   idx$save(dir)
   loaded <- load_ann_index(dir)
-  cls <- class(idx)[1]
-  expect_true(inherits(loaded, cls), info = cls)
-  expect_equal(loaded$metric, idx$metric, info = cls)
-  expect_equal(loaded$precision, idx$precision, info = cls)
-  expect_equal(loaded$n, idx$n, info = cls)
-  expect_equal(
-    loaded$predict(q, k = 5L),
-    idx$predict(q, k = 5L),
-    info = cls
-  )
+  expect_true(inherits(loaded, class(idx)[1]), info = nm)
+  expect_equal(loaded$metric, "cosine", info = nm)
+  expect_equal(loaded$precision, "double", info = nm)
+  expect_equal(loaded$n, idx$n, info = nm)
+  expect_equal(loaded$predict(q, k = 5L), idx$predict(q, k = 5L), info = nm)
 }
+
+# search knobs survive the round trip
+hnsw <- HnswIndex$new(dat, ef_search = 80L)
+dir <- tempfile()
+hnsw$save(dir)
+expect_equal(load_ann_index(dir)$ef_search, 80L)
+
+nn <- NNDescentIndex$new(dat, k_graph = 12L)
+dir <- tempfile()
+nn$save(dir)
+expect_equal(load_ann_index(dir)$extract_knn(), nn$extract_knn())
 
 expect_error(load_ann_index(file.path(tempdir(), "nope_not_here")))
 
 # dead pointer after serialisation ---------------------------------------------
 
-hnsw <- HnswIndex$new(dat)
 restored <- unserialize(serialize(hnsw, NULL))
 expect_error(restored$predict(q, k = 5L), "load_ann_index")
 expect_error(restored$query_self(k = 5L), "load_ann_index")
+expect_error(restored$save(tempfile()), "load_ann_index")
