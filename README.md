@@ -1,6 +1,7 @@
 # annsearchR <img src="man/figures/logo.png" align="right" height="138" alt="annsearchR logo" />
 
 [![r_package](https://img.shields.io/github/r-package/v/GregorLueg/annsearchR?label=R_package&color=orange)](https://github.com/GregorLueg/annsearchR/blob/main/DESCRIPTION)
+[![annsearchR status badge](https://gregorlueg.r-universe.dev/annsearchR/badges/version)](https://gregorlueg.r-universe.dev/annsearchR)
 [![CI](https://github.com/GregorLueg/annsearchR/actions/workflows/R-cmd-check.yml/badge.svg)](https://github.com/GregorLueg/annsearchR/actions/workflows/R-cmd-check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![pkgdown](https://img.shields.io/badge/pkgdown-website-1b5e9f?logo=github)](https://gregorlueg.github.io/annsearchR/)
@@ -61,9 +62,21 @@ rustc --version
 
 ### Install annsearchR
 
-Install from source. That will compile all of the Rust crates from scratch.
+You can install the package from [r-universe.dev](https://gregorlueg.r-universe.dev/annsearchR)
+as a pre-compiled binary.
 
 ```r
+# Install from r-universe (pre-compiled)
+install.packages(
+  'annsearchR',
+  repos = c('https://gregorlueg.r-universe.dev', 'https://cloud.r-project.org')
+)
+```
+
+Or install from source. That will compile all of the Rust crates from scratch.
+
+```r
+# Install from source
 remotes::install_github("GregorLueg/annsearchR")
 ```
 
