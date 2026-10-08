@@ -73,7 +73,14 @@ KmknnIndex <- R6::R6Class(
   ),
   private = list(
     query = function(newdata, k, return_dist, verbose) {
-      rs_kmknn_query(private$ptr, newdata, k, private$sqrt, return_dist, verbose)
+      rs_kmknn_query(
+        private$ptr,
+        newdata,
+        k,
+        private$sqrt,
+        return_dist,
+        verbose
+      )
     },
     query_self_impl = function(k, return_dist, verbose) {
       rs_kmknn_self(private$ptr, k, private$sqrt, return_dist, verbose)

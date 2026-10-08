@@ -33,6 +33,9 @@ hnsw_efc <- 200L
 ef_grid <- c(10L, 20L, 40L, 80L, 160L, 320L, 640L)
 annoy_trees <- 50L
 search_k_grid <- k * annoy_trees * c(1L, 2L, 5L, 10L, 20L, 50L, 100L)
+nprobe_grid <- c(2L, 4L, 8L, 16L, 32L, 64L, 128L)
+nndescent_k_graph <- 30L
+epsilon_grid <- c(0, 0.02, 0.05, 0.1, 0.15, 0.2, 0.3)
 
 # data -------------------------------------------------------------------------
 
@@ -52,9 +55,9 @@ load_dataset <- function(name) {
   on.exit(f$close_all())
   # hdf5r returns features x samples and 0-based neighbour indices
   list(
-    train = t(f[["train"]][, ]),
-    test = t(f[["test"]][, ]),
-    truth = t(f[["neighbors"]][, ])[, seq_len(k)] + 1L
+    train = t(f[["train"]][,]),
+    test = t(f[["test"]][,]),
+    truth = t(f[["neighbors"]][,])[, seq_len(k)] + 1L
   )
 }
 
@@ -109,7 +112,10 @@ rcpphnsw_threads <- if (threads == 1L) 0L else threads
 # exact ------------------------------------------------------------------------
 
 cat("exact\n")
-b <- timed_build("annsearchR exhaustive", annsearchR::ExhaustiveIndex$new(ds$train))
+b <- timed_build(
+  "annsearchR exhaustive",
+  annsearchR::ExhaustiveIndex$new(ds$train)
+)
 exact <- list(
   sweep_point(
     "annsearchR",
@@ -120,7 +126,10 @@ exact <- list(
     all_rows
   )
 )
-cat(sprintf("  sanity: exhaustive recall vs file truth = %.4f\n", exact[[1]]$recall))
+cat(sprintf(
+  "  sanity: exhaustive recall vs file truth = %.4f\n",
+  exact[[1]]$recall
+))
 
 b <- timed_build("annsearchR kmknn", annsearchR::KmknnIndex$new(ds$train))
 exact[[length(exact) + 1L]] <- sweep_point(
@@ -295,7 +304,12 @@ b <- timed_build("RcppAnnoy annoy", {
 rcppannoy_query <- function(rows, sk) {
   res <- matrix(NA_integer_, length(rows), k)
   for (j in seq_along(rows)) {
-    res[j, ] <- b$index$getNNsByVectorList(ds$test[rows[j], ], k, sk, FALSE)$item +
+    res[j, ] <- b$index$getNNsByVectorList(
+      ds$test[rows[j], ],
+      k,
+      sk,
+      FALSE
+    )$item +
       1L
   }
   res
@@ -359,11 +373,82 @@ annoy[[length(annoy) + 1L]] <- sweep_point(
   all_rows
 )
 
+# ivf --------------------------------------------------------------------------
+
+# No R package ships IVF, so it only sits on the same recall targets.
+cat("ivf\n")
+b <- timed_build("annsearchR ivf", annsearchR::IvfIndex$new(ds$train))
+ivf <- lapply(nprobe_grid, \(np) {
+  b$index$nprobe <- np
+  sweep_point(
+    "annsearchR",
+    "ivf",
+    b$build_s,
+    sprintf("nprobe=%d", np),
+    \() b$index$predict(ds$test, k = k, return_dist = FALSE)$idx,
+    all_rows
+  )
+})
+
+# nndescent --------------------------------------------------------------------
+
+# Both build a k = 30 graph. rnndescent sweeps epsilon (search tolerance)
+# where annsearchR sweeps ef_search; equal recall is the common ground.
+cat("nndescent\n")
+b <- timed_build(
+  "annsearchR nndescent",
+  annsearchR::NNDescentIndex$new(ds$train, k_graph = nndescent_k_graph)
+)
+nndescent <- lapply(ef_grid, \(ef) {
+  b$index$ef_search <- ef
+  sweep_point(
+    "annsearchR",
+    "nndescent",
+    b$build_s,
+    sprintf("ef=%d", ef),
+    \() b$index$predict(ds$test, k = k, return_dist = FALSE)$idx,
+    all_rows
+  )
+})
+
+# rnndescent: n_threads = 0 runs serially
+rnndescent_threads <- if (threads == 1L) 0L else threads
+b <- timed_build(
+  "rnndescent nndescent",
+  rnndescent::rnnd_build(
+    ds$train,
+    k = nndescent_k_graph,
+    metric = "euclidean",
+    n_threads = rnndescent_threads
+  )
+)
+nndescent <- c(
+  nndescent,
+  lapply(epsilon_grid, \(eps) {
+    sweep_point(
+      "rnndescent",
+      "nndescent",
+      b$build_s,
+      sprintf("epsilon=%.2f", eps),
+      \() {
+        rnndescent::rnnd_query(
+          b$index,
+          ds$test,
+          k = k,
+          epsilon = eps,
+          n_threads = rnndescent_threads
+        )$idx
+      },
+      all_rows
+    )
+  })
+)
+
 annsearchR::ann_set_threads(0L)
 
 # results ----------------------------------------------------------------------
 
-sweep <- data.table::rbindlist(c(exact, hnsw, annoy))
+sweep <- data.table::rbindlist(c(exact, hnsw, annoy, ivf, nndescent))
 
 # Best QPS each library reaches at or above each recall target. NA: never got
 # there on this grid.
@@ -384,7 +469,16 @@ summary <- data.table::dcast(
 )
 
 cat("\nsweep\n")
-print(sweep[, .(library, method, param, qps = round(qps), recall = round(recall, 4))], nrows = 200)
+print(
+  sweep[, .(
+    library,
+    method,
+    param,
+    qps = round(qps),
+    recall = round(recall, 4)
+  )],
+  nrows = 200
+)
 cat("\nbest QPS at recall target\n")
 print(summary, digits = 3)
 

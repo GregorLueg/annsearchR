@@ -46,7 +46,11 @@ ExhaustiveIndex <- R6::R6Class(
       ptr <- if (.is_ptr(data)) {
         data
       } else {
-        rs_exhaustive_build(.as_ann_matrix(data), private$core_metric, precision)
+        rs_exhaustive_build(
+          .as_ann_matrix(data),
+          private$core_metric,
+          precision
+        )
       }
       private$attach(ptr)
     }

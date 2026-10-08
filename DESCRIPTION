@@ -34,5 +34,6 @@ Suggests:
     hdf5r,
     RcppAnnoy,
     RcppHNSW,
+    rnndescent,
     tinytest
 Config/roxygen2/version: 8.1.0

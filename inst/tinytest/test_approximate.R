@@ -1,7 +1,12 @@
 # shared data ------------------------------------------------------------------
 
 # queries are held-out rows, so they come from the same clusters as the data
-all_data <- generate_clustered_data(2100L, 16L, n_clusters = 10L, seed = 1L)$data
+all_data <- generate_clustered_data(
+  2100L,
+  16L,
+  n_clusters = 10L,
+  seed = 1L
+)$data
 set.seed(3L)
 held_out <- sample(2100L, 100L)
 dat <- all_data[-held_out, ]

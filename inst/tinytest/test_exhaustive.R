@@ -26,7 +26,11 @@ for (metric in c("euclidean", "sqeuclidean", "cosine", "manhattan")) {
   truth <- brute_force(q, x, metric, k)
   for (precision in c("float", "double")) {
     tol <- if (precision == "float") 1e-5 else 1e-10
-    res <- ExhaustiveIndex$new(x, metric = metric, precision = precision)$predict(
+    res <- ExhaustiveIndex$new(
+      x,
+      metric = metric,
+      precision = precision
+    )$predict(
       q,
       k = k
     )
