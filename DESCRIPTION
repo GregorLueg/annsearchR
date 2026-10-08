@@ -35,13 +35,13 @@ Suggests:
     ggplot2,
     hdf5r,
     knitr,
+    quarto,
     RANN,
     RcppAnnoy,
     RcppHNSW,
-    rmarkdown,
     rnndescent,
     scales,
     tinytest
 Config/roxygen2/version: 8.1.0
-VignetteBuilder: knitr
+VignetteBuilder: quarto
 URL: https://gregorlueg.github.io/annsearchR/, https://github.com/GregorLueg/annsearchR

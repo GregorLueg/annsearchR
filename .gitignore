@@ -18,3 +18,5 @@ inst/benchmarks/cache/
 .claude/worktrees/*
 docs
 inst/doc
+/doc/
+/Meta/

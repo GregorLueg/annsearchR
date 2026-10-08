@@ -1,5 +1,9 @@
 ---
 title: "Benchmarks against the R ecosystem"
+date: last-modified
+date-format: YYYY-MM-DD
+author:
+  - name: Gregor Lueg
 ---
 
 How does annsearchR stack up against the nearest neighbour packages R users

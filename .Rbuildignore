@@ -17,3 +17,7 @@
 ^docs$
 ^pkgdown$
 ^vignettes/articles$
+^vignettes/\.quarto$
+^vignettes/*_files$
+^doc$
+^Meta$

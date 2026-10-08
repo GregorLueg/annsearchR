@@ -1,3 +1,126 @@
+# hnsw -------------------------------------------------------------------------
+
+#' HNSW index
+#'
+#' @description
+#' Hierarchical navigable small world graph. The usual first choice: high
+#' recall at low query latency. Raise `ef_search` for recall at query time,
+#' `ef_construction` for a better graph at build time.
+#'
+#' Nodes are inserted in parallel, so two builds with the same `seed` give
+#' slightly different graphs. Need bit-identical results? Build with
+#' `ann_set_threads(1L)`.
+#'
+#' @references Malkov & Yashunin, IEEE TPAMI, 2020
+#'
+#' @examples
+#' x <- generate_clustered_data(1000L, 16L)$data
+#' idx <- HnswIndex$new(x, metric = "cosine")
+#' idx$ef_search <- 100L
+#' res <- idx$predict(x[1:5, ], k = 10L)
+#'
+#' @export
+HnswIndex <- R6::R6Class(
+  "HnswIndex",
+  inherit = AnnIndex,
+  public = list(
+    #' @description
+    #' Build the index.
+    #'
+    #' @param data Numeric matrix or data.frame. Samples x features. An index
+    #' pointer is also accepted; [load_ann_index()] uses that path.
+    #' @param metric String. One of
+    #' `c("euclidean", "sqeuclidean", "cosine", "manhattan")`.
+    #' @param m Integer. Edges per node on the upper layers, `2 * m` on layer
+    #' 0. 16 suits most data; 32 to 48 helps in high dimensions.
+    #' @param ef_construction Integer. Candidate list width during the build.
+    #' Better graph, slower build, no cost at query time.
+    #' @param ef_search Integer. Beam width at query time. Raised to `k`
+    #' internally if smaller. Can be changed after the build.
+    #' @param seed Integer. Fixes the layer assignment.
+    #' @param precision String. `"float"` stores the data as f32, `"double"`
+    #' as f64.
+    #' @param .verbose Boolean. Print build progress from Rust.
+    initialize = function(
+      data,
+      metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
+      m = 16L,
+      ef_construction = 200L,
+      ef_search = 50L,
+      seed = 42L,
+      precision = c("float", "double"),
+      .verbose = FALSE
+    ) {
+      metric <- match.arg(metric)
+      precision <- match.arg(precision)
+      private$algo <- "hnsw"
+      private$set_metric(
+        metric,
+        c("euclidean", "sqeuclidean", "cosine", "manhattan")
+      )
+      checkmate::qassert(m, "X1[2,)")
+      checkmate::qassert(ef_construction, "X1[1,)")
+      checkmate::qassert(seed, "X1[0,)")
+      checkmate::assertChoice(precision, c("float", "double"))
+      checkmate::qassert(.verbose, "B1")
+
+      ptr <- if (.is_ptr(data)) {
+        data
+      } else {
+        rs_hnsw_build(
+          .as_ann_matrix(data),
+          private$core_metric,
+          as.integer(m),
+          as.integer(ef_construction),
+          as.integer(seed),
+          precision,
+          .verbose
+        )
+      }
+      private$attach(ptr)
+      self$ef_search <- ef_search
+    }
+  ),
+  active = list(
+    #' @field ef_search Integer. Beam width at query time.
+    ef_search = function(value) {
+      if (missing(value)) {
+        return(private$.ef_search)
+      }
+      private$.ef_search <- .as_knob(
+        value,
+        null_ok = FALSE,
+        .var.name = "ef_search"
+      )
+    }
+  ),
+  private = list(
+    .ef_search = NULL,
+    knobs = function() list(ef_search = private$.ef_search),
+    query = function(newdata, k, return_dist, verbose) {
+      rs_hnsw_query(
+        private$ptr,
+        newdata,
+        k,
+        private$.ef_search,
+        private$sqrt,
+        return_dist,
+        verbose
+      )
+    },
+    query_self_impl = function(k, return_dist, verbose) {
+      rs_hnsw_self(
+        private$ptr,
+        k,
+        private$.ef_search,
+        private$sqrt,
+        return_dist,
+        verbose
+      )
+    }
+  )
+)
+
 # nndescent --------------------------------------------------------------------
 
 #' NN-Descent index

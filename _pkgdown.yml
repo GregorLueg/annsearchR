@@ -26,7 +26,7 @@ navbar:
       aria-label: GitHub
 
 articles:
-  - title: "Articles"
+  - title: "Vignettes"
     navbar: ~
     contents:
       - annsearchR
@@ -70,3 +70,7 @@ reference:
       - ann_get_threads
       - knn_recall
       - generate_clustered_data
+  - title: "Rust wrappers"
+    desc: "Everything rusty - only use this if you know what you are doing..."
+    contents:
+      - starts_with("rs_", internal = TRUE)

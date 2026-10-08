@@ -1,14 +1,22 @@
 ---
 title: "Getting started with annsearchR"
-output: rmarkdown::html_vignette
+date: last-modified
+date-format: YYYY-MM-DD
 vignette: >
   %\VignetteIndexEntry{Getting started with annsearchR}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: '#>'
+author:
+  - name: Gregor Lueg
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```{r}
+#| label: threads
+#| include: false
 annsearchR::ann_set_threads(2L)
 ```
 
@@ -19,6 +27,7 @@ often as you like. Thirteen index types share one interface, so swapping HNSW
 for IVF is a one-word change.
 
 ```{r}
+#| label: setup
 library(annsearchR)
 ```
 
@@ -194,7 +203,8 @@ Four metrics: `"euclidean"`, `"sqeuclidean"`, `"cosine"` (returned as
 `1 - cosine similarity`) and `"manhattan"`. Annoy, BallTree, KMKNN, IVF, SOAR
 and LSH don't support Manhattan, and say so:
 
-```{r, error = TRUE}
+```{r}
+#| error: true
 AnnoyIndex$new(train, metric = "manhattan")
 ```
 
@@ -227,7 +237,8 @@ thread.
 The index lives in Rust memory, so `saveRDS()` can't see it. A restored object
 holds a dead pointer and tells you so instead of crashing:
 
-```{r, error = TRUE}
+```{r}
+#| error: true
 restored <- unserialize(serialize(hnsw, NULL))
 restored$predict(query, k = 10L)
 ```
@@ -245,6 +256,8 @@ loaded
 identical(loaded$predict(query, k = 10L), hnsw$predict(query, k = 10L))
 ```
 
-```{r, include = FALSE}
+```{r}
+#| label: reset-threads
+#| include: false
 annsearchR::ann_set_threads(0L)
 ```

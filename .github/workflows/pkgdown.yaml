@@ -18,6 +18,4 @@ jobs:
     with:
       rust: true
       gpu: false
-      # No vignettes in this package, so nothing to render with Quarto.
-      quarto: false
     secrets: inherit
