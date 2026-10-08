@@ -1,0 +1,10 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  annsearchR: annsearchR.html
+  articles/benchmarks: benchmarks.html
+last_built: 2026-10-08T18:04Z
+urls:
+  reference: https://gregorlueg.github.io/annsearchR/reference
+  article: https://gregorlueg.github.io/annsearchR/articles
