@@ -70,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Getting started with annsearchR</h1>
 
       <p class="author">Gregor Lueg</p>
-      <p class="date">2026-10-08</p>
+      <p class="date">2026-10-09</p>
 
       <small class="dont-index">Source: <a href="https://github.com/GregorLueg/annsearchR/blob/main/vignettes/annsearchR.qmd" class="external-link"><code>vignettes/annsearchR.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -122,7 +122,7 @@
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/ExhaustiveIndex.html">ExhaustiveIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">query</span>, k <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span><span class="op">$</span><span class="va">idx</span></span>
 <span><span class="fu"><a href="../reference/knn_recall.html">knn_recall</a></span><span class="op">(</span><span class="va">truth</span>, <span class="va">res</span><span class="op">$</span><span class="va">idx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9856</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9854</span></span></code></pre></div>
 </div>
 <p>Brute force is no slouch here either: it is SIMD accelerated, multi-threaded and, on macOS, runs large batches through Apple Accelerate. Up to a few hundred thousand points it’s worth timing before reaching for anything approximate.</p>
 </section><section class="level2"><h2 id="tune-at-query-time">Tune at query time<a class="anchor" aria-label="anchor" href="#tune-at-query-time"></a>
@@ -140,9 +140,9 @@
 <span>    <span class="va">t</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; ef_search =  10   recall 0.846   0.002s</span></span>
-<span><span class="co">#&gt; ef_search =  20   recall 0.938   0.004s</span></span>
-<span><span class="co">#&gt; ef_search =  50   recall 0.986   0.006s</span></span>
+<span><span class="co">#&gt; ef_search =  10   recall 0.848   0.003s</span></span>
+<span><span class="co">#&gt; ef_search =  20   recall 0.938   0.003s</span></span>
+<span><span class="co">#&gt; ef_search =  50   recall 0.985   0.006s</span></span>
 <span><span class="co">#&gt; ef_search = 100   recall 0.995   0.010s</span></span></code></pre></div>
 </div>
 <p>The knobs per index:</p>
@@ -224,19 +224,19 @@
 <span><span class="op">)</span></span>
 <span><span class="va">comparison</span></span>
 <span><span class="co">#&gt;         index build_s query_s recall</span></span>
-<span><span class="co">#&gt; 1  exhaustive   0.003   0.018  1.000</span></span>
+<span><span class="co">#&gt; 1  exhaustive   0.003   0.019  1.000</span></span>
 <span><span class="co">#&gt; 2       kmknn   0.138   0.004  1.000</span></span>
-<span><span class="co">#&gt; 3       annoy   0.080   0.013  1.000</span></span>
+<span><span class="co">#&gt; 3       annoy   0.053   0.014  1.000</span></span>
 <span><span class="co">#&gt; 4      kdtree   0.071   0.011  0.999</span></span>
-<span><span class="co">#&gt; 5    balltree   0.021   0.003  0.932</span></span>
-<span><span class="co">#&gt; 6        hnsw   0.575   0.006  0.985</span></span>
-<span><span class="co">#&gt; 7         ivf   0.137   0.004  0.995</span></span>
-<span><span class="co">#&gt; 8        soar   0.150   0.009  0.999</span></span>
-<span><span class="co">#&gt; 9         lsh   0.009   0.008  0.973</span></span>
-<span><span class="co">#&gt; 10  nndescent   0.376   0.005  0.884</span></span>
-<span><span class="co">#&gt; 11     vamana   1.232   0.012  0.999</span></span>
-<span><span class="co">#&gt; 12        nsg   5.550   0.013  0.999</span></span>
-<span><span class="co">#&gt; 13 rnndescent   0.443   0.012  0.989</span></span></code></pre></div>
+<span><span class="co">#&gt; 5    balltree   0.020   0.004  0.932</span></span>
+<span><span class="co">#&gt; 6        hnsw   0.564   0.006  0.986</span></span>
+<span><span class="co">#&gt; 7         ivf   0.136   0.003  0.995</span></span>
+<span><span class="co">#&gt; 8        soar   0.149   0.009  0.999</span></span>
+<span><span class="co">#&gt; 9         lsh   0.009   0.007  0.973</span></span>
+<span><span class="co">#&gt; 10  nndescent   0.381   0.005  0.884</span></span>
+<span><span class="co">#&gt; 11     vamana   1.219   0.012  0.999</span></span>
+<span><span class="co">#&gt; 12        nsg   5.545   0.014  0.999</span></span>
+<span><span class="co">#&gt; 13 rnndescent   0.438   0.011  0.989</span></span></code></pre></div>
 </div>
 <p>These are default settings on small, easy data with two threads, so read the table for the shape of things, not as a benchmark. For that, see the <a href="https://gregorlueg.github.io/annsearchR/articles/benchmarks.html">benchmarks article</a>, which compares annsearchR against RcppHNSW, RcppAnnoy, BiocNeighbors, rnndescent, FNN and RANN at equal recall on Fashion-MNIST and SIFT.</p>
 <p>What each family does:</p>

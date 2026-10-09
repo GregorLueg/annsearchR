@@ -67,7 +67,7 @@ found.
 
 truth <- ExhaustiveIndex$new(train)$predict(query, k = 10L)$idx
 knn_recall(truth, res$idx)
-#> [1] 0.9856
+#> [1] 0.9854
 ```
 
 Brute force is no slouch here either: it is SIMD accelerated,
@@ -93,9 +93,9 @@ for (ef in c(10L, 20L, 50L, 100L)) {
     t
   ))
 }
-#> ef_search =  10   recall 0.846   0.002s
-#> ef_search =  20   recall 0.938   0.004s
-#> ef_search =  50   recall 0.986   0.006s
+#> ef_search =  10   recall 0.848   0.003s
+#> ef_search =  20   recall 0.938   0.003s
+#> ef_search =  50   recall 0.985   0.006s
 #> ef_search = 100   recall 0.995   0.010s
 ```
 
@@ -149,19 +149,19 @@ comparison <- do.call(
 )
 comparison
 #>         index build_s query_s recall
-#> 1  exhaustive   0.003   0.018  1.000
+#> 1  exhaustive   0.003   0.019  1.000
 #> 2       kmknn   0.138   0.004  1.000
-#> 3       annoy   0.080   0.013  1.000
+#> 3       annoy   0.053   0.014  1.000
 #> 4      kdtree   0.071   0.011  0.999
-#> 5    balltree   0.021   0.003  0.932
-#> 6        hnsw   0.575   0.006  0.985
-#> 7         ivf   0.137   0.004  0.995
-#> 8        soar   0.150   0.009  0.999
-#> 9         lsh   0.009   0.008  0.973
-#> 10  nndescent   0.376   0.005  0.884
-#> 11     vamana   1.232   0.012  0.999
-#> 12        nsg   5.550   0.013  0.999
-#> 13 rnndescent   0.443   0.012  0.989
+#> 5    balltree   0.020   0.004  0.932
+#> 6        hnsw   0.564   0.006  0.986
+#> 7         ivf   0.136   0.003  0.995
+#> 8        soar   0.149   0.009  0.999
+#> 9         lsh   0.009   0.007  0.973
+#> 10  nndescent   0.381   0.005  0.884
+#> 11     vamana   1.219   0.012  0.999
+#> 12        nsg   5.545   0.014  0.999
+#> 13 rnndescent   0.438   0.011  0.989
 ```
 
 These are default settings on small, easy data with two threads, so read

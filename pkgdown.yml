@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   annsearchR: annsearchR.html
   articles/benchmarks: benchmarks.html
-last_built: 2026-10-08T18:04Z
+last_built: 2026-10-09T03:34Z
 urls:
   reference: https://gregorlueg.github.io/annsearchR/reference
   article: https://gregorlueg.github.io/annsearchR/articles
