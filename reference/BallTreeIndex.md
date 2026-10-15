@@ -10,7 +10,6 @@ query time does not fall. No Manhattan.
 
 Omohundro SM (1989). Five balltree construction algorithms. Technical
 Report TR-89-063, International Computer Science Institute, Berkeley.
-<https://www1.icsi.berkeley.edu/ftp/pub/techreports/1989/tr-89-063.pdf>
 
 ## Super class
 
