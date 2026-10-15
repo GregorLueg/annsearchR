@@ -6,7 +6,7 @@
 [![CI](https://github.com/GregorLueg/annsearchR/actions/workflows/R-cmd-check.yml/badge.svg)](https://github.com/GregorLueg/annsearchR/actions/workflows/R-cmd-check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![pkgdown](https://img.shields.io/badge/pkgdown-website-1b5e9f?logo=github)](https://gregorlueg.github.io/annsearchR/)
-[![extendr](https://img.shields.io/badge/extendr-^0.9.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![extendr](https://img.shields.io/badge/extendr-^0.9.0-276DC2)](https://extendr.rs/extendr/extendr_api/)
 
 **Rust-accelerated** exact and approximate nearest neighbour search for R.
 Build an index once, keep it in memory behind an R6 object and query it as
