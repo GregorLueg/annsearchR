@@ -93,9 +93,9 @@ for (ef in c(10L, 20L, 50L, 100L)) {
     t
   ))
 }
-#> ef_search =  10   recall 0.849   0.003s
-#> ef_search =  20   recall 0.938   0.004s
-#> ef_search =  50   recall 0.986   0.007s
+#> ef_search =  10   recall 0.848   0.003s
+#> ef_search =  20   recall 0.937   0.004s
+#> ef_search =  50   recall 0.986   0.008s
 #> ef_search = 100   recall 0.995   0.012s
 ```
 
@@ -149,19 +149,19 @@ comparison <- do.call(
 )
 comparison
 #>         index build_s query_s recall
-#> 1  exhaustive   0.003   0.017  1.000
-#> 2       kmknn   0.082   0.006  1.000
-#> 3       annoy   0.084   0.015  1.000
-#> 4      kdtree   0.089   0.013  0.999
-#> 5    balltree   0.028   0.004  0.932
-#> 6        hnsw   0.668   0.007  0.985
-#> 7         ivf   0.079   0.004  0.995
-#> 8        soar   0.096   0.012  0.999
-#> 9         lsh   0.013   0.009  0.973
-#> 10  nndescent   0.460   0.006  0.884
-#> 11     vamana   1.486   0.014  1.000
-#> 12        nsg   6.618   0.014  0.999
-#> 13 rnndescent   0.495   0.014  0.989
+#> 1  exhaustive   0.004   0.018  1.000
+#> 2       kmknn   0.082   0.005  1.000
+#> 3       annoy   0.080   0.016  1.000
+#> 4      kdtree   0.094   0.013  0.999
+#> 5    balltree   0.028   0.005  0.932
+#> 6        hnsw   0.685   0.008  0.986
+#> 7         ivf   0.080   0.005  0.995
+#> 8        soar   0.091   0.019  0.999
+#> 9         lsh   0.013   0.010  0.973
+#> 10  nndescent   0.469   0.006  0.884
+#> 11     vamana   1.558   0.015  0.999
+#> 12        nsg   6.773   0.020  0.999
+#> 13 rnndescent   0.538   0.015  0.989
 ```
 
 These are default settings on small, easy data with two threads, so read
