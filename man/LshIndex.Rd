@@ -17,7 +17,19 @@ res <- idx$predict(x[1:5, ], k = 10L)
 
 }
 \references{
-Lv et al., VLDB, 2007
+Charikar MS (2002). Similarity estimation techniques from rounding
+algorithms. \emph{Proceedings of the 34th Annual ACM Symposium on Theory of
+Computing}, 380-388. \doi{10.1145/509907.509965}
+
+Datar M, Immorlica N, Indyk P, Mirrokni VS (2004). Locality-sensitive
+hashing scheme based on p-stable distributions. \emph{Proceedings of the 20th
+Annual Symposium on Computational Geometry}, 253-262.
+\doi{10.1145/997817.997857}
+
+Lv Q, Josephson W, Wang Z, Charikar M, Li K (2007). Multi-probe LSH:
+efficient indexing for high-dimensional similarity search. \emph{Proceedings of
+the 33rd International Conference on Very Large Data Bases}, 950-961.
+\url{https://www.cs.princeton.edu/cass/papers/mplsh_vldb07.pdf}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{LshIndex}

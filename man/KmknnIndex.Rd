@@ -15,7 +15,10 @@ res <- idx$predict(x[1:5, ], k = 10L)
 
 }
 \references{
-Wang, IEEE ICDMW, 2012
+Wang X (2011). A fast exact k-nearest neighbors algorithm for high
+dimensional search using k-means clustering and triangle inequality.
+\emph{The 2011 International Joint Conference on Neural Networks}, 1293-1299.
+\doi{10.1109/IJCNN.2011.6033373}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{KmknnIndex}

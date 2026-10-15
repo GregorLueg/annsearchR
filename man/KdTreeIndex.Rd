@@ -17,7 +17,13 @@ res <- idx$predict(x[1:5, ], k = 10L)
 
 }
 \references{
-Muja & Lowe, IEEE TPAMI, 2014
+Silpa-Anan C, Hartley R (2008). Optimised KD-trees for fast image
+descriptor matching. \emph{2008 IEEE Conference on Computer Vision and Pattern
+Recognition}, 1-8. \doi{10.1109/CVPR.2008.4587638}
+
+Muja M, Lowe DG (2014). Scalable nearest neighbor algorithms for high
+dimensional data. \emph{IEEE Transactions on Pattern Analysis and Machine
+Intelligence}, 36, 2227-2240. \doi{10.1109/TPAMI.2014.2321376}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{KdTreeIndex}

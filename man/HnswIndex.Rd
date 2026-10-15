@@ -20,7 +20,10 @@ res <- idx$predict(x[1:5, ], k = 10L)
 
 }
 \references{
-Malkov & Yashunin, IEEE TPAMI, 2020
+Malkov YA, Yashunin DA (2020). Efficient and robust approximate nearest
+neighbor search using hierarchical navigable small world graphs. \emph{IEEE
+Transactions on Pattern Analysis and Machine Intelligence}, 42, 824-836.
+\doi{10.1109/TPAMI.2018.2889473}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{HnswIndex}

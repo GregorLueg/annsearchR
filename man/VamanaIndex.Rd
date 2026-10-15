@@ -16,7 +16,10 @@ res <- idx$predict(x[1:5, ], k = 10L)
 
 }
 \references{
-Subramanya et al., NeurIPS, 2019
+Jayaram Subramanya S, et al. (2019). DiskANN: fast accurate billion-point
+nearest neighbor search on a single node. \emph{Advances in Neural Information
+Processing Systems}, 32.
+\url{https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{VamanaIndex}

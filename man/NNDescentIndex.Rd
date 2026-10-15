@@ -17,7 +17,10 @@ knn <- idx$extract_knn()
 
 }
 \references{
-Dong, Moses & Li, WWW, 2011
+Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
+construction for generic similarity measures. \emph{Proceedings of the 20th
+International Conference on World Wide Web}, 577-586.
+\doi{10.1145/1963405.1963487}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{NNDescentIndex}
