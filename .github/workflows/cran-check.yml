@@ -5,7 +5,7 @@ on:
 
 jobs:
   cran-check:
-    uses: GregorLueg/personal-actions/.github/workflows/r-cran-check.yml
+    uses: GregorLueg/personal-actions/.github/workflows/r-cran-check.yml@main
     with:
       msrv: 1.90.0
     secrets: inherit
