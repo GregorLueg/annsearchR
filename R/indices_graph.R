@@ -161,7 +161,7 @@ NNDescentIndex <- R6::R6Class(
     #' @param max_candidates Integer or `NULL`. Neighbours sampled per node per
     #' local join. `NULL` uses `min(k_graph, 60)`.
     #' @param n_trees Integer or `NULL`. Random projection trees for the seed
-    #' graph. `NULL` uses `min(5 + round(n^0.25), 12)`.
+    #' graph. `NULL` uses `min(5 + round(sqrt(n) / 20), 64)`.
     #' @param ef_search Integer or `NULL`. Beam width at query time. `NULL`
     #' uses `clamp(2 * k, 50, 200)`. Can be changed after the build.
     #' @param seed Integer. Fixes the seed graph and the sampling.
