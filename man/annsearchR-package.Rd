@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-R interface to the Rust crate 'ann-search-rs'. Build an exact or approximate nearest neighbour index once (HNSW, Annoy, IVF, NNDescent, Vamana and more), keep it in memory behind an R6 object and query it as often as you like. Multi-threaded via Rayon, with f32 or f64 storage.
+R interface to the Rust crate 'ann-search-rs'. Build an exact or approximate nearest neighbour index once (HNSW, Annoy, IVF, NNDescent, Vamana and more), keep it in memory behind an R6 object and query it as often as you like. Multi-threaded via 'Rayon', with f32 or f64 storage. Methods include hierarchical navigable small world graphs (Malkov and Yashunin, 2020) \doi{10.1109/TPAMI.2018.2889473} and NN-Descent (Dong, Moses and Li, 2011) \doi{10.1145/1963405.1963487}.
 }
 \seealso{
 Useful links:
@@ -24,6 +24,11 @@ Useful links:
 Authors:
 \itemize{
   \item Gregor Lueg \email{gregorlueg@me.com}
+}
+
+Other contributors:
+\itemize{
+  \item Authors of the dependency Rust crates (see inst/AUTHORS file) [contributor, copyright holder]
 }
 
 }

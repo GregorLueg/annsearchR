@@ -43,7 +43,7 @@ dependencies = [
 
 [[package]]
 name = "annsearchr"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "ann-search-rs",
  "extendr-api",

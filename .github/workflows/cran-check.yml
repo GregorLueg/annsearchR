@@ -1,0 +1,12 @@
+name: CRAN check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cran-check:
+    # TODO: move to @v1 once r-cran-check.yml is released there
+    uses: GregorLueg/personal-actions/.github/workflows/r-cran-check.yml@feat-cran-check
+    with:
+      msrv: 1.90.0
+    secrets: inherit
