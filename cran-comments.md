@@ -24,6 +24,8 @@ build for).
 0 errors | 0 warnings | 1 note
 
 - New submission.
+- Possibly misspelled words in DESCRIPTION: Malkov, Yashunin and Charikar are
+  author names; HNSW, NNDescent, NN-Descent and Vamana are method names.
 
 The installed size is 11.8 MB, of which `libs` is 10.7 MB: the statically
 linked Rust library.

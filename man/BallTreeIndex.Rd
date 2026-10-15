@@ -19,7 +19,6 @@ res <- idx$predict(x[1:5, ], k = 10L)
 \references{
 Omohundro SM (1989). Five balltree construction algorithms. Technical
 Report TR-89-063, International Computer Science Institute, Berkeley.
-\url{https://www1.icsi.berkeley.edu/ftp/pub/techreports/1989/tr-89-063.pdf}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{BallTreeIndex}
