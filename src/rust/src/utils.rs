@@ -41,8 +41,8 @@ pub fn kmeans_params(iters: Option<usize>, balanced: bool) -> Option<KMeansTrain
 /// @param approx Integer matrix. Queries x k approximate neighbour indices,
 /// same shape as `truth`.
 ///
-/// @returns Numeric. Mean over queries of |truth ∩ approx| / k. `NA` entries in
-/// `approx` never count as hits.
+/// @returns Numeric. Mean over queries of the overlap between `truth` and
+/// `approx`, divided by k. `NA` entries in `approx` never count as hits.
 ///
 /// @keywords internal
 #[extendr]
