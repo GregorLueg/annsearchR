@@ -1,3 +1,16 @@
+## Resubmission
+
+This is a resubmission. The first submission failed the incoming pre-tests.
+In this version I have:
+
+- Fixed the installation ERROR on Windows. The install also built a helper
+  binary that regenerates the R wrappers, and linking it hit the Windows
+  path length limit. That binary now only builds during development
+  (under roxygen2), never at install.
+- Updated the extendr URL in README.md, which had moved.
+- Removed the ICSI URL from the BallTreeIndex references, which timed out.
+  The citation itself stays.
+
 ## Submission
 
 First submission.
