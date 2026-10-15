@@ -9,8 +9,8 @@ talk to it (metric, precision, shape). Never instantiated directly: use one
 of the algorithm classes such as \link{HnswIndex}, \link{AnnoyIndex} or
 \link{ExhaustiveIndex}.
 
-The index itself is not serialised by \code{\link[=saveRDS]{saveRDS()}}. A restored object holds
-a dead pointer and every method errors. Use \verb{$save()} and
+The index itself is not serialised by \code{\link[base:saveRDS]{base::saveRDS()}}. A restored object
+holds a dead pointer and every method errors. Use \verb{$save()} and
 \code{\link[=load_ann_index]{load_ann_index()}} instead.
 }
 \section{Active bindings}{
