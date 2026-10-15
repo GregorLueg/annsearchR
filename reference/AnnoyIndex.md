@@ -6,7 +6,8 @@ recall at query time. No Manhattan.
 
 ## References
 
-Bernhardsson, Annoy, <https://github.com/spotify/annoy>
+Bernhardsson E. Annoy (Approximate Nearest Neighbors Oh Yeah).
+<https://github.com/spotify/annoy>
 
 ## Super class
 

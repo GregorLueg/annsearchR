@@ -9,7 +9,15 @@ separate. The one tree index here that supports Manhattan.
 
 ## References
 
-Muja & Lowe, IEEE TPAMI, 2014
+Silpa-Anan C, Hartley R (2008). Optimised KD-trees for fast image
+descriptor matching. *2008 IEEE Conference on Computer Vision and
+Pattern Recognition*, 1-8.
+[doi:10.1109/CVPR.2008.4587638](https://doi.org/10.1109/CVPR.2008.4587638)
+
+Muja M, Lowe DG (2014). Scalable nearest neighbor algorithms for high
+dimensional data. *IEEE Transactions on Pattern Analysis and Machine
+Intelligence*, 36, 2227-2240.
+[doi:10.1109/TPAMI.2014.2321376](https://doi.org/10.1109/TPAMI.2014.2321376)
 
 ## Super class
 

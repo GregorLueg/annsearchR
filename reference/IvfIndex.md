@@ -7,7 +7,15 @@ Manhattan.
 
 ## References
 
-Jégou, Douze & Schmid, IEEE TPAMI, 2011
+Sivic J, Zisserman A (2003). Video Google: a text retrieval approach to
+object matching in videos. *Proceedings Ninth IEEE International
+Conference on Computer Vision*, 1470-1477.
+[doi:10.1109/ICCV.2003.1238663](https://doi.org/10.1109/ICCV.2003.1238663)
+
+Jégou H, Douze M, Schmid C (2011). Product quantization for nearest
+neighbor search. *IEEE Transactions on Pattern Analysis and Machine
+Intelligence*, 33, 117-128.
+[doi:10.1109/TPAMI.2010.57](https://doi.org/10.1109/TPAMI.2010.57)
 
 ## Super class
 

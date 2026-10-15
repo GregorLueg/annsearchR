@@ -10,7 +10,10 @@ slightly different graphs. Need bit-identical results? Build with
 
 ## References
 
-Malkov & Yashunin, IEEE TPAMI, 2020
+Malkov YA, Yashunin DA (2020). Efficient and robust approximate nearest
+neighbor search using hierarchical navigable small world graphs. *IEEE
+Transactions on Pattern Analysis and Machine Intelligence*, 42, 824-836.
+[doi:10.1109/TPAMI.2018.2889473](https://doi.org/10.1109/TPAMI.2018.2889473)
 
 ## Super class
 

@@ -23,5 +23,5 @@ rs_knn_recall(truth, approx)
 
 ## Value
 
-Numeric. Mean over queries of \|truth ∩ approx\| / k. `NA` entries in
-`approx` never count as hits.
+Numeric. Mean over queries of the overlap between `truth` and `approx`,
+divided by k. `NA` entries in `approx` never count as hits.

@@ -1,6 +1,8 @@
 # annsearchR
 
 [![r_package](https://img.shields.io/github/r-package/v/GregorLueg/annsearchR?label=R_package&color=orange)](https://github.com/GregorLueg/annsearchR/blob/main/DESCRIPTION)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/annsearchR)](https://CRAN.R-project.org/package=annsearchR)
 [![annsearchR status
 badge](https://gregorlueg.r-universe.dev/annsearchR/badges/version)](https://gregorlueg.r-universe.dev/annsearchR)
 [![CI](https://github.com/GregorLueg/annsearchR/actions/workflows/R-cmd-check.yml/badge.svg)](https://github.com/GregorLueg/annsearchR/actions/workflows/R-cmd-check.yml)
@@ -44,10 +46,35 @@ article](https://gregorlueg.github.io/annsearchR/articles/benchmarks.html).
 
 ## Installation
 
-### Prerequisites
+### CRAN
 
-This package requires Rust to be installed on your system. If you don’t
-have Rust installed:
+``` r
+
+install.packages("annsearchR")
+```
+
+CRAN ships binaries for Windows and macOS, so no Rust needed there. On
+Linux it builds from source, and the source build needs rustc 1.90 or
+newer (see below).
+
+### r-universe
+
+[r-universe.dev](https://gregorlueg.r-universe.dev/annsearchR) builds
+every commit to main as a pre-compiled binary, so you get fixes before
+they hit CRAN.
+
+``` r
+
+install.packages(
+  'annsearchR',
+  repos = c('https://gregorlueg.r-universe.dev', 'https://cloud.r-project.org')
+)
+```
+
+### From source
+
+That compiles all of the Rust crates from scratch, so you need Rust
+first.
 
 **macOS and Linux:**
 
@@ -57,35 +84,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 **Windows:**
 
-Download and run the installer from [rustup.rs](https://rustup.rs/)
+Download and run the installer from [rustup.rs](https://rustup.rs/).
 
-After installation, restart your terminal and verify Rust is installed:
-
-``` bash
-rustc --version
-```
-
-### Install annsearchR
-
-You can install the package from
-[r-universe.dev](https://gregorlueg.r-universe.dev/annsearchR) as a
-pre-compiled binary.
+Restart your terminal, check `rustc --version` reports 1.90 or newer,
+then:
 
 ``` r
 
-# Install from r-universe (pre-compiled)
-install.packages(
-  'annsearchR',
-  repos = c('https://gregorlueg.r-universe.dev', 'https://cloud.r-project.org')
-)
-```
-
-Or install from source. That will compile all of the Rust crates from
-scratch.
-
-``` r
-
-# Install from source
 remotes::install_github("GregorLueg/annsearchR")
 ```
 

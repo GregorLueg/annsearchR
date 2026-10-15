@@ -9,8 +9,8 @@ or
 [ExhaustiveIndex](https://gregorlueg.github.io/annsearchR/reference/ExhaustiveIndex.md).
 
 The index itself is not serialised by
-[`saveRDS()`](https://rdrr.io/r/base/readRDS.html). A restored object
-holds a dead pointer and every method errors. Use `$save()` and
+[`base::saveRDS()`](https://rdrr.io/r/base/readRDS.html). A restored
+object holds a dead pointer and every method errors. Use `$save()` and
 [`load_ann_index()`](https://gregorlueg.github.io/annsearchR/reference/load_ann_index.md)
 instead.
 

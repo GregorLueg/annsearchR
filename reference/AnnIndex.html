@@ -3,14 +3,14 @@
 talk to it (metric, precision, shape). Never instantiated directly: use one
 of the algorithm classes such as HnswIndex, AnnoyIndex or
 ExhaustiveIndex.
-The index itself is not serialised by saveRDS(). A restored object holds
-a dead pointer and every method errors. Use $save() and
+The index itself is not serialised by base::saveRDS(). A restored object
+holds a dead pointer and every method errors. Use $save() and
 load_ann_index() instead."><meta property="og:description" content="Holds a pointer to an index living in Rust memory, plus the bits R needs to
 talk to it (metric, precision, shape). Never instantiated directly: use one
 of the algorithm classes such as HnswIndex, AnnoyIndex or
 ExhaustiveIndex.
-The index itself is not serialised by saveRDS(). A restored object holds
-a dead pointer and every method errors. Use $save() and
+The index itself is not serialised by base::saveRDS(). A restored object
+holds a dead pointer and every method errors. Use $save() and
 load_ann_index() instead."><meta property="og:image" content="https://gregorlueg.github.io/annsearchR/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -19,7 +19,7 @@ load_ann_index() instead."><meta property="og:image" content="https://gregorlueg
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,7 @@ load_ann_index() instead."><meta property="og:image" content="https://gregorlueg
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/annsearchR.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/benchmarks.html">Benchmarks against the R ecosystem</a></li>
@@ -59,8 +60,8 @@ load_ann_index() instead."><meta property="og:image" content="https://gregorlueg
 talk to it (metric, precision, shape). Never instantiated directly: use one
 of the algorithm classes such as <a href="HnswIndex.html">HnswIndex</a>, <a href="AnnoyIndex.html">AnnoyIndex</a> or
 <a href="ExhaustiveIndex.html">ExhaustiveIndex</a>.</p>
-<p>The index itself is not serialised by <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code>. A restored object holds
-a dead pointer and every method errors. Use <code>$save()</code> and
+<p>The index itself is not serialised by <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">base::saveRDS()</a></code>. A restored object
+holds a dead pointer and every method errors. Use <code>$save()</code> and
 <code><a href="load_ann_index.html">load_ann_index()</a></code> instead.</p>
     </div>
 

@@ -9,7 +9,10 @@ query time, not on `nprobe`. No Manhattan.
 
 ## References
 
-Sun et al., NeurIPS, 2023
+Sun P, Simcha D, Dopson D, Guo R, Kumar S (2023). SOAR: improved
+indexing for approximate nearest neighbor search. *Advances in Neural
+Information Processing Systems*, 36, 3189-3204.
+<https://arxiv.org/abs/2404.00774>
 
 ## Super class
 

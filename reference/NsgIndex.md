@@ -6,7 +6,10 @@ of the graph indices; pays for it with a double build.
 
 ## References
 
-Fu et al., VLDB, 2019
+Fu C, Xiang C, Wang C, Cai D (2019). Fast approximate nearest neighbor
+search with the navigating spreading-out graph. *Proceedings of the VLDB
+Endowment*, 12, 461-474.
+[doi:10.14778/3303753.3303754](https://doi.org/10.14778/3303753.3303754)
 
 ## Super class
 

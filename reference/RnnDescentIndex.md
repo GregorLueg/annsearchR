@@ -9,7 +9,10 @@ reaches what you need.
 
 ## References
 
-Ono & Matsui, ACM MM, 2023
+Ono N, Matsui Y (2023). Relative NN-Descent: a fast index construction
+for graph-based approximate nearest neighbor search. *Proceedings of the
+31st ACM International Conference on Multimedia*, 1659-1667.
+[doi:10.1145/3581783.3612290](https://doi.org/10.1145/3581783.3612290)
 
 ## Super class
 

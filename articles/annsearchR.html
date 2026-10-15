@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
       <ul class="navbar-nav me-auto">
 <li class="active nav-item"><a class="nav-link" href="../articles/annsearchR.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
@@ -122,7 +123,7 @@
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/ExhaustiveIndex.html">ExhaustiveIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">query</span>, k <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span><span class="op">$</span><span class="va">idx</span></span>
 <span><span class="fu"><a href="../reference/knn_recall.html">knn_recall</a></span><span class="op">(</span><span class="va">truth</span>, <span class="va">res</span><span class="op">$</span><span class="va">idx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9856</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.986</span></span></code></pre></div>
 </div>
 <p>Brute force is no slouch here either: it is SIMD accelerated, multi-threaded and, on macOS, runs large batches through Apple Accelerate. Up to a few hundred thousand points it’s worth timing before reaching for anything approximate.</p>
 </section><section class="level2"><h2 id="tune-at-query-time">Tune at query time<a class="anchor" aria-label="anchor" href="#tune-at-query-time"></a>
@@ -140,10 +141,10 @@
 <span>    <span class="va">t</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; ef_search =  10   recall 0.847   0.003s</span></span>
-<span><span class="co">#&gt; ef_search =  20   recall 0.938   0.004s</span></span>
+<span><span class="co">#&gt; ef_search =  10   recall 0.848   0.002s</span></span>
+<span><span class="co">#&gt; ef_search =  20   recall 0.937   0.003s</span></span>
 <span><span class="co">#&gt; ef_search =  50   recall 0.986   0.008s</span></span>
-<span><span class="co">#&gt; ef_search = 100   recall 0.995   0.014s</span></span></code></pre></div>
+<span><span class="co">#&gt; ef_search = 100   recall 0.995   0.012s</span></span></code></pre></div>
 </div>
 <p>The knobs per index:</p>
 <table class="table caption-top">
@@ -224,19 +225,19 @@
 <span><span class="op">)</span></span>
 <span><span class="va">comparison</span></span>
 <span><span class="co">#&gt;         index build_s query_s recall</span></span>
-<span><span class="co">#&gt; 1  exhaustive   0.005   0.018  1.000</span></span>
-<span><span class="co">#&gt; 2       kmknn   0.083   0.006  1.000</span></span>
-<span><span class="co">#&gt; 3       annoy   0.072   0.017  1.000</span></span>
-<span><span class="co">#&gt; 4      kdtree   0.086   0.014  0.999</span></span>
-<span><span class="co">#&gt; 5    balltree   0.027   0.006  0.932</span></span>
-<span><span class="co">#&gt; 6        hnsw   0.692   0.008  0.986</span></span>
-<span><span class="co">#&gt; 7         ivf   0.083   0.005  0.995</span></span>
-<span><span class="co">#&gt; 8        soar   0.092   0.012  0.999</span></span>
-<span><span class="co">#&gt; 9         lsh   0.013   0.010  0.973</span></span>
-<span><span class="co">#&gt; 10  nndescent   0.509   0.006  0.884</span></span>
-<span><span class="co">#&gt; 11     vamana   1.686   0.015  1.000</span></span>
-<span><span class="co">#&gt; 12        nsg   6.827   0.020  0.999</span></span>
-<span><span class="co">#&gt; 13 rnndescent   0.622   0.016  0.989</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  exhaustive   0.004   0.017  1.000</span></span>
+<span><span class="co">#&gt; 2       kmknn   0.083   0.005  1.000</span></span>
+<span><span class="co">#&gt; 3       annoy   0.064   0.015  1.000</span></span>
+<span><span class="co">#&gt; 4      kdtree   0.082   0.013  0.999</span></span>
+<span><span class="co">#&gt; 5    balltree   0.026   0.005  0.932</span></span>
+<span><span class="co">#&gt; 6        hnsw   0.685   0.007  0.985</span></span>
+<span><span class="co">#&gt; 7         ivf   0.079   0.005  0.995</span></span>
+<span><span class="co">#&gt; 8        soar   0.089   0.011  0.999</span></span>
+<span><span class="co">#&gt; 9         lsh   0.012   0.009  0.973</span></span>
+<span><span class="co">#&gt; 10  nndescent   0.420   0.005  0.884</span></span>
+<span><span class="co">#&gt; 11     vamana   1.466   0.014  0.999</span></span>
+<span><span class="co">#&gt; 12        nsg   6.885   0.015  0.999</span></span>
+<span><span class="co">#&gt; 13 rnndescent   0.491   0.014  0.989</span></span></code></pre></div>
 </div>
 <p>These are default settings on small, easy data with two threads, so read the table for the shape of things, not as a benchmark. For that, see the <a href="https://gregorlueg.github.io/annsearchR/articles/benchmarks.html">benchmarks article</a>, which compares annsearchR against RcppHNSW, RcppAnnoy, BiocNeighbors, rnndescent, FNN and RANN at equal recall on Fashion-MNIST and SIFT.</p>
 <p>What each family does:</p>
@@ -268,7 +269,7 @@
 <span></span>
 <span><span class="va">truth_self</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/ExhaustiveIndex.html">ExhaustiveIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">$</span><span class="fu">query_self</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">15L</span><span class="op">)</span><span class="op">$</span><span class="va">idx</span></span>
 <span><span class="fu"><a href="../reference/knn_recall.html">knn_recall</a></span><span class="op">(</span><span class="va">truth_self</span>, <span class="va">graph</span><span class="op">$</span><span class="va">idx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9991658</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9993333</span></span></code></pre></div>
 </div>
 <p>Leave <code>diversify_prob</code> at 0 if extraction is the point: pruning edges makes a better search graph and a worse kNN graph.</p>
 </section><section class="level2"><h2 id="metrics-and-precision">Metrics and precision<a class="anchor" aria-label="anchor" href="#metrics-and-precision"></a>

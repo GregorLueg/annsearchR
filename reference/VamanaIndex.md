@@ -8,7 +8,10 @@ and the index is a few per cent smaller.
 
 ## References
 
-Subramanya et al., NeurIPS, 2019
+Jayaram Subramanya S, et al. (2019). DiskANN: fast accurate
+billion-point nearest neighbor search on a single node. *Advances in
+Neural Information Processing Systems*, 32.
+<https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html>
 
 ## Super class
 

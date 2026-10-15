@@ -8,7 +8,10 @@ the converged graph without any search, far cheaper than
 
 ## References
 
-Dong, Moses & Li, WWW, 2011
+Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
+construction for generic similarity measures. *Proceedings of the 20th
+International Conference on World Wide Web*, 577-586.
+[doi:10.1145/1963405.1963487](https://doi.org/10.1145/1963405.1963487)
 
 ## Super class
 
@@ -105,7 +108,7 @@ Build the index.
 - `n_trees`:
 
   Integer or `NULL`. Random projection trees for the seed graph. `NULL`
-  uses `min(5 + round(n^0.25), 12)`.
+  uses `min(5 + round(sqrt(n) / 20), 64)`.
 
 - `ef_search`:
 
