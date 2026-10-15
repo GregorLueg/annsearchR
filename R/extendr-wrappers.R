@@ -180,8 +180,8 @@ rs_subsample_queries <- function(x, n, seed) .Call(wrap__rs_subsample_queries, x
 #' @param approx Integer matrix. Queries x k approximate neighbour indices,
 #' same shape as `truth`.
 #'
-#' @returns Numeric. Mean over queries of |truth ∩ approx| / k. `NA` entries in
-#' `approx` never count as hits.
+#' @returns Numeric. Mean over queries of the overlap between `truth` and
+#' `approx`, divided by k. `NA` entries in `approx` never count as hits.
 #'
 #' @keywords internal
 rs_knn_recall <- function(truth, approx) .Call(wrap__rs_knn_recall, truth, approx)

@@ -81,7 +81,11 @@ ExhaustiveIndex <- R6::R6Class(
 #' triangle inequality. Same answers as [ExhaustiveIndex]; whether it is
 #' faster depends on how well the data clusters, so time both. No Manhattan.
 #'
-#' @references Wang, IEEE ICDMW, 2012
+#' @references
+#' Wang X (2011). A fast exact k-nearest neighbors algorithm for high
+#' dimensional search using k-means clustering and triangle inequality.
+#' *The 2011 International Joint Conference on Neural Networks*, 1293-1299.
+#' \doi{10.1109/IJCNN.2011.6033373}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data

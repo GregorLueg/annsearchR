@@ -7,7 +7,14 @@
 #' `nlist` sets how finely the space is cut, `nprobe` how many cells a query
 #' visits. The smallest of the unquantised approximate indices. No Manhattan.
 #'
-#' @references Jégou, Douze & Schmid, IEEE TPAMI, 2011
+#' @references
+#' Sivic J, Zisserman A (2003). Video Google: a text retrieval approach to
+#' object matching in videos. *Proceedings Ninth IEEE International Conference
+#' on Computer Vision*, 1470-1477. \doi{10.1109/ICCV.2003.1238663}
+#'
+#' Jégou H, Douze M, Schmid C (2011). Product quantization for nearest
+#' neighbor search. *IEEE Transactions on Pattern Analysis and Machine
+#' Intelligence*, 33, 117-128. \doi{10.1109/TPAMI.2010.57}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -122,7 +129,10 @@ IvfIndex <- R6::R6Class(
 #' given `nprobe` over [IvfIndex], but scans about twice the candidates per
 #' probe, so compare the two on query time, not on `nprobe`. No Manhattan.
 #'
-#' @references Sun et al., NeurIPS, 2023
+#' @references
+#' Sun P, Simcha D, Dopson D, Guo R, Kumar S (2023). SOAR: improved indexing
+#' for approximate nearest neighbor search. *Advances in Neural Information
+#' Processing Systems*, 36, 3189-3204. <https://arxiv.org/abs/2404.00774>
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -252,7 +262,20 @@ SoarIndex <- R6::R6Class(
 #' Fewer `bits_per_hash` widens the buckets, more `num_tables` trades memory
 #' for recall. No Manhattan.
 #'
-#' @references Lv et al., VLDB, 2007
+#' @references
+#' Charikar MS (2002). Similarity estimation techniques from rounding
+#' algorithms. *Proceedings of the 34th Annual ACM Symposium on Theory of
+#' Computing*, 380-388. \doi{10.1145/509907.509965}
+#'
+#' Datar M, Immorlica N, Indyk P, Mirrokni VS (2004). Locality-sensitive
+#' hashing scheme based on p-stable distributions. *Proceedings of the 20th
+#' Annual Symposium on Computational Geometry*, 253-262.
+#' \doi{10.1145/997817.997857}
+#'
+#' Lv Q, Josephson W, Wang Z, Charikar M, Li K (2007). Multi-probe LSH:
+#' efficient indexing for high-dimensional similarity search. *Proceedings of
+#' the 33rd International Conference on Very Large Data Bases*, 950-961.
+#' <https://www.cs.princeton.edu/cass/papers/mplsh_vldb07.pdf>
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data

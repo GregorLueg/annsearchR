@@ -13,8 +13,8 @@ rs_knn_recall(truth, approx)
 same shape as \code{truth}.}
 }
 \value{
-Numeric. Mean over queries of |truth ∩ approx| / k. \code{NA} entries in
-\code{approx} never count as hits.
+Numeric. Mean over queries of the overlap between \code{truth} and
+\code{approx}, divided by k. \code{NA} entries in \code{approx} never count as hits.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

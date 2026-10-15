@@ -11,7 +11,11 @@
 #' slightly different graphs. Need bit-identical results? Build with
 #' `ann_set_threads(1L)`.
 #'
-#' @references Malkov & Yashunin, IEEE TPAMI, 2020
+#' @references
+#' Malkov YA, Yashunin DA (2020). Efficient and robust approximate nearest
+#' neighbor search using hierarchical navigable small world graphs. *IEEE
+#' Transactions on Pattern Analysis and Machine Intelligence*, 42, 824-836.
+#' \doi{10.1109/TPAMI.2018.2889473}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -132,7 +136,11 @@ HnswIndex <- R6::R6Class(
 #' reads the post-pruning graph, so leave `diversify_prob` at 0 if extraction
 #' is the point.
 #'
-#' @references Dong, Moses & Li, WWW, 2011
+#' @references
+#' Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
+#' construction for generic similarity measures. *Proceedings of the 20th
+#' International Conference on World Wide Web*, 577-586.
+#' \doi{10.1145/1963405.1963487}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -161,7 +169,7 @@ NNDescentIndex <- R6::R6Class(
     #' @param max_candidates Integer or `NULL`. Neighbours sampled per node per
     #' local join. `NULL` uses `min(k_graph, 60)`.
     #' @param n_trees Integer or `NULL`. Random projection trees for the seed
-    #' graph. `NULL` uses `min(5 + round(n^0.25), 12)`.
+    #' graph. `NULL` uses `min(5 + round(sqrt(n) / 20), 64)`.
     #' @param ef_search Integer or `NULL`. Beam width at query time. `NULL`
     #' uses `clamp(2 * k, 50, 200)`. Can be changed after the build.
     #' @param seed Integer. Fixes the seed graph and the sampling.
@@ -306,7 +314,11 @@ NNDescentIndex <- R6::R6Class(
 #' setting, though the gap closes once you match on recall, and the index is a
 #' few per cent smaller.
 #'
-#' @references Subramanya et al., NeurIPS, 2019
+#' @references
+#' Jayaram Subramanya S, et al. (2019). DiskANN: fast accurate billion-point
+#' nearest neighbor search on a single node. *Advances in Neural Information
+#' Processing Systems*, 32.
+#' <https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html>
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -424,7 +436,10 @@ VamanaIndex <- R6::R6Class(
 #' `knn_k` first, then refines it into a sparse monotonic graph. Smallest of
 #' the graph indices; pays for it with a double build.
 #'
-#' @references Fu et al., VLDB, 2019
+#' @references
+#' Fu C, Xiang C, Wang C, Cai D (2019). Fast approximate nearest neighbor
+#' search with the navigating spreading-out graph. *Proceedings of the VLDB
+#' Endowment*, 12, 461-474. \doi{10.14778/3303753.3303754}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -546,7 +561,11 @@ NsgIndex <- R6::R6Class(
 #' is the recall knob. On Gaussian benchmark data it tops out around 0.97
 #' recall, so check it reaches what you need.
 #'
-#' @references Ono & Matsui, ACM MM, 2023
+#' @references
+#' Ono N, Matsui Y (2023). Relative NN-Descent: a fast index construction for
+#' graph-based approximate nearest neighbor search. *Proceedings of the 31st
+#' ACM International Conference on Multimedia*, 1659-1667.
+#' \doi{10.1145/3581783.3612290}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data

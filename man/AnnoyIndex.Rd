@@ -15,7 +15,8 @@ res <- idx$predict(x[1:5, ], k = 10L)
 
 }
 \references{
-Bernhardsson, Annoy, \url{https://github.com/spotify/annoy}
+Bernhardsson E. Annoy (Approximate Nearest Neighbors Oh Yeah).
+\url{https://github.com/spotify/annoy}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{AnnoyIndex}

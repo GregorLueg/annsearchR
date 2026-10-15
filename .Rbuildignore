@@ -21,3 +21,6 @@
 ^vignettes/*_files$
 ^doc$
 ^Meta$
+^tools/vendor\.sh$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

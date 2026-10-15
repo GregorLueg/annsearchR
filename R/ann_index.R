@@ -99,8 +99,8 @@
 #' of the algorithm classes such as [HnswIndex], [AnnoyIndex] or
 #' [ExhaustiveIndex].
 #'
-#' The index itself is not serialised by [saveRDS()]. A restored object holds
-#' a dead pointer and every method errors. Use `$save()` and
+#' The index itself is not serialised by [base::saveRDS()]. A restored object
+#' holds a dead pointer and every method errors. Use `$save()` and
 #' [load_ann_index()] instead.
 #'
 #' @export

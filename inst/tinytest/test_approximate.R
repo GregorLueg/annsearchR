@@ -101,12 +101,12 @@ expect_null(e$dist)
 # reproducibility --------------------------------------------------------------
 
 # the parallel HNSW build is only bit-identical on 1 thread
-ann_set_threads(1L)
+old <- ann_set_threads(1L)
 expect_equal(
   HnswIndex$new(dat, seed = 7L)$predict(q, k = k),
   HnswIndex$new(dat, seed = 7L)$predict(q, k = k)
 )
-ann_set_threads(0L)
+ann_set_threads(old)
 expect_equal(
   AnnoyIndex$new(dat, seed = 7L)$predict(q, k = k),
   AnnoyIndex$new(dat, seed = 7L)$predict(q, k = k)
@@ -124,4 +124,4 @@ expect_true(knn_recall(truth, hnsw64$predict(q, k = k)$idx) > 0.9)
 old <- ann_set_threads(2L)
 expect_equal(ann_get_threads(), 2L)
 expect_equal(hnsw$predict(q, k = k), hnsw$predict(q, k = k))
-ann_set_threads(0L)
+ann_set_threads(old)

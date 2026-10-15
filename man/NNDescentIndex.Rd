@@ -17,7 +17,10 @@ knn <- idx$extract_knn()
 
 }
 \references{
-Dong, Moses & Li, WWW, 2011
+Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
+construction for generic similarity measures. \emph{Proceedings of the 20th
+International Conference on World Wide Web}, 577-586.
+\doi{10.1145/1963405.1963487}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{NNDescentIndex}
@@ -87,7 +90,7 @@ occluded edge after descent. \code{0} disables pruning.}
       \item{\code{max_candidates}}{Integer or \code{NULL}. Neighbours sampled per node per
 local join. \code{NULL} uses \code{min(k_graph, 60)}.}
       \item{\code{n_trees}}{Integer or \code{NULL}. Random projection trees for the seed
-graph. \code{NULL} uses \code{min(5 + round(n^0.25), 12)}.}
+graph. \code{NULL} uses \code{min(5 + round(sqrt(n) / 20), 64)}.}
       \item{\code{ef_search}}{Integer or \code{NULL}. Beam width at query time. \code{NULL}
 uses \code{clamp(2 * k, 50, 200)}. Can be changed after the build.}
       \item{\code{seed}}{Integer. Fixes the seed graph and the sampling.}

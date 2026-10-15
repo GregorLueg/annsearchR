@@ -7,7 +7,9 @@
 #' recall, a larger index and a slower build. Raise `search_budget` for recall
 #' at query time. No Manhattan.
 #'
-#' @references Bernhardsson, Annoy, <https://github.com/spotify/annoy>
+#' @references
+#' Bernhardsson E. Annoy (Approximate Nearest Neighbors Oh Yeah).
+#' <https://github.com/spotify/annoy>
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -109,7 +111,14 @@ AnnoyIndex <- R6::R6Class(
 #' lets one descent recover neighbours a hard split would separate. The one
 #' tree index here that supports Manhattan.
 #'
-#' @references Muja & Lowe, IEEE TPAMI, 2014
+#' @references
+#' Silpa-Anan C, Hartley R (2008). Optimised KD-trees for fast image
+#' descriptor matching. *2008 IEEE Conference on Computer Vision and Pattern
+#' Recognition*, 1-8. \doi{10.1109/CVPR.2008.4587638}
+#'
+#' Muja M, Lowe DG (2014). Scalable nearest neighbor algorithms for high
+#' dimensional data. *IEEE Transactions on Pattern Analysis and Machine
+#' Intelligence*, 36, 2227-2240. \doi{10.1109/TPAMI.2014.2321376}
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
@@ -215,7 +224,10 @@ KdTreeIndex <- R6::R6Class(
 #' it for recall. Past about 10% recall plateaus and query time does not fall.
 #' No Manhattan.
 #'
-#' @references Omohundro, ICSI Technical Report, 1989
+#' @references
+#' Omohundro SM (1989). Five balltree construction algorithms. Technical
+#' Report TR-89-063, International Computer Science Institute, Berkeley.
+#' <https://www1.icsi.berkeley.edu/ftp/pub/techreports/1989/tr-89-063.pdf>
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data

@@ -1,6 +1,6 @@
 Package: annsearchR
 Title: Fast Approximate Nearest Neighbour Search
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     c(
         person(
@@ -8,14 +8,23 @@ Authors@R:
             family = "Lueg", 
             email = "gregorlueg@me.com", 
             role = c("aut", "cre")
+        ),
+        person(
+            given = "Authors of the dependency Rust crates",
+            role = c("ctb", "cph"),
+            comment = "see inst/AUTHORS file"
         )
     )
 Description: 
     R interface to the Rust crate 'ann-search-rs'. Build an exact or
     approximate nearest neighbour index once (HNSW, Annoy, IVF, NNDescent,
     Vamana and more), keep it in memory behind an R6 object and query it as
-    often as you like. Multi-threaded via Rayon, with f32 or f64 storage.
+    often as you like. Multi-threaded via 'Rayon', with f32 or f64 storage.
+    Methods include hierarchical navigable small world graphs (Malkov and
+    Yashunin, 2020) <doi:10.1109/TPAMI.2018.2889473> and NN-Descent (Dong,
+    Charikar and Li, 2011) <doi:10.1145/1963405.1963487>.
 License: MIT + file LICENSE
+Copyright: Rust crate authors and licences are listed in inst/AUTHORS.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Imports: 
@@ -29,19 +38,21 @@ SystemRequirements: Cargo (Rust's package manager), rustc >= 1.90, xz
 Depends: 
     R (>= 4.2)
 Suggests: 
+    knitr,
+    quarto,
+    tinytest
+Config/Needs/benchmarks: 
     BiocNeighbors,
     data.table,
     FNN,
     ggplot2,
     hdf5r,
-    knitr,
-    quarto,
     RANN,
     RcppAnnoy,
     RcppHNSW,
     rnndescent,
-    scales,
-    tinytest
+    scales
 Config/roxygen2/version: 8.1.0
 VignetteBuilder: quarto
 URL: https://gregorlueg.github.io/annsearchR/, https://github.com/GregorLueg/annsearchR
+BugReports: https://github.com/GregorLueg/annsearchR/issues
