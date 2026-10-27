@@ -1,7 +1,14 @@
 ## Resubmission
 
-This is a resubmission. The first submission failed the incoming pre-tests.
-In this version I have:
+This is a resubmission. In this version I have:
+
+- Spelled out all acronyms in the Description (HNSW, IVF, NNDescent) and
+  dropped f32/f64 in favour of plain wording.
+- Reformatted the references as `authors (year) <doi:...>`.
+- Restored the user's `options()` in `inst/benchmarks/bench_ann_benchmarks.R`
+  via `on.exit()` after raising the download timeout.
+
+## Previous resubmission
 
 - Fixed the installation ERROR on Windows. The install also built a helper
   binary that regenerates the R wrappers, and linking it hit the Windows
@@ -37,8 +44,8 @@ build for).
 0 errors | 0 warnings | 1 note
 
 - New submission.
-- Possibly misspelled words in DESCRIPTION: Malkov, Yashunin and Charikar are
-  author names; HNSW, NNDescent, NN-Descent and Vamana are method names.
+- Possibly misspelled words in DESCRIPTION: Malkov and Yashunin are author
+  names; HNSW, IVF, NNDescent and Vamana are method names.
 
 The installed size is 11.8 MB, of which `libs` is 10.7 MB: the statically
 linked Rust library.

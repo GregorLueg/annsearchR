@@ -44,7 +44,8 @@ load_dataset <- function(name) {
   dir.create(cache, recursive = TRUE, showWarnings = FALSE)
   path <- file.path(cache, paste0(name, ".hdf5"))
   if (!file.exists(path)) {
-    options(timeout = max(3600, getOption("timeout")))
+    old <- options(timeout = max(3600, getOption("timeout")))
+    on.exit(options(old), add = TRUE)
     utils::download.file(
       sprintf("http://ann-benchmarks.com/%s.hdf5", name),
       path,
@@ -52,7 +53,7 @@ load_dataset <- function(name) {
     )
   }
   f <- hdf5r::H5File$new(path, "r")
-  on.exit(f$close_all())
+  on.exit(f$close_all(), add = TRUE)
   # hdf5r returns features x samples and 0-based neighbour indices
   list(
     train = t(f[["train"]][,]),
