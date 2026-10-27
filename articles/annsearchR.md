@@ -67,7 +67,7 @@ found.
 
 truth <- ExhaustiveIndex$new(train)$predict(query, k = 10L)$idx
 knn_recall(truth, res$idx)
-#> [1] 0.986
+#> [1] 0.9854
 ```
 
 Brute force is no slouch here either: it is SIMD accelerated,
@@ -94,9 +94,9 @@ for (ef in c(10L, 20L, 50L, 100L)) {
   ))
 }
 #> ef_search =  10   recall 0.847   0.003s
-#> ef_search =  20   recall 0.937   0.004s
-#> ef_search =  50   recall 0.986   0.008s
-#> ef_search = 100   recall 0.995   0.012s
+#> ef_search =  20   recall 0.938   0.004s
+#> ef_search =  50   recall 0.985   0.006s
+#> ef_search = 100   recall 0.995   0.010s
 ```
 
 The knobs per index:
@@ -149,19 +149,19 @@ comparison <- do.call(
 )
 comparison
 #>         index build_s query_s recall
-#> 1  exhaustive   0.003   0.016  1.000
-#> 2       kmknn   0.081   0.005  1.000
-#> 3       annoy   0.095   0.015  1.000
-#> 4      kdtree   0.088   0.013  0.999
-#> 5    balltree   0.026   0.004  0.932
-#> 6        hnsw   0.646   0.007  0.986
-#> 7         ivf   0.080   0.005  0.995
-#> 8        soar   0.088   0.012  0.999
-#> 9         lsh   0.016   0.009  0.973
-#> 10  nndescent   0.422   0.007  0.884
-#> 11     vamana   1.465   0.014  0.999
-#> 12        nsg   6.706   0.015  0.999
-#> 13 rnndescent   0.516   0.013  0.989
+#> 1  exhaustive   0.002   0.019  1.000
+#> 2       kmknn   0.138   0.004  1.000
+#> 3       annoy   0.054   0.014  1.000
+#> 4      kdtree   0.061   0.010  0.999
+#> 5    balltree   0.021   0.004  0.932
+#> 6        hnsw   0.564   0.007  0.985
+#> 7         ivf   0.136   0.003  0.995
+#> 8        soar   0.152   0.009  0.999
+#> 9         lsh   0.010   0.008  0.973
+#> 10  nndescent   0.393   0.004  0.884
+#> 11     vamana   1.201   0.012  0.999
+#> 12        nsg   6.435   0.014  0.999
+#> 13 rnndescent   0.436   0.012  0.989
 ```
 
 These are default settings on small, easy data with two threads, so read
@@ -215,7 +215,7 @@ graph <- nnd$extract_knn()
 
 truth_self <- ExhaustiveIndex$new(train)$query_self(k = 15L)$idx
 knn_recall(truth_self, graph$idx)
-#> [1] 0.9993333
+#> [1] 0.9994051
 ```
 
 Leave `diversify_prob` at 0 if extraction is the point: pruning edges
