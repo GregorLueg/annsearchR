@@ -1,14 +1,15 @@
 //! NN-Descent: builds the kNN graph directly by iterative local join. The
 //! converged graph can be extracted without any search.
 
-use ann_search_rs::prelude::parse_annsearch_verbosity;
+use ann_search_rs::prelude::{parse_annsearch_verbosity, NNDescentKnnParams};
 use ann_search_rs::{
-    build_nndescent_index, extract_nndescent_knn, query_nndescent_index, query_nndescent_self,
+    build_knn_graph_nndescent, build_nndescent_index, extract_nndescent_knn,
+    query_nndescent_index, query_nndescent_self,
 };
 use extendr_api::prelude::*;
 use extendr_api::Result;
 
-use crate::convert::opt_usize;
+use crate::convert::{opt_usize, pack_knn_graph, r_err, r_to_flat};
 use crate::handle::{build_prec, query_prec, self_prec, AnnIndex};
 
 /// Build an NN-Descent index
@@ -165,10 +166,86 @@ fn rs_nndescent_extract(
     })
 }
 
+/// Build the NN-Descent kNN graph without an index
+///
+/// @description
+/// `r lifecycle::badge("experimental")`
+/// Use [knn_graph_nndescent()] instead.
+///
+/// @param data Numeric matrix. Samples x features.
+/// @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+/// @param k_graph Integer. Neighbours per node found by the descent, the
+/// sample itself not counted.
+/// @param delta Numeric. Convergence threshold.
+/// @param max_iter Integer or `NULL`. Iteration cap.
+/// @param max_candidates Integer or `NULL`. Candidates sampled per local join.
+/// @param n_trees Integer or `NULL`. Random projection trees for the seed
+/// graph.
+/// @param include_self Boolean. Prepend each point at distance 0.
+/// @param sqrt Boolean. Square root the distances (true Euclidean).
+/// @param return_dist Boolean. Return the distances.
+/// @param seed Integer. Random seed.
+/// @param precision String. `"float"` or `"double"`.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
+///
+/// @returns A list with `idx` (1-based integer matrix, `k_graph` columns plus
+/// one with `include_self`) and `dist` (double matrix or `NULL`).
+///
+/// @keywords internal
+#[extendr]
+#[allow(clippy::too_many_arguments)]
+fn rs_nndescent_knn_graph(
+    data: RMatrix<f64>,
+    metric: &str,
+    k_graph: i32,
+    delta: f64,
+    max_iter: Nullable<i32>,
+    max_candidates: Nullable<i32>,
+    n_trees: Nullable<i32>,
+    include_self: bool,
+    sqrt: bool,
+    return_dist: bool,
+    seed: i32,
+    precision: &str,
+    verbose: i32,
+) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
+    let params = NNDescentKnnParams::new(
+        k_graph as usize,
+        opt_usize(max_iter),
+        opt_usize(max_candidates),
+        opt_usize(n_trees),
+        delta,
+        include_self,
+        return_dist,
+    );
+    let seed = seed as usize;
+    // The flat copy moves into the builder, which drops it before returning.
+    match precision {
+        "double" => {
+            let mat = r_to_flat::<f64>(&data);
+            let g = crate::pool::run(move || {
+                build_knn_graph_nndescent(mat, metric, Some(params), seed, verbosity)
+            })
+            .map_err(r_err)?;
+            Ok(pack_knn_graph(&g, sqrt))
+        }
+        _ => {
+            let mat = r_to_flat::<f32>(&data);
+            let g = crate::pool::run(move || {
+                build_knn_graph_nndescent(mat, metric, Some(params), seed, verbosity)
+            })
+            .map_err(r_err)?;
+            Ok(pack_knn_graph(&g, sqrt))
+        }
+    }
+}
+
 extendr_module! {
     mod nndescent;
     fn rs_nndescent_build;
     fn rs_nndescent_query;
     fn rs_nndescent_self;
     fn rs_nndescent_extract;
+    fn rs_nndescent_knn_graph;
 }

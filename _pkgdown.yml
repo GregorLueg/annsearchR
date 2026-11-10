@@ -58,6 +58,10 @@ reference:
       - VamanaIndex
       - NsgIndex
       - RnnDescentIndex
+  - title: "kNN graphs"
+    desc: "The kNN graph of the data, no index kept"
+    contents:
+      - knn_graph_nndescent
   - title: "Shared interface"
     desc: "Querying, saving and loading any index"
     contents:

@@ -790,6 +790,34 @@ rs_nndescent_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Ca
 #' @keywords internal
 rs_nndescent_extract <- function(ptr, k, include_self, sqrt, return_dist) .Call(wrap__rs_nndescent_extract, ptr, k, include_self, sqrt, return_dist)
 
+#' Build the NN-Descent kNN graph without an index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [knn_graph_nndescent()] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param k_graph Integer. Neighbours per node found by the descent, the
+#' sample itself not counted.
+#' @param delta Numeric. Convergence threshold.
+#' @param max_iter Integer or `NULL`. Iteration cap.
+#' @param max_candidates Integer or `NULL`. Candidates sampled per local join.
+#' @param n_trees Integer or `NULL`. Random projection trees for the seed
+#' graph.
+#' @param include_self Boolean. Prepend each point at distance 0.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
+#'
+#' @returns A list with `idx` (1-based integer matrix, `k_graph` columns plus
+#' one with `include_self`) and `dist` (double matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nndescent_knn_graph <- function(data, metric, k_graph, delta, max_iter, max_candidates, n_trees, include_self, sqrt, return_dist, seed, precision, verbose) .Call(wrap__rs_nndescent_knn_graph, data, metric, k_graph, delta, max_iter, max_candidates, n_trees, include_self, sqrt, return_dist, seed, precision, verbose)
+
 #' Build a Vamana index
 #'
 #' @description

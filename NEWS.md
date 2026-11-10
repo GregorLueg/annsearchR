@@ -10,6 +10,12 @@
   instead of 2.4 GB; Annoy peaks at 5.2 GB instead of 6.0 GB and builds in
   7.0 s instead of 8.3 s; the kd forest peaks at 3.7 GB instead of 4.2 GB.
   Recall is unchanged and query speed is within run-to-run noise.
+- New `knn_graph_nndescent()`: matrix in, kNN graph out, no index kept. Same
+  graph as `NNDescentIndex$new()` followed by `$extract_knn()` at the same
+  seed and `n_trees`. On SIFT-128 (1M x 128, 10 threads, `k_graph = 15`) it
+  peaks at 5.0 GB instead of 6.0 GB, at the same build time (14.7 s).
+- `NNDescentIndex$extract_knn()` reads the full kNN graph whatever
+  `diversify_prob` is set to; the docs said otherwise.
 - Manhattan NN-Descent seeds its graph by kd-tree leaf join, like the other
   metrics.
 - `.verbose` takes `0`, `1` or `2` as well as `FALSE`/`TRUE`. `2` prints timed

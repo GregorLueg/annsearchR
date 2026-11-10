@@ -98,6 +98,39 @@ expect_equal(dim(e$idx), c(nrow(dat), 10L))
 expect_false(any(e$idx == seq_len(nrow(dat))))
 expect_null(e$dist)
 
+# graph only, no index ---------------------------------------------------------
+
+for (metric in c("euclidean", "sqeuclidean", "cosine", "manhattan")) {
+  for (precision in c("float", "double")) {
+    nn <- NNDescentIndex$new(
+      dat,
+      metric = metric,
+      k_graph = 12L,
+      n_trees = 8L,
+      seed = 3L,
+      precision = precision
+    )
+    for (self in c(TRUE, FALSE)) {
+      g <- knn_graph_nndescent(
+        dat,
+        metric = metric,
+        k_graph = 12L,
+        n_trees = 8L,
+        include_self = self,
+        seed = 3L,
+        precision = precision
+      )
+      expect_equal(g, nn$extract_knn(k = 12L + self, include_self = self))
+    }
+  }
+}
+
+g <- knn_graph_nndescent(dat, k_graph = 10L, return_dist = FALSE)
+expect_equal(dim(g$idx), c(nrow(dat), 11L))
+expect_equal(g$idx[, 1], seq_len(nrow(dat)))
+expect_null(g$dist)
+expect_error(knn_graph_nndescent(dat, k_graph = 0L))
+
 # reproducibility --------------------------------------------------------------
 
 # the parallel HNSW build is only bit-identical on 1 thread

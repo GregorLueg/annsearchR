@@ -202,8 +202,17 @@ truth_self <- ExhaustiveIndex$new(train)$query_self(k = 15L)$idx
 knn_recall(truth_self, graph$idx)
 ```
 
-Leave `diversify_prob` at 0 if extraction is the point: pruning edges makes a
-better search graph and a worse kNN graph.
+Only need the graph and never query it? `knn_graph_nndescent()` runs the same
+descent but drops the seeding trees as they go and keeps no index, so less
+memory sits around at the end. `k_graph` counts true neighbours, and the sample
+itself comes on top with `include_self = TRUE`, so ask for one column more from
+`$extract_knn()` to compare like for like:
+
+```{r}
+#| label: knn-graph
+graph_only <- knn_graph_nndescent(train, k_graph = 15L)
+identical(graph_only, nnd$extract_knn(k = 16L))
+```
 
 ## Metrics and precision
 
