@@ -5,7 +5,10 @@
   throughout, the Annoy, kd and ball tree forests build in place over one
   permutation per tree, and NN-Descent no longer keeps a second, reordered
   copy of the vectors. NSG builds its internal kNN graph without the
-  NN-Descent search structure.
+  NN-Descent search structure. On SIFT-128 (1M x 128, 10 threads), the
+  NN-Descent build peaks at 6.3 GB instead of 8.2 GB and saves to 1.9 GB
+  instead of 2.4 GB; Annoy peaks at 5.2 GB instead of 6.0 GB and builds in
+  7.0 s instead of 8.3 s. Recall and query speed are unchanged.
 - Manhattan NN-Descent seeds its graph by kd-tree leaf join, like the other
   metrics.
 - `.verbose` takes `0`, `1` or `2` as well as `FALSE`/`TRUE`. `2` prints timed
