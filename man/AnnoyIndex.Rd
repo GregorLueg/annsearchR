@@ -56,7 +56,8 @@ Bernhardsson E. Annoy (Approximate Nearest Neighbors Oh Yeah).
   n_trees = 25L,
   search_budget = NULL,
   seed = 42L,
-  precision = c("float", "double")
+  precision = c("float", "double"),
+  .verbose = FALSE
 )}
     \if{html}{\out{</div>}}
   }
@@ -72,6 +73,8 @@ pointer is also accepted; \code{\link[=load_ann_index]{load_ann_index()}} uses t
       \item{\code{seed}}{Integer. Fixes the random hyperplanes.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}
+      \item{\code{.verbose}}{Boolean or integer. Build progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} adds timed build stages.}
     }
     \if{html}{\out{</div>}}
   }

@@ -1,6 +1,7 @@
 //! Multi-probe LSH over random projections. Cheapest build here, weakest
 //! recall per unit of query time. No Manhattan.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{build_lsh_index, query_lsh_index, query_lsh_self};
 use extendr_api::prelude::*;
 use extendr_api::Result;
@@ -21,11 +22,13 @@ use crate::handle::{build_prec, query_prec, self_prec, AnnIndex};
 /// @param slot_bits Integer or `NULL`. Bits per quantised projection.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
 /// @keywords internal
 #[extendr]
+#[allow(clippy::too_many_arguments)]
 fn rs_lsh_build(
     data: RMatrix<f64>,
     metric: &str,
@@ -34,7 +37,9 @@ fn rs_lsh_build(
     slot_bits: Nullable<i32>,
     seed: i32,
     precision: &str,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (num_tables, bits_per_hash) = (num_tables as usize, bits_per_hash as usize);
     let (slot_bits, seed) = (opt_usize(slot_bits), seed as usize);
     build_prec!(data, precision, Lsh, |mat| build_lsh_index(
@@ -43,7 +48,8 @@ fn rs_lsh_build(
         num_tables,
         bits_per_hash,
         slot_bits,
-        seed
+        seed,
+        verbosity
     ))
 }
 
@@ -61,7 +67,7 @@ fn rs_lsh_build(
 /// @param max_candidates Integer or `NULL`. Cap on candidates scored.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -77,13 +83,14 @@ fn rs_lsh_query(
     max_candidates: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k = k as usize;
     let (n_probe, max_candidates) = (opt_usize(n_probe), opt_usize(max_candidates));
     query_prec!(ptr, Lsh, "lsh", data, k, sqrt, |idx, q| {
         let probes = n_probe.unwrap_or_else(|| idx.num_projections());
-        query_lsh_index(q, idx, k, probes, max_candidates, return_dist, verbose)
+        query_lsh_index(q, idx, k, probes, max_candidates, return_dist, verbosity)
     })
 }
 
@@ -99,7 +106,7 @@ fn rs_lsh_query(
 /// @param max_candidates Integer or `NULL`. Cap on candidates scored.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -113,12 +120,13 @@ fn rs_lsh_self(
     max_candidates: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k = k as usize;
     let (n_probe, max_candidates) = (opt_usize(n_probe), opt_usize(max_candidates));
     self_prec!(ptr, Lsh, "lsh", k, sqrt, |idx| {
-        query_lsh_self(idx, k, n_probe, max_candidates, return_dist, verbose)
+        query_lsh_self(idx, k, n_probe, max_candidates, return_dist, verbosity)
     })
 }
 

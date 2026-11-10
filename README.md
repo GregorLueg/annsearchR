@@ -27,6 +27,8 @@ Thirteen CPU indices, all behind the same `$new()` / `$predict()` interface:
 Euclidean, squared Euclidean, cosine and Manhattan distances, f32 or f64
 storage, multi-threaded via Rayon. Indices can be saved to disk and loaded
 back, and `$query_self()` gives you the kNN graph of the indexed data itself.
+Need only that graph? `knn_graph_nndescent()` builds it directly, without
+keeping an index.
 
 ### Speed
 

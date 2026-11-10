@@ -1,6 +1,7 @@
 //! IVF: inverted file over k-means Voronoi cells. `nlist` sets how finely the
 //! space is cut, `nprobe` how many cells a query visits. No Manhattan.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{build_ivf_index, query_ivf_index, query_ivf_self};
 use extendr_api::prelude::*;
 use extendr_api::Result;
@@ -22,7 +23,7 @@ use crate::utils::kmeans_params;
 /// @param kmeans_balanced Boolean. Reseed starved centroids.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
@@ -37,18 +38,14 @@ fn rs_ivf_build(
     kmeans_balanced: bool,
     seed: i32,
     precision: &str,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let nlist = opt_usize(nlist);
     let km = kmeans_params(opt_usize(kmeans_iters), kmeans_balanced);
     let seed = seed as usize;
     build_prec!(data, precision, Ivf, |mat| build_ivf_index(
-        mat,
-        nlist,
-        km,
-        metric,
-        seed,
-        verbose
+        mat, nlist, km, metric, seed, verbosity
     ))
 }
 
@@ -64,7 +61,7 @@ fn rs_ivf_build(
 /// @param nprobe Integer or `NULL`. Cells visited per query.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -78,11 +75,12 @@ fn rs_ivf_query(
     nprobe: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, nprobe) = (k as usize, opt_usize(nprobe));
     query_prec!(ptr, Ivf, "ivf", data, k, sqrt, |idx, q| {
-        query_ivf_index(q, idx, k, nprobe, return_dist, verbose)
+        query_ivf_index(q, idx, k, nprobe, return_dist, verbosity)
     })
 }
 
@@ -97,7 +95,7 @@ fn rs_ivf_query(
 /// @param nprobe Integer or `NULL`. Cells visited per query.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -110,11 +108,12 @@ fn rs_ivf_self(
     nprobe: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, nprobe) = (k as usize, opt_usize(nprobe));
     self_prec!(ptr, Ivf, "ivf", k, sqrt, |idx| {
-        query_ivf_self(idx, k, nprobe, return_dist, verbose)
+        query_ivf_self(idx, k, nprobe, return_dist, verbosity)
     })
 }
 

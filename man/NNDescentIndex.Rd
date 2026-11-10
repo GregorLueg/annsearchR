@@ -7,8 +7,9 @@
 Builds the kNN graph directly by iterative local join. Want the kNN graph of
 the data itself (UMAP, clustering)? \verb{$extract_knn()} hands back the
 converged graph without any search, far cheaper than \verb{$query_self()}. It
-reads the post-pruning graph, so leave \code{diversify_prob} at 0 if extraction
-is the point.
+reads the full kNN graph: \code{diversify_prob} only prunes the graph that
+queries walk. Only need the graph and never query? \code{\link[=knn_graph_nndescent]{knn_graph_nndescent()}}
+returns the same graph without keeping an index around.
 }
 \examples{
 x <- generate_clustered_data(1000L, 16L)$data
@@ -96,7 +97,8 @@ uses \code{clamp(2 * k, 50, 200)}. Can be changed after the build.}
       \item{\code{seed}}{Integer. Fixes the seed graph and the sampling.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}
-      \item{\code{.verbose}}{Boolean. Print build progress from Rust.}
+      \item{\code{.verbose}}{Boolean or integer. Build progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} adds timed build stages.}
     }
     \if{html}{\out{</div>}}
   }

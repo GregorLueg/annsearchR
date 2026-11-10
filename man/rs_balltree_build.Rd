@@ -4,7 +4,7 @@
 \alias{rs_balltree_build}
 \title{Build a ball tree index}
 \usage{
-rs_balltree_build(data, metric, seed, precision)
+rs_balltree_build(data, metric, seed, precision, verbose)
 }
 \arguments{
 \item{data}{Numeric matrix. Samples x features.}
@@ -14,6 +14,8 @@ rs_balltree_build(data, metric, seed, precision)
 \item{seed}{Integer. Random seed.}
 
 \item{precision}{String. \code{"float"} or \code{"double"}.}
+
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 External pointer to the index.

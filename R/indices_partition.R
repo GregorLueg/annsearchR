@@ -42,7 +42,8 @@ IvfIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine"),
@@ -63,7 +64,7 @@ IvfIndex <- R6::R6Class(
       checkmate::qassert(kmeans_balanced, "B1")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -164,7 +165,8 @@ SoarIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine"),
@@ -193,7 +195,7 @@ SoarIndex <- R6::R6Class(
       checkmate::qassert(kmeans_balanced, "B1")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -304,6 +306,8 @@ LshIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the random projections.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine"),
@@ -313,7 +317,8 @@ LshIndex <- R6::R6Class(
       n_probe = NULL,
       max_candidates = NULL,
       seed = 42L,
-      precision = c("float", "double")
+      precision = c("float", "double"),
+      .verbose = FALSE
     ) {
       metric <- match.arg(metric)
       precision <- match.arg(precision)
@@ -324,6 +329,7 @@ LshIndex <- R6::R6Class(
       slot_bits <- .as_knob(slot_bits, .var.name = "slot_bits")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -335,7 +341,8 @@ LshIndex <- R6::R6Class(
           as.integer(bits_per_hash),
           slot_bits,
           as.integer(seed),
-          precision
+          precision,
+          .verbose
         )
       }
       private$attach(ptr)

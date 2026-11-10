@@ -4,7 +4,7 @@
 //! back ragged (`Vec<Vec<_>>`, rows can be short) and leave as dense
 //! column-major R matrices with 1-based indices.
 
-use ann_search_rs::prelude::AnnSearchErrors;
+use ann_search_rs::prelude::{AnnSearchErrors, KnnGraph, KNN_GRAPH_EMPTY};
 use extendr_api::prelude::*;
 use extendr_api::Error;
 use num_traits::{AsPrimitive, Float};
@@ -104,6 +104,76 @@ where
                                     v
                                 }
                             });
+                        }
+                    });
+            }
+            dist_mat.into()
+        }
+        None => ().into(),
+    };
+
+    list!(idx = idx_mat, dist = dist_robj).into()
+}
+
+/// Turn a flat kNN graph into R matrices.
+///
+/// Same output as [`pack_knn`], written straight from the flat graph so no
+/// ragged copy of it is ever held. Empty slots become `NA` indices and `Inf`
+/// distances.
+///
+/// ### Params
+///
+/// * `graph` - Flat graph, rows sorted by distance, 0-based ids.
+/// * `sqrt` - Take the square root of each distance.
+///
+/// ### Returns
+///
+/// `list(idx = n x k integer matrix (1-based), dist = n x k double matrix or
+/// NULL)`.
+pub fn pack_knn_graph<T>(graph: &KnnGraph<T>, sqrt: bool) -> Robj
+where
+    T: Float + AsPrimitive<f64> + Send + Sync,
+{
+    let (n, k) = (graph.n, graph.k);
+
+    let mut idx_mat = RMatrix::<i32>::new(n, k);
+    if n > 0 {
+        idx_mat
+            .data_mut()
+            .par_chunks_mut(n)
+            .enumerate()
+            .for_each(|(c, col)| {
+                for (r, x) in col.iter_mut().enumerate() {
+                    let j = graph.indices[r * k + c];
+                    *x = if j == KNN_GRAPH_EMPTY {
+                        i32::MIN
+                    } else {
+                        (j + 1) as i32
+                    };
+                }
+            });
+    }
+
+    let dist_robj: Robj = match &graph.distances {
+        Some(d) => {
+            let mut dist_mat = RMatrix::<f64>::new(n, k);
+            if n > 0 {
+                dist_mat
+                    .data_mut()
+                    .par_chunks_mut(n)
+                    .enumerate()
+                    .for_each(|(c, col)| {
+                        for (r, x) in col.iter_mut().enumerate() {
+                            *x = if graph.indices[r * k + c] == KNN_GRAPH_EMPTY {
+                                f64::INFINITY
+                            } else {
+                                let v: f64 = d[r * k + c].as_().max(0.0);
+                                if sqrt {
+                                    v.sqrt()
+                                } else {
+                                    v
+                                }
+                            };
                         }
                     });
             }

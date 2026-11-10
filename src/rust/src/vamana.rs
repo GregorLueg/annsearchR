@@ -1,6 +1,7 @@
 //! Vamana: the flat graph from DiskANN, pruned in two passes with the
 //! relaxed-neighbour rule.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{build_vamana_index, query_vamana_index, query_vamana_self};
 use extendr_api::prelude::*;
 use extendr_api::Result;
@@ -22,6 +23,7 @@ use crate::handle::{build_prec, query_prec, self_prec, AnnIndex};
 /// @param alpha_pass2 Numeric. Relaxation factor on the second pass.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
@@ -37,10 +39,12 @@ fn rs_vamana_build(
     alpha_pass2: f64,
     seed: i32,
     precision: &str,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (r, l_build, seed) = (r as usize, l_build as usize, seed as usize);
     let (alpha_pass1, alpha_pass2) = (alpha_pass1 as f32, alpha_pass2 as f32);
-    build_prec!(data, precision, Vamana, |mat| Ok(build_vamana_index(
+    build_prec!(data, precision, Vamana, |mat| build_vamana_index(
         mat,
         r,
         l_build,
@@ -48,8 +52,9 @@ fn rs_vamana_build(
         alpha_pass1,
         alpha_pass2,
         metric,
-        seed
-    )))
+        seed,
+        verbosity
+    ))
 }
 
 /// Query a Vamana index
@@ -64,7 +69,7 @@ fn rs_vamana_build(
 /// @param ef_search Integer or `NULL`. Beam width at query time.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -78,11 +83,12 @@ fn rs_vamana_query(
     ef_search: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, ef_search) = (k as usize, opt_usize(ef_search));
     query_prec!(ptr, Vamana, "vamana", data, k, sqrt, |idx, q| {
-        query_vamana_index(q, idx, k, ef_search, return_dist, verbose)
+        query_vamana_index(q, idx, k, ef_search, return_dist, verbosity)
     })
 }
 
@@ -97,7 +103,7 @@ fn rs_vamana_query(
 /// @param ef_search Integer or `NULL`. Beam width at query time.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -110,11 +116,12 @@ fn rs_vamana_self(
     ef_search: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, ef_search) = (k as usize, opt_usize(ef_search));
     self_prec!(ptr, Vamana, "vamana", k, sqrt, |idx| {
-        query_vamana_self(idx, k, ef_search, return_dist, verbose)
+        query_vamana_self(idx, k, ef_search, return_dist, verbosity)
     })
 }
 

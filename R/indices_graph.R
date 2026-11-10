@@ -44,7 +44,8 @@ HnswIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the layer assignment.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -66,7 +67,7 @@ HnswIndex <- R6::R6Class(
       checkmate::qassert(ef_construction, "X1[1,)")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -133,8 +134,9 @@ HnswIndex <- R6::R6Class(
 #' Builds the kNN graph directly by iterative local join. Want the kNN graph of
 #' the data itself (UMAP, clustering)? `$extract_knn()` hands back the
 #' converged graph without any search, far cheaper than `$query_self()`. It
-#' reads the post-pruning graph, so leave `diversify_prob` at 0 if extraction
-#' is the point.
+#' reads the full kNN graph: `diversify_prob` only prunes the graph that
+#' queries walk. Only need the graph and never query? [knn_graph_nndescent()]
+#' returns the same graph without keeping an index around.
 #'
 #' @references
 #' Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
@@ -175,7 +177,8 @@ NNDescentIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the seed graph and the sampling.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -205,7 +208,7 @@ NNDescentIndex <- R6::R6Class(
       n_trees <- .as_knob(n_trees, .var.name = "n_trees")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -304,6 +307,116 @@ NNDescentIndex <- R6::R6Class(
   )
 )
 
+# knn graph --------------------------------------------------------------------
+
+#' kNN graph by NN-Descent, without an index
+#'
+#' @description
+#' Matrix in, kNN graph out. Runs the same descent as [NNDescentIndex], but
+#' drops the seeding trees as soon as they are joined and keeps no index, so
+#' peak memory stays near the data plus the graph. At the same `seed`,
+#' `n_trees` and descent parameters, the result is identical to
+#' `NNDescentIndex$new(...)$extract_knn()`. Use [NNDescentIndex] if you also
+#' want to query the graph with new data.
+#'
+#' `k_graph` is the number of neighbours the descent finds per sample, the
+#' sample itself not counted. With `include_self = TRUE` (the default, as for
+#' `$query_self()`) each row starts with the sample itself at distance 0, so
+#' the matrices have `k_graph + 1` columns. With `include_self = FALSE` they
+#' have `k_graph` columns of true neighbours only.
+#'
+#' @param data Numeric matrix or data.frame. Samples x features.
+#' @param metric String. One of
+#' `c("euclidean", "sqeuclidean", "cosine", "manhattan")`.
+#' @param k_graph Integer. Neighbours per sample found by the descent, the
+#' sample itself not counted.
+#' @param delta Numeric. Convergence threshold: descent stops once the
+#' fraction of updated edges falls below it.
+#' @param max_iter Integer or `NULL`. Iteration cap. `NULL` uses
+#' `max(round(log2(n)), 5)`.
+#' @param max_candidates Integer or `NULL`. Neighbours sampled per node per
+#' local join. `NULL` uses `min(k_graph, 60)`.
+#' @param n_trees Integer or `NULL`. Random projection trees for the seed
+#' graph. `NULL` uses `min(5 + round(sqrt(n) / 20), 64)`.
+#' @param include_self Boolean. Put each sample first at distance 0, adding
+#' one column.
+#' @param return_dist Boolean. Return the distances as well.
+#' @param seed Integer. Fixes the seed graph and the sampling.
+#' @param precision String. `"float"` runs the descent in f32, `"double"` in
+#' f64.
+#' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+#' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
+#'
+#' @returns A list with:
+#' \itemize{
+#'   \item idx - Integer matrix, samples x (`k_graph + include_self`), 1-based
+#'   neighbour indices sorted by distance. Rows the descent could not fill
+#'   are `NA` padded.
+#'   \item dist - Double matrix of the same shape with the distances, `Inf`
+#'   where `idx` is `NA`. `NULL` if `return_dist = FALSE`.
+#' }
+#'
+#' @references
+#' Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
+#' construction for generic similarity measures. *Proceedings of the 20th
+#' International Conference on World Wide Web*, 577-586.
+#' \doi{10.1145/1963405.1963487}
+#'
+#' @examples
+#' x <- generate_clustered_data(1000L, 16L)$data
+#' knn <- knn_graph_nndescent(x, k_graph = 15L)
+#' dim(knn$idx)
+#'
+#' @export
+knn_graph_nndescent <- function(
+  data,
+  metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
+  k_graph = 15L,
+  delta = 0.001,
+  max_iter = NULL,
+  max_candidates = NULL,
+  n_trees = NULL,
+  include_self = TRUE,
+  return_dist = TRUE,
+  seed = 42L,
+  precision = c("float", "double"),
+  .verbose = FALSE
+) {
+  metric <- match.arg(metric)
+  precision <- match.arg(precision)
+  checkmate::assertChoice(
+    metric,
+    c("euclidean", "sqeuclidean", "cosine", "manhattan")
+  )
+  checkmate::qassert(k_graph, "X1[1,)")
+  checkmate::qassert(delta, "N1[0,1]")
+  max_iter <- .as_knob(max_iter, .var.name = "max_iter")
+  max_candidates <- .as_knob(max_candidates, .var.name = "max_candidates")
+  n_trees <- .as_knob(n_trees, .var.name = "n_trees")
+  checkmate::qassert(include_self, "B1")
+  checkmate::qassert(return_dist, "B1")
+  checkmate::qassert(seed, "X1[0,)")
+  checkmate::assertChoice(precision, c("float", "double"))
+  .verbose <- .as_verbosity(.verbose)
+  spec <- .ann_metrics()[[metric]]
+
+  rs_nndescent_knn_graph(
+    .as_ann_matrix(data),
+    spec$core,
+    as.integer(k_graph),
+    as.double(delta),
+    max_iter,
+    max_candidates,
+    n_trees,
+    include_self,
+    spec$sqrt,
+    return_dist,
+    as.integer(seed),
+    precision,
+    .verbose
+  )
+}
+
 # vamana -----------------------------------------------------------------------
 
 #' Vamana index
@@ -348,6 +461,8 @@ VamanaIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the entry point and pruning order.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -357,7 +472,8 @@ VamanaIndex <- R6::R6Class(
       alpha_pass2 = 1.2,
       ef_search = NULL,
       seed = 42L,
-      precision = c("float", "double")
+      precision = c("float", "double"),
+      .verbose = FALSE
     ) {
       metric <- match.arg(metric)
       precision <- match.arg(precision)
@@ -372,6 +488,7 @@ VamanaIndex <- R6::R6Class(
       checkmate::qassert(alpha_pass2, "N1[1,)")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -384,7 +501,8 @@ VamanaIndex <- R6::R6Class(
           as.double(alpha_pass1),
           as.double(alpha_pass2),
           as.integer(seed),
-          precision
+          precision,
+          .verbose
         )
       }
       private$attach(ptr)
@@ -468,7 +586,8 @@ NsgIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the initial graph and navigating node.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -494,7 +613,7 @@ NsgIndex <- R6::R6Class(
       checkmate::qassert(knn_k, "X1[1,)")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -597,7 +716,8 @@ RnnDescentIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the seed graph and the sampling.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -626,7 +746,7 @@ RnnDescentIndex <- R6::R6Class(
       n_trees <- .as_knob(n_trees, .var.name = "n_trees")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data

@@ -1,6 +1,6 @@
 Package: annsearchR
 Title: Fast Approximate Nearest Neighbour Search
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     c(
         person(
@@ -54,7 +54,7 @@ Config/Needs/benchmarks:
     RcppHNSW,
     rnndescent,
     scales
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
 VignetteBuilder: quarto
 URL: https://gregorlueg.github.io/annsearchR/, https://github.com/GregorLueg/annsearchR
 BugReports: https://github.com/GregorLueg/annsearchR/issues

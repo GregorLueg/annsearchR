@@ -1,6 +1,7 @@
 //! HNSW: hierarchical navigable small world graph. `ef_search` is required;
 //! HNSW has no internal default to fall back on.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{build_hnsw_index, query_hnsw_index, query_hnsw_self};
 use extendr_api::prelude::*;
 use extendr_api::Result;
@@ -19,7 +20,7 @@ use crate::handle::{build_prec, query_prec, self_prec, AnnIndex};
 /// @param ef_construction Integer. Candidate list width during the build.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
@@ -32,17 +33,18 @@ fn rs_hnsw_build(
     ef_construction: i32,
     seed: i32,
     precision: &str,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (m, ef_construction, seed) = (m as usize, ef_construction as usize, seed as usize);
-    build_prec!(data, precision, Hnsw, |mat| Ok(build_hnsw_index(
+    build_prec!(data, precision, Hnsw, |mat| build_hnsw_index(
         mat,
         m,
         ef_construction,
         metric,
         seed,
-        verbose
-    )))
+        verbosity
+    ))
 }
 
 /// Query an HNSW index
@@ -57,7 +59,7 @@ fn rs_hnsw_build(
 /// @param ef_search Integer. Beam width at query time.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -71,11 +73,12 @@ fn rs_hnsw_query(
     ef_search: i32,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, ef_search) = (k as usize, ef_search as usize);
     query_prec!(ptr, Hnsw, "hnsw", data, k, sqrt, |idx, q| {
-        query_hnsw_index(q, idx, k, ef_search, return_dist, verbose)
+        query_hnsw_index(q, idx, k, ef_search, return_dist, verbosity)
     })
 }
 
@@ -90,7 +93,7 @@ fn rs_hnsw_query(
 /// @param ef_search Integer. Beam width at query time.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -103,11 +106,12 @@ fn rs_hnsw_self(
     ef_search: i32,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, ef_search) = (k as usize, ef_search as usize);
     self_prec!(ptr, Hnsw, "hnsw", k, sqrt, |idx| {
-        query_hnsw_self(idx, k, ef_search, return_dist, verbose)
+        query_hnsw_self(idx, k, ef_search, return_dist, verbosity)
     })
 }
 

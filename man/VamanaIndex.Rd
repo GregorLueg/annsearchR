@@ -62,7 +62,8 @@ Processing Systems}, 32.
   alpha_pass2 = 1.2,
   ef_search = NULL,
   seed = 42L,
-  precision = c("float", "double")
+  precision = c("float", "double"),
+  .verbose = FALSE
 )}
     \if{html}{\out{</div>}}
   }
@@ -84,6 +85,8 @@ uses 75. Can be changed after the build.}
       \item{\code{seed}}{Integer. Fixes the entry point and pruning order.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}
+      \item{\code{.verbose}}{Boolean or integer. Build progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} adds timed build stages.}
     }
     \if{html}{\out{</div>}}
   }

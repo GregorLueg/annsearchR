@@ -195,11 +195,12 @@ rs_knn_recall <- function(truth, approx) .Call(wrap__rs_knn_recall, truth, appro
 #' @param data Numeric matrix. Samples x features.
 #' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
 #' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
 #' @keywords internal
-rs_exhaustive_build <- function(data, metric, precision) .Call(wrap__rs_exhaustive_build, data, metric, precision)
+rs_exhaustive_build <- function(data, metric, precision, verbose) .Call(wrap__rs_exhaustive_build, data, metric, precision, verbose)
 
 #' Query an exhaustive index
 #'
@@ -212,7 +213,7 @@ rs_exhaustive_build <- function(data, metric, precision) .Call(wrap__rs_exhausti
 #' @param k Integer. Number of neighbours.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -230,7 +231,7 @@ rs_exhaustive_query <- function(ptr, data, k, sqrt, return_dist, verbose) .Call(
 #' @param k Integer. Number of neighbours, including the point itself.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -251,7 +252,7 @@ rs_exhaustive_self <- function(ptr, k, sqrt, return_dist, verbose) .Call(wrap__r
 #' @param kmeans_balanced Boolean. Reseed starved centroids.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -269,7 +270,7 @@ rs_kmknn_build <- function(data, metric, nlist, kmeans_iters, kmeans_balanced, s
 #' @param k Integer. Number of neighbours.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -287,7 +288,7 @@ rs_kmknn_query <- function(ptr, data, k, sqrt, return_dist, verbose) .Call(wrap_
 #' @param k Integer. Number of neighbours, including the point itself.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -306,11 +307,12 @@ rs_kmknn_self <- function(ptr, k, sqrt, return_dist, verbose) .Call(wrap__rs_kmk
 #' @param n_trees Integer. Number of trees.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
 #' @keywords internal
-rs_annoy_build <- function(data, metric, n_trees, seed, precision) .Call(wrap__rs_annoy_build, data, metric, n_trees, seed, precision)
+rs_annoy_build <- function(data, metric, n_trees, seed, precision, verbose) .Call(wrap__rs_annoy_build, data, metric, n_trees, seed, precision, verbose)
 
 #' Query an Annoy index
 #'
@@ -325,7 +327,7 @@ rs_annoy_build <- function(data, metric, n_trees, seed, precision) .Call(wrap__r
 #' `NULL` lets the crate pick.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -344,7 +346,7 @@ rs_annoy_query <- function(ptr, data, k, search_budget, sqrt, return_dist, verbo
 #' @param search_budget Integer or `NULL`. Candidates to inspect per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -363,11 +365,12 @@ rs_annoy_self <- function(ptr, k, search_budget, sqrt, return_dist, verbose) .Ca
 #' @param n_trees Integer. Number of trees.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
 #' @keywords internal
-rs_kdtree_build <- function(data, metric, n_trees, seed, precision) .Call(wrap__rs_kdtree_build, data, metric, n_trees, seed, precision)
+rs_kdtree_build <- function(data, metric, n_trees, seed, precision, verbose) .Call(wrap__rs_kdtree_build, data, metric, n_trees, seed, precision, verbose)
 
 #' Query a kd forest index
 #'
@@ -381,7 +384,7 @@ rs_kdtree_build <- function(data, metric, n_trees, seed, precision) .Call(wrap__
 #' @param search_budget Integer or `NULL`. Candidates inspected per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -400,7 +403,7 @@ rs_kdtree_query <- function(ptr, data, k, search_budget, sqrt, return_dist, verb
 #' @param search_budget Integer or `NULL`. Candidates inspected per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -418,11 +421,12 @@ rs_kdtree_self <- function(ptr, k, search_budget, sqrt, return_dist, verbose) .C
 #' @param metric String. One of `c("euclidean", "cosine")`.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
 #' @keywords internal
-rs_balltree_build <- function(data, metric, seed, precision) .Call(wrap__rs_balltree_build, data, metric, seed, precision)
+rs_balltree_build <- function(data, metric, seed, precision, verbose) .Call(wrap__rs_balltree_build, data, metric, seed, precision, verbose)
 
 #' Query a ball tree index
 #'
@@ -436,7 +440,7 @@ rs_balltree_build <- function(data, metric, seed, precision) .Call(wrap__rs_ball
 #' @param search_budget Integer or `NULL`. Points inspected per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -455,7 +459,7 @@ rs_balltree_query <- function(ptr, data, k, search_budget, sqrt, return_dist, ve
 #' @param search_budget Integer or `NULL`. Points inspected per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -475,7 +479,7 @@ rs_balltree_self <- function(ptr, k, search_budget, sqrt, return_dist, verbose) 
 #' @param ef_construction Integer. Candidate list width during the build.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -494,7 +498,7 @@ rs_hnsw_build <- function(data, metric, m, ef_construction, seed, precision, ver
 #' @param ef_search Integer. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -513,7 +517,7 @@ rs_hnsw_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose) .
 #' @param ef_search Integer. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -534,7 +538,7 @@ rs_hnsw_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wr
 #' @param kmeans_balanced Boolean. Reseed starved centroids.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -553,7 +557,7 @@ rs_ivf_build <- function(data, metric, nlist, kmeans_iters, kmeans_balanced, see
 #' @param nprobe Integer or `NULL`. Cells visited per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -572,7 +576,7 @@ rs_ivf_query <- function(ptr, data, k, nprobe, sqrt, return_dist, verbose) .Call
 #' @param nprobe Integer or `NULL`. Cells visited per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -596,7 +600,7 @@ rs_ivf_self <- function(ptr, k, nprobe, sqrt, return_dist, verbose) .Call(wrap__
 #' @param kmeans_balanced Boolean. Reseed starved centroids.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -615,7 +619,7 @@ rs_soar_build <- function(data, metric, nlist, rule, rule_param, kmeans_iters, k
 #' @param nprobe Integer or `NULL`. Cells visited per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -634,7 +638,7 @@ rs_soar_query <- function(ptr, data, k, nprobe, sqrt, return_dist, verbose) .Cal
 #' @param nprobe Integer or `NULL`. Cells visited per query.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -655,11 +659,12 @@ rs_soar_self <- function(ptr, k, nprobe, sqrt, return_dist, verbose) .Call(wrap_
 #' @param slot_bits Integer or `NULL`. Bits per quantised projection.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
 #' @keywords internal
-rs_lsh_build <- function(data, metric, num_tables, bits_per_hash, slot_bits, seed, precision) .Call(wrap__rs_lsh_build, data, metric, num_tables, bits_per_hash, slot_bits, seed, precision)
+rs_lsh_build <- function(data, metric, num_tables, bits_per_hash, slot_bits, seed, precision, verbose) .Call(wrap__rs_lsh_build, data, metric, num_tables, bits_per_hash, slot_bits, seed, precision, verbose)
 
 #' Query an LSH index
 #'
@@ -675,7 +680,7 @@ rs_lsh_build <- function(data, metric, num_tables, bits_per_hash, slot_bits, see
 #' @param max_candidates Integer or `NULL`. Cap on candidates scored.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -695,7 +700,7 @@ rs_lsh_query <- function(ptr, data, k, n_probe, max_candidates, sqrt, return_dis
 #' @param max_candidates Integer or `NULL`. Cap on candidates scored.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -720,7 +725,7 @@ rs_lsh_self <- function(ptr, k, n_probe, max_candidates, sqrt, return_dist, verb
 #' graph.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -739,7 +744,7 @@ rs_nndescent_build <- function(data, metric, k_graph, delta, diversify_prob, max
 #' @param ef_search Integer or `NULL`. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -758,7 +763,7 @@ rs_nndescent_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbo
 #' @param ef_search Integer or `NULL`. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -785,6 +790,34 @@ rs_nndescent_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Ca
 #' @keywords internal
 rs_nndescent_extract <- function(ptr, k, include_self, sqrt, return_dist) .Call(wrap__rs_nndescent_extract, ptr, k, include_self, sqrt, return_dist)
 
+#' Build the NN-Descent kNN graph without an index
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Use [knn_graph_nndescent()] instead.
+#'
+#' @param data Numeric matrix. Samples x features.
+#' @param metric String. One of `c("euclidean", "cosine", "manhattan")`.
+#' @param k_graph Integer. Neighbours per node found by the descent, the
+#' sample itself not counted.
+#' @param delta Numeric. Convergence threshold.
+#' @param max_iter Integer or `NULL`. Iteration cap.
+#' @param max_candidates Integer or `NULL`. Candidates sampled per local join.
+#' @param n_trees Integer or `NULL`. Random projection trees for the seed
+#' graph.
+#' @param include_self Boolean. Prepend each point at distance 0.
+#' @param sqrt Boolean. Square root the distances (true Euclidean).
+#' @param return_dist Boolean. Return the distances.
+#' @param seed Integer. Random seed.
+#' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
+#'
+#' @returns A list with `idx` (1-based integer matrix, `k_graph` columns plus
+#' one with `include_self`) and `dist` (double matrix or `NULL`).
+#'
+#' @keywords internal
+rs_nndescent_knn_graph <- function(data, metric, k_graph, delta, max_iter, max_candidates, n_trees, include_self, sqrt, return_dist, seed, precision, verbose) .Call(wrap__rs_nndescent_knn_graph, data, metric, k_graph, delta, max_iter, max_candidates, n_trees, include_self, sqrt, return_dist, seed, precision, verbose)
+
 #' Build a Vamana index
 #'
 #' @description
@@ -799,11 +832,12 @@ rs_nndescent_extract <- function(ptr, k, include_self, sqrt, return_dist) .Call(
 #' @param alpha_pass2 Numeric. Relaxation factor on the second pass.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
 #' @keywords internal
-rs_vamana_build <- function(data, metric, r, l_build, alpha_pass1, alpha_pass2, seed, precision) .Call(wrap__rs_vamana_build, data, metric, r, l_build, alpha_pass1, alpha_pass2, seed, precision)
+rs_vamana_build <- function(data, metric, r, l_build, alpha_pass1, alpha_pass2, seed, precision, verbose) .Call(wrap__rs_vamana_build, data, metric, r, l_build, alpha_pass1, alpha_pass2, seed, precision, verbose)
 
 #' Query a Vamana index
 #'
@@ -817,7 +851,7 @@ rs_vamana_build <- function(data, metric, r, l_build, alpha_pass1, alpha_pass2, 
 #' @param ef_search Integer or `NULL`. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -836,7 +870,7 @@ rs_vamana_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose)
 #' @param ef_search Integer or `NULL`. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -858,7 +892,7 @@ rs_vamana_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(
 #' @param knn_k Integer. Degree of the NN-Descent graph built first.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -877,7 +911,7 @@ rs_nsg_build <- function(data, metric, r, l_build, c, knn_k, seed, precision, ve
 #' @param ef_search Integer or `NULL`. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -896,7 +930,7 @@ rs_nsg_query <- function(ptr, data, k, ef_search, sqrt, return_dist, verbose) .C
 #' @param ef_search Integer or `NULL`. Beam width at query time.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -920,7 +954,7 @@ rs_nsg_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wra
 #' graph.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns External pointer to the index.
 #'
@@ -940,7 +974,7 @@ rs_rnndescent_build <- function(data, metric, s, r, t1, t2, n_trees, seed, preci
 #' @param k_search Integer or `NULL`. Neighbours expanded per hop.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).
@@ -960,7 +994,7 @@ rs_rnndescent_query <- function(ptr, data, k, ef_search, k_search, sqrt, return_
 #' @param k_search Integer or `NULL`. Neighbours expanded per hop.
 #' @param sqrt Boolean. Square root the distances (true Euclidean).
 #' @param return_dist Boolean. Return the distances.
-#' @param verbose Boolean. Print progress.
+#' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 #'
 #' @returns A list with `idx` (1-based integer matrix) and `dist` (double
 #' matrix or `NULL`).

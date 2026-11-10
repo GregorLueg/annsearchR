@@ -4,7 +4,7 @@
 \alias{rs_annoy_build}
 \title{Build an Annoy index}
 \usage{
-rs_annoy_build(data, metric, n_trees, seed, precision)
+rs_annoy_build(data, metric, n_trees, seed, precision, verbose)
 }
 \arguments{
 \item{data}{Numeric matrix. Samples x features.}
@@ -16,6 +16,8 @@ rs_annoy_build(data, metric, n_trees, seed, precision)
 \item{seed}{Integer. Random seed.}
 
 \item{precision}{String. \code{"float"} or \code{"double"}.}
+
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 External pointer to the index.

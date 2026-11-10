@@ -78,6 +78,19 @@
   if (is.null(value)) NULL else as.integer(value)
 }
 
+#' Validate a verbosity flag
+#'
+#' @param value Boolean, or integer in `0:2`. `TRUE` maps to 1, `FALSE` to 0.
+#' @param .var.name String. Name used in error messages.
+#'
+#' @returns `value` as integer, one of `0:2`.
+#'
+#' @keywords internal
+.as_verbosity <- function(value, .var.name = ".verbose") {
+  checkmate::qassert(value, c("B1", "X1[0,2]"), .var.name = .var.name)
+  as.integer(value)
+}
+
 #' Is this an external pointer, alive or dead
 #'
 #' @param x Any R object.
@@ -114,7 +127,8 @@ AnnIndex <- R6::R6Class(
     #' number of features as the index.
     #' @param k Integer. Number of neighbours.
     #' @param return_dist Boolean. Return the distances as well.
-    #' @param .verbose Boolean. Print progress from Rust.
+    #' @param .verbose Boolean or integer. Query progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` detailed.
     #'
     #' @returns A list with:
     #' \itemize{
@@ -128,7 +142,7 @@ AnnIndex <- R6::R6Class(
       newdata <- .as_ann_matrix(newdata, private$.dim, .var.name = "newdata")
       checkmate::qassert(k, "X1[1,)")
       checkmate::qassert(return_dist, "B1")
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       private$query(newdata, as.integer(k), return_dist, .verbose)
     },
@@ -139,7 +153,8 @@ AnnIndex <- R6::R6Class(
     #'
     #' @param k Integer. Number of neighbours, including the sample itself.
     #' @param return_dist Boolean. Return the distances as well.
-    #' @param .verbose Boolean. Print progress from Rust.
+    #' @param .verbose Boolean or integer. Query progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` detailed.
     #'
     #' @returns A list with `idx` and `dist`, as for `$predict()`, with one row
     #' per indexed sample.
@@ -147,7 +162,7 @@ AnnIndex <- R6::R6Class(
       private$check_ptr()
       checkmate::qassert(k, "X1[1,)")
       checkmate::qassert(return_dist, "B1")
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       private$query_self_impl(as.integer(k), return_dist, .verbose)
     },
