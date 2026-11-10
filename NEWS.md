@@ -1,3 +1,22 @@
+# annsearchR 0.2.0
+
+- Built on ann-search-rs 0.12.2.
+- Smaller indices in memory and on disk. Stored point ids are 32-bit
+  throughout, the Annoy, kd and ball tree forests build in place over one
+  permutation per tree, and NN-Descent no longer keeps a second, reordered
+  copy of the vectors. NSG builds its internal kNN graph without the
+  NN-Descent search structure.
+- Manhattan NN-Descent seeds its graph by kd-tree leaf join, like the other
+  metrics.
+- `.verbose` takes `0`, `1` or `2` as well as `FALSE`/`TRUE`. `2` prints timed
+  build stages. Every constructor has `.verbose` now, including
+  `ExhaustiveIndex`, `AnnoyIndex`, `KdTreeIndex`, `BallTreeIndex`, `LshIndex`
+  and `VamanaIndex`.
+- Datasets with more than `2^32 - 2` samples (`2^31 - 2` for NN-Descent and
+  RNN-Descent) are refused with an error.
+- Breaking: the on-disk format changed. Indices saved with 0.1.0 do not load,
+  rebuild and save them again.
+
 # annsearchR 0.1.0
 
 First CRAN release.
