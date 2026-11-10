@@ -1,34 +1,15 @@
 # annsearchR 0.2.0
 
-- Built on ann-search-rs 0.12.2.
-- Smaller indices in memory and on disk. Stored point ids are 32-bit
-  throughout, the Annoy, kd and ball tree forests build in place over one
-  permutation per tree, and NN-Descent no longer keeps a second, reordered
-  copy of the vectors. NSG builds its internal kNN graph without the
-  NN-Descent search structure. On SIFT-128 (1M x 128, 10 threads), the
-  NN-Descent build peaks at 6.3 GB instead of 8.2 GB and saves to 1.9 GB
-  instead of 2.4 GB; Annoy peaks at 5.2 GB instead of 6.0 GB and builds in
-  7.0 s instead of 8.3 s; the kd forest peaks at 3.7 GB instead of 4.2 GB.
-  Recall is unchanged and query speed is within run-to-run noise.
-- New `knn_graph_nndescent()`: matrix in, kNN graph out, no index kept. Same
-  graph as `NNDescentIndex$new()` followed by `$extract_knn()` at the same
-  seed and `n_trees`. On SIFT-128 (1M x 128, 10 threads, `k_graph = 15`) it
-  peaks at 5.0 GB instead of 6.0 GB, at the same build time (14.7 s).
-- `NNDescentIndex$extract_knn()` reads the full kNN graph whatever
-  `diversify_prob` is set to; the docs said otherwise.
-- Manhattan NN-Descent seeds its graph by kd-tree leaf join, like the other
-  metrics.
-- `.verbose` takes `0`, `1` or `2` as well as `FALSE`/`TRUE`. `2` prints timed
-  build stages. Every constructor has `.verbose` now, including
-  `ExhaustiveIndex`, `AnnoyIndex`, `KdTreeIndex`, `BallTreeIndex`, `LshIndex`
-  and `VamanaIndex`.
-- Datasets with more than `2^32 - 2` samples (`2^31 - 2` for NN-Descent and
-  RNN-Descent) are refused with an error.
-- Breaking: the on-disk format changed. Indices saved with 0.1.0 do not load,
-  rebuild and save them again.
-- `faer` comes in without its `npy` feature, which drops nine crates from the
-  vendored Rust sources.
-- The benchmarks article is rerun on 0.2.0.
+- Breaking: new on-disk format. Indices saved with 0.1.0 need rebuilding.
+- Built on ann-search-rs 0.12.2. Smaller indices in memory and on disk, e.g.
+  the NN-Descent build on SIFT-128 peaks at 6.3 GB instead of 8.2 GB. Recall
+  and query speed unchanged.
+- New `knn_graph_nndescent()`: the NN-Descent kNN graph without keeping an
+  index, same graph as `$extract_knn()` at lower peak memory.
+- `.verbose` on every constructor, taking `0`, `1` or `2` as well as
+  `FALSE`/`TRUE`.
+- Manhattan NN-Descent seeds by kd-tree leaf join, like the other metrics.
+- Datasets above the 32-bit id limit are refused with an error.
 
 # annsearchR 0.1.0
 
