@@ -19,7 +19,7 @@ rs_lsh_self(ptr, k, n_probe, max_candidates, sqrt, return_dist, verbose)
 
 \item{return_dist}{Boolean. Return the distances.}
 
-\item{verbose}{Boolean. Print progress.}
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 A list with \code{idx} (1-based integer matrix) and \code{dist} (double

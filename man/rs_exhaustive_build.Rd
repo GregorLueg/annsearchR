@@ -4,7 +4,7 @@
 \alias{rs_exhaustive_build}
 \title{Build an exhaustive index}
 \usage{
-rs_exhaustive_build(data, metric, precision)
+rs_exhaustive_build(data, metric, precision, verbose)
 }
 \arguments{
 \item{data}{Numeric matrix. Samples x features.}
@@ -12,6 +12,8 @@ rs_exhaustive_build(data, metric, precision)
 \item{metric}{String. One of \code{c("euclidean", "cosine", "manhattan")}.}
 
 \item{precision}{String. \code{"float"} or \code{"double"}.}
+
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 External pointer to the index.

@@ -1,5 +1,6 @@
 //! Relative NN-Descent: builds and prunes a navigable graph in one pass.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{build_rnn_descent_index, query_rnn_descent_index, query_rnn_descent_self};
 use extendr_api::prelude::*;
 use extendr_api::Result;
@@ -23,7 +24,7 @@ use crate::handle::{build_prec, query_prec, self_prec, AnnIndex};
 /// graph.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
@@ -40,12 +41,13 @@ fn rs_rnndescent_build(
     n_trees: Nullable<i32>,
     seed: i32,
     precision: &str,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (s, r, t1, t2) = (s as usize, r as usize, t1 as usize, t2 as usize);
     let (n_trees, seed) = (opt_usize(n_trees), seed as usize);
     build_prec!(data, precision, RnnDescent, |mat| build_rnn_descent_index(
-        mat, s, r, t1, t2, metric, n_trees, seed, verbose
+        mat, s, r, t1, t2, metric, n_trees, seed, verbosity
     ))
 }
 
@@ -62,7 +64,7 @@ fn rs_rnndescent_build(
 /// @param k_search Integer or `NULL`. Neighbours expanded per hop.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -78,12 +80,13 @@ fn rs_rnndescent_query(
     k_search: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k = k as usize;
     let (ef_search, k_search) = (opt_usize(ef_search), opt_usize(k_search));
     query_prec!(ptr, RnnDescent, "rnndescent", data, k, sqrt, |idx, q| {
-        query_rnn_descent_index(q, idx, k, ef_search, k_search, return_dist, verbose)
+        query_rnn_descent_index(q, idx, k, ef_search, k_search, return_dist, verbosity)
     })
 }
 
@@ -99,7 +102,7 @@ fn rs_rnndescent_query(
 /// @param k_search Integer or `NULL`. Neighbours expanded per hop.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -113,12 +116,13 @@ fn rs_rnndescent_self(
     k_search: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k = k as usize;
     let (ef_search, k_search) = (opt_usize(ef_search), opt_usize(k_search));
     self_prec!(ptr, RnnDescent, "rnndescent", k, sqrt, |idx| {
-        query_rnn_descent_self(idx, k, ef_search, k_search, return_dist, verbose)
+        query_rnn_descent_self(idx, k, ef_search, k_search, return_dist, verbosity)
     })
 }
 

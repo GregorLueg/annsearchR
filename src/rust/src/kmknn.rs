@@ -1,6 +1,7 @@
 //! kMkNN: exact search over a k-means partition, pruned by the triangle
 //! inequality. No Manhattan.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{build_kmknn_index, query_kmknn_index, query_kmknn_self};
 use extendr_api::prelude::*;
 use extendr_api::Result;
@@ -22,7 +23,7 @@ use crate::utils::kmeans_params;
 /// @param kmeans_balanced Boolean. Reseed starved centroids.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
@@ -37,18 +38,14 @@ fn rs_kmknn_build(
     kmeans_balanced: bool,
     seed: i32,
     precision: &str,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let nlist = opt_usize(nlist);
     let km = kmeans_params(opt_usize(kmeans_iters), kmeans_balanced);
     let seed = seed as usize;
     build_prec!(data, precision, Kmknn, |mat| build_kmknn_index(
-        mat,
-        metric,
-        nlist,
-        km,
-        seed,
-        verbose
+        mat, metric, nlist, km, seed, verbosity
     ))
 }
 
@@ -63,7 +60,7 @@ fn rs_kmknn_build(
 /// @param k Integer. Number of neighbours.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -76,11 +73,12 @@ fn rs_kmknn_query(
     k: i32,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k = k as usize;
     query_prec!(ptr, Kmknn, "kmknn", data, k, sqrt, |idx, q| {
-        query_kmknn_index(q, idx, k, return_dist, verbose)
+        query_kmknn_index(q, idx, k, return_dist, verbosity)
     })
 }
 
@@ -94,7 +92,7 @@ fn rs_kmknn_query(
 /// @param k Integer. Number of neighbours, including the point itself.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -106,11 +104,12 @@ fn rs_kmknn_self(
     k: i32,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k = k as usize;
     self_prec!(ptr, Kmknn, "kmknn", k, sqrt, |idx| {
-        query_kmknn_self(idx, k, return_dist, verbose)
+        query_kmknn_self(idx, k, return_dist, verbosity)
     })
 }
 

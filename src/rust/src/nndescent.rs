@@ -1,6 +1,7 @@
 //! NN-Descent: builds the kNN graph directly by iterative local join. The
 //! converged graph can be extracted without any search.
 
+use ann_search_rs::prelude::parse_annsearch_verbosity;
 use ann_search_rs::{
     build_nndescent_index, extract_nndescent_knn, query_nndescent_index, query_nndescent_self,
 };
@@ -27,7 +28,7 @@ use crate::handle::{build_prec, query_prec, self_prec, AnnIndex};
 /// graph.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns External pointer to the index.
 ///
@@ -45,8 +46,9 @@ fn rs_nndescent_build(
     n_trees: Nullable<i32>,
     seed: i32,
     precision: &str,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<ExternalPtr<AnnIndex>> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let k_graph = Some(k_graph as usize);
     let (max_iter, max_candidates) = (opt_usize(max_iter), opt_usize(max_candidates));
     let (n_trees, seed) = (opt_usize(n_trees), seed as usize);
@@ -60,7 +62,7 @@ fn rs_nndescent_build(
         max_candidates,
         n_trees,
         seed,
-        verbose
+        verbosity
     ))
 }
 
@@ -76,7 +78,7 @@ fn rs_nndescent_build(
 /// @param ef_search Integer or `NULL`. Beam width at query time.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -90,11 +92,12 @@ fn rs_nndescent_query(
     ef_search: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, ef_search) = (k as usize, opt_usize(ef_search));
     query_prec!(ptr, NNDescent, "nndescent", data, k, sqrt, |idx, q| {
-        query_nndescent_index(q, idx, k, ef_search, return_dist, verbose)
+        query_nndescent_index(q, idx, k, ef_search, return_dist, verbosity)
     })
 }
 
@@ -109,7 +112,7 @@ fn rs_nndescent_query(
 /// @param ef_search Integer or `NULL`. Beam width at query time.
 /// @param sqrt Boolean. Square root the distances (true Euclidean).
 /// @param return_dist Boolean. Return the distances.
-/// @param verbose Boolean. Print progress.
+/// @param verbose Integer. 0 silent, 1 progress, 2 detailed.
 ///
 /// @returns A list with `idx` (1-based integer matrix) and `dist` (double
 /// matrix or `NULL`).
@@ -122,11 +125,12 @@ fn rs_nndescent_self(
     ef_search: Nullable<i32>,
     sqrt: bool,
     return_dist: bool,
-    verbose: bool,
+    verbose: i32,
 ) -> Result<Robj> {
+    let verbosity = parse_annsearch_verbosity(verbose as usize);
     let (k, ef_search) = (k as usize, opt_usize(ef_search));
     self_prec!(ptr, NNDescent, "nndescent", k, sqrt, |idx| {
-        query_nndescent_self(idx, k, ef_search, return_dist, verbose)
+        query_nndescent_self(idx, k, ef_search, return_dist, verbosity)
     })
 }
 

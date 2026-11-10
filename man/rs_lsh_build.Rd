@@ -11,7 +11,8 @@ rs_lsh_build(
   bits_per_hash,
   slot_bits,
   seed,
-  precision
+  precision,
+  verbose
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ rs_lsh_build(
 \item{seed}{Integer. Random seed.}
 
 \item{precision}{String. \code{"float"} or \code{"double"}.}
+
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 External pointer to the index.

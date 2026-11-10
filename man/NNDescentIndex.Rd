@@ -96,7 +96,8 @@ uses \code{clamp(2 * k, 50, 200)}. Can be changed after the build.}
       \item{\code{seed}}{Integer. Fixes the seed graph and the sampling.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}
-      \item{\code{.verbose}}{Boolean. Print build progress from Rust.}
+      \item{\code{.verbose}}{Boolean or integer. Build progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} adds timed build stages.}
     }
     \if{html}{\out{</div>}}
   }

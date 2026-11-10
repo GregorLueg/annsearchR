@@ -45,7 +45,8 @@ res <- idx$predict(x[1:5, ], k = 10L)
     \preformatted{ExhaustiveIndex$new(
   data,
   metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
-  precision = c("float", "double")
+  precision = c("float", "double"),
+  .verbose = FALSE
 )}
     \if{html}{\out{</div>}}
   }
@@ -58,6 +59,8 @@ pointer is also accepted; \code{\link[=load_ann_index]{load_ann_index()}} uses t
 \code{c("euclidean", "sqeuclidean", "cosine", "manhattan")}.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}
+      \item{\code{.verbose}}{Boolean or integer. Build progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} adds timed build stages.}
     }
     \if{html}{\out{</div>}}
   }

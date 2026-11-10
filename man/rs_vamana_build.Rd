@@ -12,7 +12,8 @@ rs_vamana_build(
   alpha_pass1,
   alpha_pass2,
   seed,
-  precision
+  precision,
+  verbose
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ rs_vamana_build(
 \item{seed}{Integer. Random seed.}
 
 \item{precision}{String. \code{"float"} or \code{"double"}.}
+
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 External pointer to the index.

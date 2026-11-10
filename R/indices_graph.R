@@ -44,7 +44,8 @@ HnswIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the layer assignment.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -66,7 +67,7 @@ HnswIndex <- R6::R6Class(
       checkmate::qassert(ef_construction, "X1[1,)")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -175,7 +176,8 @@ NNDescentIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the seed graph and the sampling.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -205,7 +207,7 @@ NNDescentIndex <- R6::R6Class(
       n_trees <- .as_knob(n_trees, .var.name = "n_trees")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -348,6 +350,8 @@ VamanaIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the entry point and pruning order.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -357,7 +361,8 @@ VamanaIndex <- R6::R6Class(
       alpha_pass2 = 1.2,
       ef_search = NULL,
       seed = 42L,
-      precision = c("float", "double")
+      precision = c("float", "double"),
+      .verbose = FALSE
     ) {
       metric <- match.arg(metric)
       precision <- match.arg(precision)
@@ -372,6 +377,7 @@ VamanaIndex <- R6::R6Class(
       checkmate::qassert(alpha_pass2, "N1[1,)")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -384,7 +390,8 @@ VamanaIndex <- R6::R6Class(
           as.double(alpha_pass1),
           as.double(alpha_pass2),
           as.integer(seed),
-          precision
+          precision,
+          .verbose
         )
       }
       private$attach(ptr)
@@ -468,7 +475,8 @@ NsgIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the initial graph and navigating node.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -494,7 +502,7 @@ NsgIndex <- R6::R6Class(
       checkmate::qassert(knn_k, "X1[1,)")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -597,7 +605,8 @@ RnnDescentIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the seed graph and the sampling.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
@@ -626,7 +635,7 @@ RnnDescentIndex <- R6::R6Class(
       n_trees <- .as_knob(n_trees, .var.name = "n_trees")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data

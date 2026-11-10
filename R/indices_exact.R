@@ -29,10 +29,13 @@ ExhaustiveIndex <- R6::R6Class(
     #' `c("euclidean", "sqeuclidean", "cosine", "manhattan")`.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine", "manhattan"),
-      precision = c("float", "double")
+      precision = c("float", "double"),
+      .verbose = FALSE
     ) {
       metric <- match.arg(metric)
       precision <- match.arg(precision)
@@ -42,6 +45,7 @@ ExhaustiveIndex <- R6::R6Class(
         c("euclidean", "sqeuclidean", "cosine", "manhattan")
       )
       checkmate::assertChoice(precision, c("float", "double"))
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data
@@ -49,7 +53,8 @@ ExhaustiveIndex <- R6::R6Class(
         rs_exhaustive_build(
           .as_ann_matrix(data),
           private$core_metric,
-          precision
+          precision,
+          .verbose
         )
       }
       private$attach(ptr)
@@ -110,7 +115,8 @@ KmknnIndex <- R6::R6Class(
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
-    #' @param .verbose Boolean. Print build progress from Rust.
+    #' @param .verbose Boolean or integer. Build progress from Rust: `0` or
+    #' `FALSE` silent, `1` or `TRUE` progress, `2` adds timed build stages.
     initialize = function(
       data,
       metric = c("euclidean", "sqeuclidean", "cosine"),
@@ -130,7 +136,7 @@ KmknnIndex <- R6::R6Class(
       checkmate::qassert(kmeans_balanced, "B1")
       checkmate::qassert(seed, "X1[0,)")
       checkmate::assertChoice(precision, c("float", "double"))
-      checkmate::qassert(.verbose, "B1")
+      .verbose <- .as_verbosity(.verbose)
 
       ptr <- if (.is_ptr(data)) {
         data

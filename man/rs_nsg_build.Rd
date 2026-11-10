@@ -23,7 +23,7 @@ rs_nsg_build(data, metric, r, l_build, c, knn_k, seed, precision, verbose)
 
 \item{precision}{String. \code{"float"} or \code{"double"}.}
 
-\item{verbose}{Boolean. Print progress.}
+\item{verbose}{Integer. 0 silent, 1 progress, 2 detailed.}
 }
 \value{
 External pointer to the index.

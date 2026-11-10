@@ -53,7 +53,8 @@ holds a dead pointer and every method errors. Use \verb{$save()} and
 number of features as the index.}
       \item{\code{k}}{Integer. Number of neighbours.}
       \item{\code{return_dist}}{Boolean. Return the distances as well.}
-      \item{\code{.verbose}}{Boolean. Print progress from Rust.}
+      \item{\code{.verbose}}{Boolean or integer. Query progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} detailed.}
     }
     \if{html}{\out{</div>}}
   }
@@ -84,7 +85,8 @@ path, which is faster than \verb{$predict()} on the training data.
     \describe{
       \item{\code{k}}{Integer. Number of neighbours, including the sample itself.}
       \item{\code{return_dist}}{Boolean. Return the distances as well.}
-      \item{\code{.verbose}}{Boolean. Print progress from Rust.}
+      \item{\code{.verbose}}{Boolean or integer. Query progress from Rust: \code{0} or
+\code{FALSE} silent, \code{1} or \code{TRUE} progress, \code{2} detailed.}
     }
     \if{html}{\out{</div>}}
   }
