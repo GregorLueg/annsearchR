@@ -46,6 +46,13 @@ Navigable neighbour graphs
 - [`RnnDescentIndex`](https://gregorlueg.github.io/annsearchR/reference/RnnDescentIndex.md)
   : Relative NN-Descent index
 
+## kNN graphs
+
+The kNN graph of the data, no index kept
+
+- [`knn_graph_nndescent()`](https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.md)
+  : kNN graph by NN-Descent, without an index
+
 ## Shared interface
 
 Querying, saving and loading any index
@@ -160,6 +167,8 @@ Everything rusty - only use this if you know what you are doing…
   **\[experimental\]** : Build an NN-Descent index
 - [`rs_nndescent_extract()`](https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_extract.md)
   **\[experimental\]** : Extract the converged NN-Descent graph
+- [`rs_nndescent_knn_graph()`](https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_knn_graph.md)
+  **\[experimental\]** : Build the NN-Descent kNN graph without an index
 - [`rs_nndescent_query()`](https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_query.md)
   **\[experimental\]** : Query an NN-Descent index
 - [`rs_nndescent_self()`](https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_self.md)

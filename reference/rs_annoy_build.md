@@ -7,7 +7,7 @@ instead.
 ## Usage
 
 ``` r
-rs_annoy_build(data, metric, n_trees, seed, precision)
+rs_annoy_build(data, metric, n_trees, seed, precision, verbose)
 ```
 
 ## Arguments
@@ -31,6 +31,10 @@ rs_annoy_build(data, metric, n_trees, seed, precision)
 - precision:
 
   String. `"float"` or `"double"`.
+
+- verbose:
+
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

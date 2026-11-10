@@ -59,7 +59,8 @@ Build the index.
       n_trees = 25L,
       search_budget = NULL,
       seed = 42L,
-      precision = c("float", "double")
+      precision = c("float", "double"),
+      .verbose = FALSE
     )
 
 #### Arguments
@@ -91,6 +92,11 @@ Build the index.
 - `precision`:
 
   String. `"float"` stores the data as f32, `"double"` as f64.
+
+- `.verbose`:
+
+  Boolean or integer. Build progress from Rust: `0` or `FALSE` silent,
+  `1` or `TRUE` progress, `2` adds timed build stages.
 
 ------------------------------------------------------------------------
 

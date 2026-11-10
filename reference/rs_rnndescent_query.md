@@ -49,7 +49,7 @@ rs_rnndescent_query(
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

@@ -32,7 +32,7 @@ rs_balltree_self(ptr, k, search_budget, sqrt, return_dist, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

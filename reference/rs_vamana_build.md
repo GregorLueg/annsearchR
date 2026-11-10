@@ -15,7 +15,8 @@ rs_vamana_build(
   alpha_pass1,
   alpha_pass2,
   seed,
-  precision
+  precision,
+  verbose
 )
 ```
 
@@ -52,6 +53,10 @@ rs_vamana_build(
 - precision:
 
   String. `"float"` or `"double"`.
+
+- verbose:
+
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

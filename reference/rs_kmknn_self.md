@@ -28,7 +28,7 @@ rs_kmknn_self(ptr, k, sqrt, return_dist, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

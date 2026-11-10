@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,16 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="annsearchr-020">annsearchR 0.2.0<a class="anchor" aria-label="anchor" href="#annsearchr-020"></a></h2>
+<ul><li>Breaking: new on-disk format. Indices saved with 0.1.0 need rebuilding.</li>
+<li>Built on ann-search-rs 0.12.2. Smaller indices in memory and on disk, e.g. the NN-Descent build on SIFT-128 peaks at 6.3 GB instead of 8.2 GB. Recall and query speed unchanged.</li>
+<li>New <code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code>: the NN-Descent kNN graph without keeping an index, same graph as <code>$extract_knn()</code> at lower peak memory.</li>
+<li>
+<code>.verbose</code> on every constructor, taking <code>0</code>, <code>1</code> or <code>2</code> as well as <code>FALSE</code>/<code>TRUE</code>.</li>
+<li>Manhattan NN-Descent seeds by kd-tree leaf join, like the other metrics.</li>
+<li>Datasets above the 32-bit id limit are refused with an error.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="annsearchr-010">annsearchR 0.1.0<a class="anchor" aria-label="anchor" href="#annsearchr-010"></a></h2>
 <p>First CRAN release.</p>
 <ul><li>Thirteen CPU indices behind one R6 interface: brute force, kMkNN, Annoy, k-d forest, ball tree, IVF, SOAR, LSH, HNSW, NN-Descent, Vamana, NSG and RNN-Descent. Euclidean, squared Euclidean, cosine and Manhattan distances, f32 or f64 storage, save to disk and load back.</li>
@@ -50,7 +60,8 @@
 <li>Under <code>R CMD check --as-cran</code> the thread pool starts at two threads. Outside of a check it still takes every core, see <code><a href="../reference/ann_set_threads.html">ann_set_threads()</a></code>.</li>
 <li>The Rust crates ship vendored in <code>src/rust/vendor.tar.xz</code> and compile offline.</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

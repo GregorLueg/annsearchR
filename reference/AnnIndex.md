@@ -73,7 +73,8 @@ Find the `k` nearest indexed samples for each row of `newdata`.
 
 - `.verbose`:
 
-  Boolean. Print progress from Rust.
+  Boolean or integer. Query progress from Rust: `0` or `FALSE` silent,
+  `1` or `TRUE` progress, `2` detailed.
 
 #### Returns
 
@@ -108,7 +109,8 @@ path, which is faster than `$predict()` on the training data.
 
 - `.verbose`:
 
-  Boolean. Print progress from Rust.
+  Boolean or integer. Query progress from Rust: `0` or `FALSE` silent,
+  `1` or `TRUE` progress, `2` detailed.
 
 #### Returns
 

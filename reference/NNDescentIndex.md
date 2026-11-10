@@ -3,8 +3,10 @@
 Builds the kNN graph directly by iterative local join. Want the kNN
 graph of the data itself (UMAP, clustering)? `$extract_knn()` hands back
 the converged graph without any search, far cheaper than
-`$query_self()`. It reads the post-pruning graph, so leave
-`diversify_prob` at 0 if extraction is the point.
+`$query_self()`. It reads the full kNN graph: `diversify_prob` only
+prunes the graph that queries walk. Only need the graph and never query?
+[`knn_graph_nndescent()`](https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.md)
+returns the same graph without keeping an index around.
 
 ## References
 
@@ -125,7 +127,8 @@ Build the index.
 
 - `.verbose`:
 
-  Boolean. Print build progress from Rust.
+  Boolean or integer. Build progress from Rust: `0` or `FALSE` silent,
+  `1` or `TRUE` progress, `2` adds timed build stages.
 
 ------------------------------------------------------------------------
 

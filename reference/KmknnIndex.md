@@ -87,7 +87,8 @@ Build the index.
 
 - `.verbose`:
 
-  Boolean. Print build progress from Rust.
+  Boolean or integer. Build progress from Rust: `0` or `FALSE` silent,
+  `1` or `TRUE` progress, `2` adds timed build stages.
 
 ------------------------------------------------------------------------
 

@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@
 <li>
 <strong>Graphs:</strong> HNSW, NN-Descent, Vamana, NSG and RNN-Descent</li>
 </ul>
-<p>Euclidean, squared Euclidean, cosine and Manhattan distances, f32 or f64 storage, multi-threaded via Rayon. Indices can be saved to disk and loaded back, and <code>$query_self()</code> gives you the kNN graph of the indexed data itself.</p>
+<p>Euclidean, squared Euclidean, cosine and Manhattan distances, f32 or f64 storage, multi-threaded via Rayon. Indices can be saved to disk and loaded back, and <code>$query_self()</code> gives you the kNN graph of the indexed data itself. Need only that graph? <code><a href="reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code> builds it directly, without keeping an index.</p>
 </div>
 <div class="section level3">
 <h3 id="speed">Speed<a class="anchor" aria-label="anchor" href="#speed"></a>

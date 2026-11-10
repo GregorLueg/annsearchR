@@ -7,7 +7,7 @@ instead.
 ## Usage
 
 ``` r
-rs_exhaustive_build(data, metric, precision)
+rs_exhaustive_build(data, metric, precision, verbose)
 ```
 
 ## Arguments
@@ -23,6 +23,10 @@ rs_exhaustive_build(data, metric, precision)
 - precision:
 
   String. `"float"` or `"double"`.
+
+- verbose:
+
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

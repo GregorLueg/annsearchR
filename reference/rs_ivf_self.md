@@ -32,7 +32,7 @@ rs_ivf_self(ptr, k, nprobe, sqrt, return_dist, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

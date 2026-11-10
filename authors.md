@@ -14,13 +14,13 @@ Source:
 [`DESCRIPTION`](https://github.com/GregorLueg/annsearchR/blob/main/DESCRIPTION)
 
 Lueg G (2026). *annsearchR: Fast Approximate Nearest Neighbour Search*.
-R package version 0.1.0, <https://gregorlueg.github.io/annsearchR/>.
+R package version 0.2.0, <https://gregorlueg.github.io/annsearchR/>.
 
     @Manual{,
       title = {annsearchR: Fast Approximate Nearest Neighbour Search},
       author = {Gregor Lueg},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://gregorlueg.github.io/annsearchR/},
     }
 
@@ -661,13 +661,6 @@ R package version 0.1.0, <https://gregorlueg.github.io/annsearchR/>.
 
     -------------------------------------------------------------
 
-    Name:        npyz
-    Repository:  https://github.com/ExpHP/npyz
-    Authors:     Michael Lamparski, Pavel Potocek
-    License:     MIT
-
-    -------------------------------------------------------------
-
     Name:        nu-ansi-term
     Repository:  https://github.com/nushell/nu-ansi-term
     Authors:     ogham@bsago.me, Ryan Scheel (Havvy), Josh Triplett, The Nushell Project Developers
@@ -675,22 +668,8 @@ R package version 0.1.0, <https://gregorlueg.github.io/annsearchR/>.
 
     -------------------------------------------------------------
 
-    Name:        num-bigint
-    Repository:  https://github.com/rust-num/num-bigint
-    Authors:     The Rust Project Developers
-    License:     MIT OR Apache-2.0
-
-    -------------------------------------------------------------
-
     Name:        num-complex
     Repository:  https://github.com/rust-num/num-complex
-    Authors:     The Rust Project Developers
-    License:     MIT OR Apache-2.0
-
-    -------------------------------------------------------------
-
-    Name:        num-integer
-    Repository:  https://github.com/rust-num/num-integer
     Authors:     The Rust Project Developers
     License:     MIT OR Apache-2.0
 
@@ -734,34 +713,6 @@ R package version 0.1.0, <https://gregorlueg.github.io/annsearchR/>.
     Name:        paste
     Repository:  https://github.com/dtolnay/paste
     Authors:     David Tolnay
-    License:     MIT OR Apache-2.0
-
-    -------------------------------------------------------------
-
-    Name:        pest
-    Repository:  https://github.com/pest-parser/pest
-    Authors:     Dragoș Tiselice
-    License:     MIT OR Apache-2.0
-
-    -------------------------------------------------------------
-
-    Name:        pest_derive
-    Repository:  https://github.com/pest-parser/pest
-    Authors:     Dragoș Tiselice
-    License:     MIT OR Apache-2.0
-
-    -------------------------------------------------------------
-
-    Name:        pest_generator
-    Repository:  https://github.com/pest-parser/pest
-    Authors:     Dragoș Tiselice
-    License:     MIT OR Apache-2.0
-
-    -------------------------------------------------------------
-
-    Name:        pest_meta
-    Repository:  https://github.com/pest-parser/pest
-    Authors:     Dragoș Tiselice
     License:     MIT OR Apache-2.0
 
     -------------------------------------------------------------
@@ -826,13 +777,6 @@ R package version 0.1.0, <https://gregorlueg.github.io/annsearchR/>.
     Repository:  https://github.com/sarah-quinones/pulp/
     Authors:     sarah quiñones
     License:     MIT
-
-    -------------------------------------------------------------
-
-    Name:        py_literal
-    Repository:  https://github.com/jturner314/py_literal
-    Authors:     Jim Turner
-    License:     MIT OR Apache-2.0
 
     -------------------------------------------------------------
 
@@ -1183,13 +1127,6 @@ R package version 0.1.0, <https://gregorlueg.github.io/annsearchR/>.
     Repository:  https://github.com/tokio-rs/tracing
     Authors:     Eliza Weisman, David Barsky, Tokio Contributors
     License:     MIT
-
-    -------------------------------------------------------------
-
-    Name:        ucd-trie
-    Repository:  https://github.com/BurntSushi/ucd-generate
-    Authors:     Andrew Gallant
-    License:     MIT OR Apache-2.0
 
     -------------------------------------------------------------
 

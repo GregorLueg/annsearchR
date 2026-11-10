@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Getting started with annsearchR</h1>
 
       <p class="author">Gregor Lueg</p>
-      <p class="date">2026-10-27</p>
+      <p class="date">2026-11-10</p>
 
       <small class="dont-index">Source: <a href="https://github.com/GregorLueg/annsearchR/blob/main/vignettes/annsearchR.qmd" class="external-link"><code>vignettes/annsearchR.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -140,10 +140,10 @@
 <span>    <span class="va">t</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; ef_search =  10   recall 0.847   0.003s</span></span>
+<span><span class="co">#&gt; ef_search =  10   recall 0.848   0.003s</span></span>
 <span><span class="co">#&gt; ef_search =  20   recall 0.938   0.004s</span></span>
-<span><span class="co">#&gt; ef_search =  50   recall 0.985   0.006s</span></span>
-<span><span class="co">#&gt; ef_search = 100   recall 0.995   0.010s</span></span></code></pre></div>
+<span><span class="co">#&gt; ef_search =  50   recall 0.985   0.008s</span></span>
+<span><span class="co">#&gt; ef_search = 100   recall 0.995   0.012s</span></span></code></pre></div>
 </div>
 <p>The knobs per index:</p>
 <table class="table caption-top">
@@ -224,19 +224,19 @@
 <span><span class="op">)</span></span>
 <span><span class="va">comparison</span></span>
 <span><span class="co">#&gt;         index build_s query_s recall</span></span>
-<span><span class="co">#&gt; 1  exhaustive   0.002   0.019  1.000</span></span>
-<span><span class="co">#&gt; 2       kmknn   0.138   0.004  1.000</span></span>
-<span><span class="co">#&gt; 3       annoy   0.054   0.014  1.000</span></span>
-<span><span class="co">#&gt; 4      kdtree   0.061   0.010  0.999</span></span>
-<span><span class="co">#&gt; 5    balltree   0.021   0.004  0.932</span></span>
-<span><span class="co">#&gt; 6        hnsw   0.564   0.007  0.985</span></span>
-<span><span class="co">#&gt; 7         ivf   0.136   0.003  0.995</span></span>
-<span><span class="co">#&gt; 8        soar   0.152   0.009  0.999</span></span>
-<span><span class="co">#&gt; 9         lsh   0.010   0.008  0.973</span></span>
-<span><span class="co">#&gt; 10  nndescent   0.393   0.004  0.884</span></span>
-<span><span class="co">#&gt; 11     vamana   1.201   0.012  0.999</span></span>
-<span><span class="co">#&gt; 12        nsg   6.435   0.014  0.999</span></span>
-<span><span class="co">#&gt; 13 rnndescent   0.436   0.012  0.989</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  exhaustive   0.003   0.016  1.000</span></span>
+<span><span class="co">#&gt; 2       kmknn   0.084   0.005  1.000</span></span>
+<span><span class="co">#&gt; 3       annoy   0.046   0.016  1.000</span></span>
+<span><span class="co">#&gt; 4      kdtree   0.068   0.014  0.999</span></span>
+<span><span class="co">#&gt; 5    balltree   0.025   0.005  0.932</span></span>
+<span><span class="co">#&gt; 6        hnsw   0.658   0.008  0.985</span></span>
+<span><span class="co">#&gt; 7         ivf   0.082   0.004  0.995</span></span>
+<span><span class="co">#&gt; 8        soar   0.105   0.011  0.999</span></span>
+<span><span class="co">#&gt; 9         lsh   0.012   0.009  0.973</span></span>
+<span><span class="co">#&gt; 10  nndescent   0.474   0.005  0.884</span></span>
+<span><span class="co">#&gt; 11     vamana   1.561   0.014  0.999</span></span>
+<span><span class="co">#&gt; 12        nsg   7.964   0.015  0.999</span></span>
+<span><span class="co">#&gt; 13 rnndescent   0.538   0.015  0.989</span></span></code></pre></div>
 </div>
 <p>These are default settings on small, easy data with two threads, so read the table for the shape of things, not as a benchmark. For that, see the <a href="https://gregorlueg.github.io/annsearchR/articles/benchmarks.html">benchmarks article</a>, which compares annsearchR against RcppHNSW, RcppAnnoy, BiocNeighbors, rnndescent, FNN and RANN at equal recall on Fashion-MNIST and SIFT.</p>
 <p>What each family does:</p>
@@ -268,21 +268,27 @@
 <span></span>
 <span><span class="va">truth_self</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/ExhaustiveIndex.html">ExhaustiveIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">$</span><span class="fu">query_self</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">15L</span><span class="op">)</span><span class="op">$</span><span class="va">idx</span></span>
 <span><span class="fu"><a href="../reference/knn_recall.html">knn_recall</a></span><span class="op">(</span><span class="va">truth_self</span>, <span class="va">graph</span><span class="op">$</span><span class="va">idx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9994051</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9993333</span></span></code></pre></div>
 </div>
-<p>Leave <code>diversify_prob</code> at 0 if extraction is the point: pruning edges makes a better search graph and a worse kNN graph.</p>
+<p>Only need the graph and never query it? <code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code> runs the same descent but drops the seeding trees as they go and keeps no index, so less memory sits around at the end. <code>k_graph</code> counts true neighbours, and the sample itself comes on top with <code>include_self = TRUE</code>, so ask for one column more from <code>$extract_knn()</code> to compare like for like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent</a></span><span class="op">(</span><span class="va">train</span>, k_graph <span class="op">=</span> <span class="fl">15L</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">graph_only</span>, <span class="va">nnd</span><span class="op">$</span><span class="fu">extract_knn</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">16L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
 </section><section class="level2"><h2 id="metrics-and-precision">Metrics and precision<a class="anchor" aria-label="anchor" href="#metrics-and-precision"></a>
 </h2>
 <p>Four metrics: <code>"euclidean"</code>, <code>"sqeuclidean"</code>, <code>"cosine"</code> (returned as <code>1 - cosine similarity</code>) and <code>"manhattan"</code>. Annoy, BallTree, KMKNN, IVF, SOAR and LSH don’t support Manhattan, and say so:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va"><a href="../reference/AnnoyIndex.html">AnnoyIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span>, metric <span class="op">=</span> <span class="st">"manhattan"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in `match.arg()`:</span></span>
 <span><span class="co">#&gt; ! 'arg' should be one of "euclidean", "sqeuclidean", "cosine"</span></span></code></pre></div>
 </div>
 <p>Data is stored as 32-bit floats by default, which halves the memory against R’s doubles. <code>precision = "double"</code> keeps 64 bits if you need them:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hnsw64</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/HnswIndex.html">HnswIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span>, precision <span class="op">=</span> <span class="st">"double"</span><span class="op">)</span></span>
 <span><span class="va">hnsw64</span><span class="op">$</span><span class="va">precision</span></span>
 <span><span class="co">#&gt; [1] "double"</span></span></code></pre></div>
@@ -291,7 +297,7 @@
 </h2>
 <p>Builds and queries are parallel over all cores by default. <code><a href="../reference/ann_set_threads.html">ann_set_threads()</a></code> installs a dedicated pool and can be called as often as you like:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">old</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ann_set_threads.html">ann_set_threads</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/ann_get_threads.html">ann_get_threads</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
@@ -302,7 +308,7 @@
 </h2>
 <p>The index lives in Rust memory, so <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> can’t see it. A restored object holds a dead pointer and tells you so instead of crashing:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">restored</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/serialize.html" class="external-link">unserialize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/serialize.html" class="external-link">serialize</a></span><span class="op">(</span><span class="va">hnsw</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">restored</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">query</span>, k <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in `private$check_ptr()`:</span></span>
@@ -310,7 +316,7 @@
 </div>
 <p>Use <code>$save()</code> and <code><a href="../reference/load_ann_index.html">load_ann_index()</a></code> instead. The search knobs and metric travel with the index:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">hnsw</span><span class="op">$</span><span class="va">ef_search</span> <span class="op">&lt;-</span> <span class="fl">80L</span></span>
 <span><span class="va">hnsw</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
@@ -330,7 +336,8 @@
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -339,8 +346,69 @@
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -354,6 +422,7 @@
         interactiveBorder: 10,
         theme: 'light-border',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;

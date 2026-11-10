@@ -32,7 +32,7 @@ rs_vamana_self(ptr, k, ef_search, sqrt, return_dist, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

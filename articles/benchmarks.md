@@ -10,8 +10,9 @@ Instead each library builds once, its search-time knob is swept, and we
 read off the best queries per second (QPS) it reaches at recall@10 of
 0.90, 0.95 and 0.99.
 
-These are numbers from one machine on one day, frozen here rather than
-rebuilt with the package. Everything needed to rerun them is in
+These are numbers from one machine on one day with annsearchR 0.2.0
+(ann-search-rs 0.12.2), frozen here rather than rebuilt with the
+package. Everything needed to rerun them is in
 [`inst/benchmarks/`](https://github.com/GregorLueg/annsearchR/tree/main/inst/benchmarks).
 
 ## Setup
@@ -54,20 +55,20 @@ per algorithm family
 
 | Method     | Library          | Build (s) | QPS @ 0.90 | QPS @ 0.95 | QPS @ 0.99 |
 |------------|------------------|----------:|-----------:|-----------:|-----------:|
-| hnsw       | **annsearchR**   |       3.5 |     92,593 |     64,935 |     44,248 |
-| hnsw       | RcppHNSW         |       8.4 |     44,843 |     31,646 |     21,186 |
-| hnsw       | BiocNeighbors    |      66.3 |     14,347 |     14,347 |     14,347 |
-| nndescent  | **annsearchR**   |       3.3 |     68,027 |     68,027 |     26,178 |
-| nndescent  | rnndescent       |      15.8 |     15,221 |     14,144 |     12,210 |
-| ivf        | **annsearchR**   |       1.4 |     34,130 |     34,130 |     17,094 |
-| annoy      | **annsearchR**   |       1.7 |     22,573 |     22,573 |     11,364 |
-| annoy      | RcppAnnoy (fork) |      16.0 |     11,001 |      6,094 |      3,444 |
-| annoy      | BiocNeighbors    |      15.6 |      4,921 |      4,921 |        n/a |
-| exhaustive | **annsearchR**   |       0.1 |     17,452 |     17,452 |     17,452 |
-| kmknn      | **annsearchR**   |       1.3 |      2,137 |      2,137 |      2,137 |
-| kmknn      | BiocNeighbors    |     117.2 |        781 |        781 |        781 |
-| kd_tree    | RANN             |        \- |         33 |         33 |         33 |
-| kd_tree    | FNN              |        \- |         33 |         33 |         33 |
+| hnsw       | **annsearchR**   |       3.7 |     83,333 |     63,291 |     42,194 |
+| hnsw       | RcppHNSW         |       8.6 |     42,553 |     30,303 |     21,186 |
+| hnsw       | BiocNeighbors    |      66.6 |     13,717 |     13,717 |     13,717 |
+| nndescent  | **annsearchR**   |       2.3 |     71,429 |     71,429 |     27,473 |
+| nndescent  | rnndescent       |      15.1 |     16,835 |     15,198 |     12,392 |
+| ivf        | **annsearchR**   |       1.4 |     33,557 |     33,557 |     17,094 |
+| annoy      | **annsearchR**   |       1.7 |     21,739 |     21,739 |     11,223 |
+| annoy      | RcppAnnoy (fork) |      16.4 |     10,471 |      5,956 |      3,306 |
+| annoy      | BiocNeighbors    |      15.7 |      4,845 |      4,845 |        n/a |
+| exhaustive | **annsearchR**   |       0.1 |     16,313 |     16,313 |     16,313 |
+| kmknn      | **annsearchR**   |       1.3 |      2,147 |      2,147 |      2,147 |
+| kmknn      | BiocNeighbors    |     116.4 |        783 |        783 |        783 |
+| kd_tree    | RANN             |        \- |         31 |         31 |         31 |
+| kd_tree    | FNN              |        \- |         30 |         30 |         30 |
 
 ### SIFT-128, 10 threads
 
@@ -78,20 +79,20 @@ algorithm family
 
 | Method     | Library          | Build (s) | QPS @ 0.90 | QPS @ 0.95 | QPS @ 0.99 |
 |------------|------------------|----------:|-----------:|-----------:|-----------:|
-| hnsw       | **annsearchR**   |      52.3 |     70,423 |     41,841 |     23,202 |
-| hnsw       | RcppHNSW         |     103.4 |     34,364 |     20,000 |     11,186 |
-| hnsw       | BiocNeighbors    |     659.9 |     20,534 |     20,534 |        n/a |
-| nndescent  | **annsearchR**   |      29.7 |     36,630 |     20,040 |      6,258 |
-| nndescent  | rnndescent       |     207.8 |      1,621 |      1,621 |      1,621 |
-| ivf        | **annsearchR**   |       2.5 |     12,285 |      6,105 |      3,056 |
-| annoy      | **annsearchR**   |      10.1 |      9,766 |      5,459 |      2,695 |
-| annoy      | BiocNeighbors    |      93.7 |      7,474 |        n/a |        n/a |
-| annoy      | RcppAnnoy (fork) |     101.5 |      5,777 |      3,716 |      1,168 |
-| exhaustive | **annsearchR**   |       0.4 |      3,477 |      3,477 |      3,477 |
-| kmknn      | **annsearchR**   |       2.1 |        491 |        491 |        491 |
-| kmknn      | BiocNeighbors    |     867.0 |        277 |        277 |        277 |
+| hnsw       | **annsearchR**   |      42.6 |     78,125 |     48,780 |     26,042 |
+| hnsw       | RcppHNSW         |      85.1 |     38,760 |     21,645 |     12,107 |
+| hnsw       | BiocNeighbors    |     564.3 |     23,310 |     23,310 |        n/a |
+| nndescent  | **annsearchR**   |      22.0 |     46,083 |     25,189 |      7,874 |
+| nndescent  | rnndescent       |     188.4 |      1,754 |      1,588 |      1,588 |
+| ivf        | **annsearchR**   |       1.9 |     13,736 |      6,920 |      3,597 |
+| annoy      | **annsearchR**   |       7.0 |     12,500 |      7,123 |      3,369 |
+| annoy      | BiocNeighbors    |      79.0 |      8,606 |        n/a |        n/a |
+| annoy      | RcppAnnoy (fork) |      83.7 |      7,267 |      4,407 |      1,393 |
+| exhaustive | **annsearchR**   |       0.4 |      3,384 |      3,384 |      3,384 |
+| kmknn      | **annsearchR**   |       2.2 |        500 |        500 |        500 |
+| kmknn      | BiocNeighbors    |     858.3 |        273 |        273 |        273 |
+| kd_tree    | RANN             |        \- |          6 |          6 |          6 |
 | kd_tree    | FNN              |        \- |          6 |          6 |          6 |
-| kd_tree    | RANN             |        \- |          5 |          5 |          5 |
 
 ### Fashion-MNIST, 1 thread
 
@@ -105,50 +106,50 @@ per algorithm family
 
 | Method     | Library        | Build (s) | QPS @ 0.90 | QPS @ 0.95 | QPS @ 0.99 |
 |------------|----------------|----------:|-----------:|-----------:|-----------:|
-| hnsw       | **annsearchR** |      17.8 |     22,883 |     15,773 |     10,030 |
-| hnsw       | RcppHNSW       |      67.4 |      5,682 |      4,102 |      2,760 |
-| hnsw       | BiocNeighbors  |      65.8 |      1,806 |      1,806 |      1,806 |
-| nndescent  | **annsearchR** |      15.4 |     15,674 |     15,674 |      5,102 |
-| nndescent  | rnndescent     |      82.4 |      3,691 |      3,331 |      2,509 |
-| ivf        | **annsearchR** |       1.9 |      8,658 |      8,658 |      4,604 |
-| annoy      | **annsearchR** |       5.7 |      4,608 |      4,608 |      2,287 |
-| annoy      | RcppAnnoy      |      15.7 |      1,534 |        817 |        436 |
-| annoy      | BiocNeighbors  |      15.4 |        602 |        602 |        n/a |
-| exhaustive | **annsearchR** |       0.1 |      6,135 |      6,135 |      6,135 |
-| kmknn      | **annsearchR** |       1.8 |        671 |        671 |        671 |
-| kmknn      | BiocNeighbors  |     117.2 |        100 |        100 |        100 |
-| kd_tree    | RANN           |        \- |         33 |         33 |         33 |
-| kd_tree    | FNN            |        \- |         32 |         32 |         32 |
+| hnsw       | **annsearchR** |      15.9 |     23,981 |     16,667 |     10,718 |
+| hnsw       | RcppHNSW       |      67.2 |      5,643 |      4,054 |      2,704 |
+| hnsw       | BiocNeighbors  |      66.8 |      1,776 |      1,776 |      1,776 |
+| nndescent  | **annsearchR** |      11.6 |     15,432 |     15,432 |      5,414 |
+| nndescent  | rnndescent     |      77.0 |      3,899 |      3,471 |      2,556 |
+| ivf        | **annsearchR** |       1.9 |      8,496 |      8,496 |      4,608 |
+| annoy      | **annsearchR** |       5.7 |      4,521 |      4,521 |      2,223 |
+| annoy      | RcppAnnoy      |      15.7 |      1,528 |        802 |        435 |
+| annoy      | BiocNeighbors  |      15.5 |        611 |        611 |        n/a |
+| exhaustive | **annsearchR** |       0.1 |      6,098 |      6,098 |      6,098 |
+| kmknn      | **annsearchR** |       1.9 |        674 |        674 |        674 |
+| kmknn      | BiocNeighbors  |     116.5 |        100 |        100 |        100 |
+| kd_tree    | RANN           |        \- |         31 |         31 |         31 |
+| kd_tree    | FNN            |        \- |         30 |         30 |         30 |
 
 ## What the numbers say
 
 - **HNSW:** annsearchR runs about 2x the queries per second of RcppHNSW
   at every recall target on both datasets with 10 threads, and builds 2
-  to 2.4x faster. Recall at the same `ef_search` is within about 0.01 of
+  to 2.3x faster. Recall at the same `ef_search` is within about 0.02 of
   RcppHNSW’s, so the graphs are of the same quality; the Rust search is
-  just quicker. On one thread the gap widens to 3.6 to 4x: RcppHNSW
+  just quicker. On one thread the gap widens to 4 to 4.3x: RcppHNSW
   gains more from extra threads than annsearchR does.
-- **NN-Descent:** against rnndescent, 4.5x faster at recall 0.90 on
-  Fashion-MNIST and 23x on SIFT, with builds 5 to 7x faster.
+- **NN-Descent:** against rnndescent, 4.2x faster at recall 0.90 on
+  Fashion-MNIST and 26x on SIFT, with builds 6.5 to 8.5x faster.
 - **Annoy:** RcppAnnoy has no threads and no batch query, so the only
   way to use more cores from R is forking over query chunks with
   [`parallel::mclapply`](https://rdrr.io/r/parallel/mclapply.html).
   That’s what the “(fork)” rows are, fork cost included. annsearchR
-  still does 1.5 to 3.7x the QPS and builds about 10x faster.
+  still does 1.6 to 3.7x the QPS and builds 10 to 12x faster.
 - **Exact search:** annsearchR’s brute force beats every exact
   competitor by a mile: about 530x the single-threaded FNN and RANN
-  kd-trees on Fashion-MNIST, and 22x BiocNeighbors’ KMKNN. It also beats
+  kd-trees on Fashion-MNIST, and 21x BiocNeighbors’ KMKNN. It also beats
   its own KMKNN on both datasets: at 784 and 128 dimensions, pruning by
   k-means clusters doesn’t pay against a blocked GEMM.
 - **Builds:** BiocNeighbors builds its HNSW, Annoy and KMKNN indices on
-  one thread whatever `num.threads` says, which is where its 11 and 14.5
-  minute SIFT builds come from.
+  one thread whatever `num.threads` says, which is where its 9.5 and
+  14.3 minute SIFT builds come from.
 
 ## Caveats
 
 - **Brute force isn’t single-core even on “1 thread”.** On macOS the
   exhaustive index runs large batches through Apple Accelerate. At “1
-  thread” it worked out to roughly 577 GFLOP/s on Fashion-MNIST, far
+  thread” it worked out to roughly 574 GFLOP/s on Fashion-MNIST, far
   more than one core can do, so read its 1-thread numbers as
   Accelerate’s. The approximate indices don’t use that path.
 - **BiocNeighbors HNSW and Annoy are single points.** Its prebuilt index
@@ -177,6 +178,6 @@ Rscript inst/benchmarks/bench_ann_benchmarks.R sift-128-euclidean 10
 Rscript inst/benchmarks/plot_results.R
 ```
 
-On SIFT the index builds alone add up to about 35 minutes on the machine
+On SIFT the index builds alone add up to about 32 minutes on the machine
 above, most of it in the single-threaded BiocNeighbors and RcppAnnoy
 builds.

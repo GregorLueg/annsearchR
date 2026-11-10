@@ -66,7 +66,7 @@ rs_nndescent_build(
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

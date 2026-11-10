@@ -38,7 +38,7 @@ rs_hnsw_build(data, metric, m, ef_construction, seed, precision, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

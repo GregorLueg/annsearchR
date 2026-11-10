@@ -29,12 +29,14 @@
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/dot-ann_metrics.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/dot-as_ann_matrix.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/dot-as_knob.html</loc></url>
+<url><loc>https://gregorlueg.github.io/annsearchR/reference/dot-as_verbosity.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/dot-is_ptr.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/generate_cell_embeddings.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/generate_clustered_data.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/generate_correlated_data.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/generate_low_rank_data.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/index.html</loc></url>
+<url><loc>https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/knn_recall.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/load_ann_index.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/predict.AnnIndex.html</loc></url>
@@ -73,6 +75,7 @@
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_lsh_self.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_build.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_extract.html</loc></url>
+<url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_knn_graph.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_query.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_nndescent_self.html</loc></url>
 <url><loc>https://gregorlueg.github.io/annsearchR/reference/rs_nsg_build.html</loc></url>

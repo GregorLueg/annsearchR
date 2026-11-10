@@ -46,7 +46,7 @@ rs_nsg_build(data, metric, r, l_build, c, knn_k, seed, precision, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

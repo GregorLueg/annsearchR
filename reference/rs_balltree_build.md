@@ -7,7 +7,7 @@ instead.
 ## Usage
 
 ``` r
-rs_balltree_build(data, metric, seed, precision)
+rs_balltree_build(data, metric, seed, precision, verbose)
 ```
 
 ## Arguments
@@ -27,6 +27,10 @@ rs_balltree_build(data, metric, seed, precision)
 - precision:
 
   String. `"float"` or `"double"`.
+
+- verbose:
+
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

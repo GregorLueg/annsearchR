@@ -14,7 +14,8 @@ rs_lsh_build(
   bits_per_hash,
   slot_bits,
   seed,
-  precision
+  precision,
+  verbose
 )
 ```
 
@@ -47,6 +48,10 @@ rs_lsh_build(
 - precision:
 
   String. `"float"` or `"double"`.
+
+- verbose:
+
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

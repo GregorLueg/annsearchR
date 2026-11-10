@@ -41,7 +41,7 @@ rs_lsh_query(ptr, data, k, n_probe, max_candidates, sqrt, return_dist, verbose)
 
 - verbose:
 
-  Boolean. Print progress.
+  Integer. 0 silent, 1 progress, 2 detailed.
 
 ## Value
 

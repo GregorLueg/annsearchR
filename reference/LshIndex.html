@@ -15,7 +15,7 @@ for recall. No Manhattan."><meta property="og:image" content="https://gregorlueg
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,8 @@ the 33rd International Conference on Very Large Data Bases</em>, 950-961.
 <span>  n_probe <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_candidates <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">42L</span>,</span>
-<span>  precision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"float"</span>, <span class="st">"double"</span><span class="op">)</span></span>
+<span>  precision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"float"</span>, <span class="st">"double"</span><span class="op">)</span>,</span>
+<span>  .verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
@@ -149,6 +150,10 @@ query. <code>NULL</code> means no cap. Can be changed after the build.</p></dd>
       <dt><code>precision</code></dt>
 <dd><p>String. <code>"float"</code> stores the data as f32, <code>"double"</code>
 as f64.</p></dd>
+
+      <dt><code>.verbose</code></dt>
+<dd><p>Boolean or integer. Build progress from Rust: <code>0</code> or
+<code>FALSE</code> silent, <code>1</code> or <code>TRUE</code> progress, <code>2</code> adds timed build stages.</p></dd>
 
 
 </dl><p></p></div>
