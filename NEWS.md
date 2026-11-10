@@ -8,7 +8,8 @@
   NN-Descent search structure. On SIFT-128 (1M x 128, 10 threads), the
   NN-Descent build peaks at 6.3 GB instead of 8.2 GB and saves to 1.9 GB
   instead of 2.4 GB; Annoy peaks at 5.2 GB instead of 6.0 GB and builds in
-  7.0 s instead of 8.3 s. Recall and query speed are unchanged.
+  7.0 s instead of 8.3 s; the kd forest peaks at 3.7 GB instead of 4.2 GB.
+  Recall is unchanged and query speed is within run-to-run noise.
 - Manhattan NN-Descent seeds its graph by kd-tree leaf join, like the other
   metrics.
 - `.verbose` takes `0`, `1` or `2` as well as `FALSE`/`TRUE`. `2` prints timed
@@ -19,6 +20,9 @@
   RNN-Descent) are refused with an error.
 - Breaking: the on-disk format changed. Indices saved with 0.1.0 do not load,
   rebuild and save them again.
+- `faer` comes in without its `npy` feature, which drops nine crates from the
+  vendored Rust sources.
+- The benchmarks article is rerun on 0.2.0.
 
 # annsearchR 0.1.0
 
