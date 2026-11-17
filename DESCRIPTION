@@ -50,8 +50,10 @@ Config/Needs/benchmarks:
     ggplot2,
     hdf5r,
     RANN,
+    Rcpp,
     RcppAnnoy,
     RcppHNSW,
+    RcppThread,
     rnndescent,
     scales
 Config/roxygen2/version: 8.1.1

@@ -10,7 +10,7 @@ crate-type = ['staticlib', 'rlib']
 name = 'annsearchR'
 
 [dependencies]
-ann-search-rs = { version = "0.12.2", features = ["serialise", "synthetic"] }
+ann-search-rs = { version = "0.13.1", features = ["serialise", "synthetic"] }
 extendr-api = "0.9.0"
 faer = { version = "0.24.4", default-features = false, features = ["std"] }
 num-traits = "0.2.19"

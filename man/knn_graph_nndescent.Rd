@@ -66,10 +66,10 @@ where \code{idx} is \code{NA}. \code{NULL} if \code{return_dist = FALSE}.
 \description{
 Matrix in, kNN graph out. Runs the same descent as \link{NNDescentIndex}, but
 drops the seeding trees as soon as they are joined and keeps no index, so
-peak memory stays near the data plus the graph. At the same \code{seed},
-\code{n_trees} and descent parameters, the result is identical to
-\code{NNDescentIndex$new(...)$extract_knn()}. Use \link{NNDescentIndex} if you also
-want to query the graph with new data.
+peak memory stays near the data plus the graph. The graph is not
+bit-identical to \code{NNDescentIndex$new(...)$extract_knn()} at the same \code{seed},
+but the recall is the same. Use \link{NNDescentIndex} if you also want to query
+the graph with new data.
 
 \code{k_graph} is the number of neighbours the descent finds per sample, the
 sample itself not counted. With \code{include_self = TRUE} (the default, as for

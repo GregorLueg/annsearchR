@@ -9,7 +9,7 @@ the data itself (UMAP, clustering)? \verb{$extract_knn()} hands back the
 converged graph without any search, far cheaper than \verb{$query_self()}. It
 reads the full kNN graph: \code{diversify_prob} only prunes the graph that
 queries walk. Only need the graph and never query? \code{\link[=knn_graph_nndescent]{knn_graph_nndescent()}}
-returns the same graph without keeping an index around.
+builds it without keeping an index around.
 }
 \examples{
 x <- generate_clustered_data(1000L, 16L)$data

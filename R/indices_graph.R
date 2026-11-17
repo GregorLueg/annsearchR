@@ -136,7 +136,7 @@ HnswIndex <- R6::R6Class(
 #' converged graph without any search, far cheaper than `$query_self()`. It
 #' reads the full kNN graph: `diversify_prob` only prunes the graph that
 #' queries walk. Only need the graph and never query? [knn_graph_nndescent()]
-#' returns the same graph without keeping an index around.
+#' builds it without keeping an index around.
 #'
 #' @references
 #' Dong W, Charikar M, Li K (2011). Efficient k-nearest neighbor graph
@@ -314,10 +314,10 @@ NNDescentIndex <- R6::R6Class(
 #' @description
 #' Matrix in, kNN graph out. Runs the same descent as [NNDescentIndex], but
 #' drops the seeding trees as soon as they are joined and keeps no index, so
-#' peak memory stays near the data plus the graph. At the same `seed`,
-#' `n_trees` and descent parameters, the result is identical to
-#' `NNDescentIndex$new(...)$extract_knn()`. Use [NNDescentIndex] if you also
-#' want to query the graph with new data.
+#' peak memory stays near the data plus the graph. The graph is not
+#' bit-identical to `NNDescentIndex$new(...)$extract_knn()` at the same `seed`,
+#' but the recall is the same. Use [NNDescentIndex] if you also want to query
+#' the graph with new data.
 #'
 #' `k_graph` is the number of neighbours the descent finds per sample, the
 #' sample itself not counted. With `include_self = TRUE` (the default, as for

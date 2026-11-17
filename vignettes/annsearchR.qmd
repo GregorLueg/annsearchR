@@ -205,13 +205,13 @@ knn_recall(truth_self, graph$idx)
 Only need the graph and never query it? `knn_graph_nndescent()` runs the same
 descent but drops the seeding trees as they go and keeps no index, so less
 memory sits around at the end. `k_graph` counts true neighbours, and the sample
-itself comes on top with `include_self = TRUE`, so ask for one column more from
-`$extract_knn()` to compare like for like:
+itself comes on top with `include_self = TRUE`, so ask for one column more to
+compare against the exact graph:
 
 ```{r}
 #| label: knn-graph
 graph_only <- knn_graph_nndescent(train, k_graph = 15L)
-identical(graph_only, nnd$extract_knn(k = 16L))
+knn_recall(truth_self, graph_only$idx[, 1:15])
 ```
 
 ## Metrics and precision
