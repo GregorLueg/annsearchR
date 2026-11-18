@@ -6,8 +6,10 @@
 # M = 16, ef_construction = 200, ef_search = 50; Annoy at 50 trees with a
 # search budget of 1500 items per query. Ground truth comes from
 # annsearchR's ExhaustiveIndex (checked against FNN, which is exact).
-# FNN, RANN and RcppAnnoy are single-threaded; the others run at 1 thread and
-# at all cores.
+# FNN and RANN are single-threaded; the others run at 1 thread and at all
+# cores. Threaded RcppAnnoy queries go the Seurat way: save the index to a temp
+# file and search it from C++ over RcppThread (annoy_search.cpp), save cost
+# included.
 
 # setup ------------------------------------------------------------------------
 
@@ -144,11 +146,13 @@ rcpphnsw_case <- function(threads) {
 
 # RcppAnnoy --------------------------------------------------------------------
 
-rcppannoy_case <- function() {
+Rcpp::sourceCpp(file.path("inst", "benchmarks", "annoy_search.cpp"))
+
+rcppannoy_case <- function(threads) {
   run_case(
     "RcppAnnoy",
     "annoy",
-    1L,
+    threads,
     \() {
       a <- methods::new(RcppAnnoy::AnnoyEuclidean, dim)
       a$setSeed(42L)
@@ -159,6 +163,12 @@ rcppannoy_case <- function() {
       a
     },
     \(a) {
+      if (threads > 1L) {
+        path <- tempfile(fileext = ".ann")
+        on.exit(unlink(path), add = TRUE)
+        a$save(path)
+        return(annoy_search_threaded(path, query, k, annoy_search_k, threads))
+      }
       res <- matrix(NA_integer_, n_query, k)
       for (i in seq_len(n_query)) {
         res[i, ] <- a$getNNsByVectorList(
@@ -235,7 +245,7 @@ results <- data.table::rbindlist(c(
   annsearchr_cases(1L),
   annsearchr_cases(n_cores),
   list(rcpphnsw_case(1L), rcpphnsw_case(n_cores)),
-  list(rcppannoy_case()),
+  list(rcppannoy_case(1L), rcppannoy_case(n_cores)),
   biocneighbors_cases(1L),
   biocneighbors_cases(n_cores),
   exact_tree_cases()

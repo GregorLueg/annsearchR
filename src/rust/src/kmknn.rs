@@ -19,8 +19,10 @@ use crate::utils::kmeans_params;
 /// @param data Numeric matrix. Samples x features.
 /// @param metric String. One of `c("euclidean", "cosine")`.
 /// @param nlist Integer or `NULL`. Number of k-means clusters.
-/// @param kmeans_iters Integer or `NULL`. Lloyd iterations.
-/// @param kmeans_balanced Boolean. Reseed starved centroids.
+/// @param kmeans_iters Integer or `NULL`. `NULL` uses e-means, an integer
+/// Lloyd's with that many iterations.
+/// @param kmeans_balanced Boolean. Reseed starved centroids. Only affects
+/// Lloyd's (`kmeans_iters` set), ignored under e-means.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
 /// @param verbose Integer. 0 silent, 1 progress, 2 detailed.

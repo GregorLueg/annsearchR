@@ -10,8 +10,9 @@
 # Compare libraries at equal recall, not at equal settings: the summary gives
 # the best queries per second each library reaches at recall >= 0.9 / 0.95 /
 # 0.99. FNN and RANN are single-threaded whatever `threads` says. RcppAnnoy
-# builds single-threaded; with threads > 1 its queries are forked over chunks
-# via parallel::mclapply (not available on Windows), fork cost included.
+# builds single-threaded; with threads > 1 it is queried the way Seurat does:
+# the index is saved to a temp file and searched from C++ over RcppThread
+# (annoy_search.cpp), save cost included.
 # FNN and RANN are exact kd-trees and run on a query subset; QPS normalises.
 # BiocNeighbors bakes the search knob into the prebuilt index, so its HNSW and
 # Annoy get one matched point each rather than a sweep.
@@ -315,10 +316,12 @@ rcppannoy_query <- function(rows, sk) {
   }
   res
 }
-# RcppAnnoy has no threaded or batch query; the only route to more cores from
-# R is forking over query chunks. Forks inherit the built index.
-rcppannoy_label <- if (threads > 1L) "RcppAnnoy (fork)" else "RcppAnnoy"
-query_chunks <- parallel::splitIndices(n_query, threads)
+# RcppAnnoy has no threaded query of its own. Like Seurat, save the index and
+# search the file from C++ with one thread pool, saving on every call.
+rcppannoy_label <- if (threads > 1L) "RcppAnnoy (threaded)" else "RcppAnnoy"
+if (threads > 1L) {
+  Rcpp::sourceCpp(file.path("inst", "benchmarks", "annoy_search.cpp"))
+}
 annoy <- c(
   annoy,
   lapply(search_k_grid, \(sk) {
@@ -331,15 +334,10 @@ annoy <- c(
         if (threads == 1L) {
           return(rcppannoy_query(all_rows, sk))
         }
-        do.call(
-          rbind,
-          parallel::mclapply(
-            query_chunks,
-            rcppannoy_query,
-            sk = sk,
-            mc.cores = threads
-          )
-        )
+        path <- tempfile(fileext = ".ann")
+        on.exit(unlink(path), add = TRUE)
+        b$index$save(path)
+        annoy_search_threaded(path, ds$test, k, sk, threads)
       },
       all_rows
     )

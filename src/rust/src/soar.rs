@@ -56,8 +56,10 @@ fn soar_rule(rule: Nullable<String>, param: Nullable<f64>) -> Result<Option<Soar
 /// @param rule String or `NULL`. Spilling rule.
 /// @param rule_param Numeric or `NULL`. `mu` (shifted) or `lambda`
 /// (orthogonal).
-/// @param kmeans_iters Integer or `NULL`. Lloyd iterations.
-/// @param kmeans_balanced Boolean. Reseed starved centroids.
+/// @param kmeans_iters Integer or `NULL`. `NULL` uses e-means, an integer
+/// Lloyd's with that many iterations.
+/// @param kmeans_balanced Boolean. Reseed starved centroids. Only affects
+/// Lloyd's (`kmeans_iters` set), ignored under e-means.
 /// @param seed Integer. Random seed.
 /// @param precision String. `"float"` or `"double"`.
 /// @param verbose Integer. 0 silent, 1 progress, 2 detailed.

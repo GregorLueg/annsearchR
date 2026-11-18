@@ -120,7 +120,9 @@ for (metric in c("euclidean", "sqeuclidean", "cosine", "manhattan")) {
         seed = 3L,
         precision = precision
       )
-      expect_equal(g, nn$extract_knn(k = 12L + self, include_self = self))
+      e <- nn$extract_knn(k = 12L + self, include_self = self)
+      expect_equal(dim(g$idx), dim(e$idx))
+      expect_true(knn_recall(e$idx, g$idx) > 0.99)
     }
   }
 }

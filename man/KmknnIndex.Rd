@@ -19,6 +19,10 @@ Wang X (2011). A fast exact k-nearest neighbors algorithm for high
 dimensional search using k-means clustering and triangle inequality.
 \emph{The 2011 International Joint Conference on Neural Networks}, 1293-1299.
 \doi{10.1109/IJCNN.2011.6033373}
+
+Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+(2026). e-means: outperforming k-means (in one-tenth the epochs). \emph{arXiv}.
+\url{https://arxiv.org/abs/2611.09501}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{KmknnIndex}
@@ -65,8 +69,12 @@ pointer is also accepted; \code{\link[=load_ann_index]{load_ann_index()}} uses t
       \item{\code{metric}}{String. One of \code{c("euclidean", "sqeuclidean", "cosine")}.}
       \item{\code{nlist}}{Integer or \code{NULL}. Number of k-means clusters. \code{NULL} uses
 \code{sqrt(n)}.}
-      \item{\code{kmeans_iters}}{Integer or \code{NULL}. Lloyd iterations. \code{NULL} uses 30.}
-      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each iteration.}
+      \item{\code{kmeans_iters}}{Integer or \code{NULL}. \code{NULL} trains the centroids with
+e-means at its own epoch budget. An integer switches to Lloyd's with that
+many iterations.}
+      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each iteration.
+Only affects Lloyd's k-means, i.e. when \code{kmeans_iters} is set. Ignored
+otherwise: e-means, the default, has no balancing option.}
       \item{\code{seed}}{Integer. Fixes the k-means initialisation.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}

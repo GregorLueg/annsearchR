@@ -34,8 +34,8 @@ keeping an index.
 
 At equal recall on the [ann-benchmarks](https://ann-benchmarks.com) datasets,
 annsearchR's HNSW runs about 2x the queries per second of RcppHNSW with 10
-threads and 3.6 to 4x on one thread. NN-Descent is 4.5 to 23x faster than
-rnndescent and Annoy 1.5 to 3.7x faster than RcppAnnoy. The full comparison
+threads and 3.7 to 4.2x on one thread. NN-Descent is 4.3 to 18x faster than
+rnndescent and Annoy 1.5 to 3.5x faster than RcppAnnoy. The full comparison
 against RcppHNSW, RcppAnnoy, BiocNeighbors, rnndescent, FNN and RANN on
 Fashion-MNIST and SIFT-128 is in the
 [benchmarks article](https://gregorlueg.github.io/annsearchR/articles/benchmarks.html).

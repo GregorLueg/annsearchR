@@ -23,6 +23,10 @@ on Computer Vision}, 1470-1477. \doi{10.1109/ICCV.2003.1238663}
 Jégou H, Douze M, Schmid C (2011). Product quantization for nearest
 neighbor search. \emph{IEEE Transactions on Pattern Analysis and Machine
 Intelligence}, 33, 117-128. \doi{10.1109/TPAMI.2010.57}
+
+Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+(2026). e-means: outperforming k-means (in one-tenth the epochs). \emph{arXiv}.
+\url{https://arxiv.org/abs/2611.09501}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{IvfIndex}
@@ -79,8 +83,12 @@ pointer is also accepted; \code{\link[=load_ann_index]{load_ann_index()}} uses t
 \code{sqrt(n)}.}
       \item{\code{nprobe}}{Integer or \code{NULL}. Cells visited per query. \code{NULL} uses
 \code{sqrt(nlist)}. Can be changed after the build.}
-      \item{\code{kmeans_iters}}{Integer or \code{NULL}. Lloyd iterations. \code{NULL} uses 30.}
-      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each iteration.}
+      \item{\code{kmeans_iters}}{Integer or \code{NULL}. \code{NULL} trains the centroids with
+e-means at its own epoch budget. An integer switches to Lloyd's with that
+many iterations.}
+      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each iteration.
+Only affects Lloyd's k-means, i.e. when \code{kmeans_iters} is set. Ignored
+otherwise: e-means, the default, has no balancing option.}
       \item{\code{seed}}{Integer. Fixes the k-means initialisation.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}

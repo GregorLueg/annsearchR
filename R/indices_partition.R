@@ -16,6 +16,10 @@
 #' neighbor search. *IEEE Transactions on Pattern Analysis and Machine
 #' Intelligence*, 33, 117-128. \doi{10.1109/TPAMI.2010.57}
 #'
+#' Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+#' (2026). e-means: outperforming k-means (in one-tenth the epochs). *arXiv*.
+#' <https://arxiv.org/abs/2611.09501>
+#'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
 #' idx <- IvfIndex$new(x)
@@ -37,8 +41,12 @@ IvfIndex <- R6::R6Class(
     #' `sqrt(n)`.
     #' @param nprobe Integer or `NULL`. Cells visited per query. `NULL` uses
     #' `sqrt(nlist)`. Can be changed after the build.
-    #' @param kmeans_iters Integer or `NULL`. Lloyd iterations. `NULL` uses 30.
+    #' @param kmeans_iters Integer or `NULL`. `NULL` trains the centroids with
+    #' e-means at its own epoch budget. An integer switches to Lloyd's with that
+    #' many iterations.
     #' @param kmeans_balanced Boolean. Reseed starved centroids each iteration.
+    #' Only affects Lloyd's k-means, i.e. when `kmeans_iters` is set. Ignored
+    #' otherwise: e-means, the default, has no balancing option.
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
@@ -135,6 +143,10 @@ IvfIndex <- R6::R6Class(
 #' for approximate nearest neighbor search. *Advances in Neural Information
 #' Processing Systems*, 36, 3189-3204. <https://arxiv.org/abs/2404.00774>
 #'
+#' Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+#' (2026). e-means: outperforming k-means (in one-tenth the epochs). *arXiv*.
+#' <https://arxiv.org/abs/2611.09501>
+#'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
 #' idx <- SoarIndex$new(x)
@@ -160,8 +172,12 @@ SoarIndex <- R6::R6Class(
     #' cosine and shifted otherwise.
     #' @param rule_param Numeric or `NULL`. `mu` for the shifted rule, `lambda`
     #' for the orthogonal one. `NULL` uses 0.5 and 1.0 respectively.
-    #' @param kmeans_iters Integer or `NULL`. Lloyd iterations. `NULL` uses 30.
+    #' @param kmeans_iters Integer or `NULL`. `NULL` trains the centroids with
+    #' e-means at its own epoch budget. An integer switches to Lloyd's with that
+    #' many iterations.
     #' @param kmeans_balanced Boolean. Reseed starved centroids each iteration.
+    #' Only affects Lloyd's k-means, i.e. when `kmeans_iters` is set. Ignored
+    #' otherwise: e-means, the default, has no balancing option.
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.

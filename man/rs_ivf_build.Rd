@@ -22,9 +22,11 @@ rs_ivf_build(
 
 \item{nlist}{Integer or \code{NULL}. Number of Voronoi cells.}
 
-\item{kmeans_iters}{Integer or \code{NULL}. Lloyd iterations.}
+\item{kmeans_iters}{Integer or \code{NULL}. \code{NULL} uses e-means, an integer
+Lloyd's with that many iterations.}
 
-\item{kmeans_balanced}{Boolean. Reseed starved centroids.}
+\item{kmeans_balanced}{Boolean. Reseed starved centroids. Only affects
+Lloyd's (\code{kmeans_iters} set), ignored under e-means.}
 
 \item{seed}{Integer. Random seed.}
 
