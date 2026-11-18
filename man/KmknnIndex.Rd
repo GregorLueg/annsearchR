@@ -19,6 +19,10 @@ Wang X (2011). A fast exact k-nearest neighbors algorithm for high
 dimensional search using k-means clustering and triangle inequality.
 \emph{The 2011 International Joint Conference on Neural Networks}, 1293-1299.
 \doi{10.1109/IJCNN.2011.6033373}
+
+Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+(2026). e-means: outperforming k-means (in one-tenth the epochs). \emph{arXiv}.
+\url{https://arxiv.org/abs/2611.09501}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{KmknnIndex}

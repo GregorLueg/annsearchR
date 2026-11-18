@@ -92,6 +92,10 @@ ExhaustiveIndex <- R6::R6Class(
 #' *The 2011 International Joint Conference on Neural Networks*, 1293-1299.
 #' \doi{10.1109/IJCNN.2011.6033373}
 #'
+#' Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+#' (2026). e-means: outperforming k-means (in one-tenth the epochs). *arXiv*.
+#' <https://arxiv.org/abs/2611.09501>
+#'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
 #' idx <- KmknnIndex$new(x)

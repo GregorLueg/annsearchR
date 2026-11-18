@@ -16,6 +16,10 @@
 #' neighbor search. *IEEE Transactions on Pattern Analysis and Machine
 #' Intelligence*, 33, 117-128. \doi{10.1109/TPAMI.2010.57}
 #'
+#' Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+#' (2026). e-means: outperforming k-means (in one-tenth the epochs). *arXiv*.
+#' <https://arxiv.org/abs/2611.09501>
+#'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data
 #' idx <- IvfIndex$new(x)
@@ -138,6 +142,10 @@ IvfIndex <- R6::R6Class(
 #' Sun P, Simcha D, Dopson D, Guo R, Kumar S (2023). SOAR: improved indexing
 #' for approximate nearest neighbor search. *Advances in Neural Information
 #' Processing Systems*, 36, 3189-3204. <https://arxiv.org/abs/2404.00774>
+#'
+#' Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+#' (2026). e-means: outperforming k-means (in one-tenth the epochs). *arXiv*.
+#' <https://arxiv.org/abs/2611.09501>
 #'
 #' @examples
 #' x <- generate_clustered_data(1000L, 16L)$data

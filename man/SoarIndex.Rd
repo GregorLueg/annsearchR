@@ -19,6 +19,10 @@ res <- idx$predict(x[1:5, ], k = 10L)
 Sun P, Simcha D, Dopson D, Guo R, Kumar S (2023). SOAR: improved indexing
 for approximate nearest neighbor search. \emph{Advances in Neural Information
 Processing Systems}, 36, 3189-3204. \url{https://arxiv.org/abs/2404.00774}
+
+Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+(2026). e-means: outperforming k-means (in one-tenth the epochs). \emph{arXiv}.
+\url{https://arxiv.org/abs/2611.09501}
 }
 \section{Super class}{
 \code{\link[annsearchR:AnnIndex]{AnnIndex}} -> \code{SoarIndex}
