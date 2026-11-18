@@ -82,8 +82,12 @@ pointer is also accepted; \code{\link[=load_ann_index]{load_ann_index()}} uses t
 cosine and shifted otherwise.}
       \item{\code{rule_param}}{Numeric or \code{NULL}. \code{mu} for the shifted rule, \code{lambda}
 for the orthogonal one. \code{NULL} uses 0.5 and 1.0 respectively.}
-      \item{\code{kmeans_iters}}{Integer or \code{NULL}. Lloyd iterations. \code{NULL} uses 30.}
-      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each iteration.}
+      \item{\code{kmeans_iters}}{Integer or \code{NULL}. \code{NULL} trains the centroids with
+e-means at its own epoch budget. An integer switches to Lloyd's with that
+many iterations.}
+      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each Lloyd
+iteration. Ignored unless \code{kmeans_iters} is set: e-means revives starved
+clusters itself.}
       \item{\code{seed}}{Integer. Fixes the k-means initialisation.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}

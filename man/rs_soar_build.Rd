@@ -29,9 +29,10 @@ rs_soar_build(
 \item{rule_param}{Numeric or \code{NULL}. \code{mu} (shifted) or \code{lambda}
 (orthogonal).}
 
-\item{kmeans_iters}{Integer or \code{NULL}. Lloyd iterations.}
+\item{kmeans_iters}{Integer or \code{NULL}. \code{NULL} uses e-means, an integer
+Lloyd's with that many iterations.}
 
-\item{kmeans_balanced}{Boolean. Reseed starved centroids.}
+\item{kmeans_balanced}{Boolean. Reseed starved centroids. Lloyd's only.}
 
 \item{seed}{Integer. Random seed.}
 

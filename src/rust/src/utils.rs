@@ -14,8 +14,9 @@ use rayon::prelude::*;
 ///
 /// ### Params
 ///
-/// * `iters` - Lloyd iterations, or `None` for the crate default.
-/// * `balanced` - Reseed starved centroids each iteration.
+/// * `iters` - Lloyd iterations, or `None` for the crate default (e-means).
+/// * `balanced` - Reseed starved centroids each iteration. The crate ignores it
+///   under e-means, so it only takes effect alongside `iters`.
 ///
 /// ### Returns
 ///

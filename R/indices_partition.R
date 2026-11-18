@@ -37,8 +37,12 @@ IvfIndex <- R6::R6Class(
     #' `sqrt(n)`.
     #' @param nprobe Integer or `NULL`. Cells visited per query. `NULL` uses
     #' `sqrt(nlist)`. Can be changed after the build.
-    #' @param kmeans_iters Integer or `NULL`. Lloyd iterations. `NULL` uses 30.
-    #' @param kmeans_balanced Boolean. Reseed starved centroids each iteration.
+    #' @param kmeans_iters Integer or `NULL`. `NULL` trains the centroids with
+    #' e-means at its own epoch budget. An integer switches to Lloyd's with that
+    #' many iterations.
+    #' @param kmeans_balanced Boolean. Reseed starved centroids each Lloyd
+    #' iteration. Ignored unless `kmeans_iters` is set: e-means revives starved
+    #' clusters itself.
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
@@ -160,8 +164,12 @@ SoarIndex <- R6::R6Class(
     #' cosine and shifted otherwise.
     #' @param rule_param Numeric or `NULL`. `mu` for the shifted rule, `lambda`
     #' for the orthogonal one. `NULL` uses 0.5 and 1.0 respectively.
-    #' @param kmeans_iters Integer or `NULL`. Lloyd iterations. `NULL` uses 30.
-    #' @param kmeans_balanced Boolean. Reseed starved centroids each iteration.
+    #' @param kmeans_iters Integer or `NULL`. `NULL` trains the centroids with
+    #' e-means at its own epoch budget. An integer switches to Lloyd's with that
+    #' many iterations.
+    #' @param kmeans_balanced Boolean. Reseed starved centroids each Lloyd
+    #' iteration. Ignored unless `kmeans_iters` is set: e-means revives starved
+    #' clusters itself.
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.
