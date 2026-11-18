@@ -4,8 +4,8 @@
   builds and lower peak memory for most indices. Indices saved with 0.2.0
   still load.
 - IVF, SOAR and KMKNN train their centroids with e-means unless `kmeans_iters`
-  is set, so results differ at the same seed. `kmeans_balanced` only applies
-  with Lloyd's, i.e. when `kmeans_iters` is set.
+  is set, so results differ at the same seed. `kmeans_balanced` only affects
+  Lloyd's, i.e. when `kmeans_iters` is set, and is ignored otherwise.
 - `knn_graph_nndescent()` is no longer bit-identical to `$extract_knn()` at
   the same seed. Recall is unchanged.
 - RNN-Descent results differ at the same seed. NN-Descent distances and

@@ -250,7 +250,8 @@ rs_exhaustive_self <- function(ptr, k, sqrt, return_dist, verbose) .Call(wrap__r
 #' @param nlist Integer or `NULL`. Number of k-means clusters.
 #' @param kmeans_iters Integer or `NULL`. `NULL` uses e-means, an integer
 #' Lloyd's with that many iterations.
-#' @param kmeans_balanced Boolean. Reseed starved centroids. Lloyd's only.
+#' @param kmeans_balanced Boolean. Reseed starved centroids. Only affects
+#' Lloyd's (`kmeans_iters` set), ignored under e-means.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
 #' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
@@ -537,7 +538,8 @@ rs_hnsw_self <- function(ptr, k, ef_search, sqrt, return_dist, verbose) .Call(wr
 #' @param nlist Integer or `NULL`. Number of Voronoi cells.
 #' @param kmeans_iters Integer or `NULL`. `NULL` uses e-means, an integer
 #' Lloyd's with that many iterations.
-#' @param kmeans_balanced Boolean. Reseed starved centroids. Lloyd's only.
+#' @param kmeans_balanced Boolean. Reseed starved centroids. Only affects
+#' Lloyd's (`kmeans_iters` set), ignored under e-means.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
 #' @param verbose Integer. 0 silent, 1 progress, 2 detailed.
@@ -600,7 +602,8 @@ rs_ivf_self <- function(ptr, k, nprobe, sqrt, return_dist, verbose) .Call(wrap__
 #' (orthogonal).
 #' @param kmeans_iters Integer or `NULL`. `NULL` uses e-means, an integer
 #' Lloyd's with that many iterations.
-#' @param kmeans_balanced Boolean. Reseed starved centroids. Lloyd's only.
+#' @param kmeans_balanced Boolean. Reseed starved centroids. Only affects
+#' Lloyd's (`kmeans_iters` set), ignored under e-means.
 #' @param seed Integer. Random seed.
 #' @param precision String. `"float"` or `"double"`.
 #' @param verbose Integer. 0 silent, 1 progress, 2 detailed.

@@ -117,9 +117,9 @@ KmknnIndex <- R6::R6Class(
     #' @param kmeans_iters Integer or `NULL`. `NULL` trains the centroids with
     #' e-means at its own epoch budget. An integer switches to Lloyd's with that
     #' many iterations.
-    #' @param kmeans_balanced Boolean. Reseed starved centroids each Lloyd
-    #' iteration. Ignored unless `kmeans_iters` is set: e-means revives starved
-    #' clusters itself.
+    #' @param kmeans_balanced Boolean. Reseed starved centroids each iteration.
+    #' Only affects Lloyd's k-means, i.e. when `kmeans_iters` is set. Ignored
+    #' otherwise: e-means, the default, has no balancing option.
     #' @param seed Integer. Fixes the k-means initialisation.
     #' @param precision String. `"float"` stores the data as f32, `"double"`
     #' as f64.

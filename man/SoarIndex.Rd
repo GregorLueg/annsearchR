@@ -89,9 +89,9 @@ for the orthogonal one. \code{NULL} uses 0.5 and 1.0 respectively.}
       \item{\code{kmeans_iters}}{Integer or \code{NULL}. \code{NULL} trains the centroids with
 e-means at its own epoch budget. An integer switches to Lloyd's with that
 many iterations.}
-      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each Lloyd
-iteration. Ignored unless \code{kmeans_iters} is set: e-means revives starved
-clusters itself.}
+      \item{\code{kmeans_balanced}}{Boolean. Reseed starved centroids each iteration.
+Only affects Lloyd's k-means, i.e. when \code{kmeans_iters} is set. Ignored
+otherwise: e-means, the default, has no balancing option.}
       \item{\code{seed}}{Integer. Fixes the k-means initialisation.}
       \item{\code{precision}}{String. \code{"float"} stores the data as f32, \code{"double"}
 as f64.}
