@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Benchmarks against the R ecosystem</h1>
 
       <p class="author">Gregor Lueg</p>
-      <p class="date">2026-11-10</p>
+      <p class="date">2026-11-18</p>
 
       <small class="dont-index">Source: <a href="https://github.com/GregorLueg/annsearchR/blob/main/vignettes/articles/benchmarks.qmd" class="external-link"><code>vignettes/articles/benchmarks.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -82,7 +82,7 @@
 
 
     <p>How does annsearchR stack up against the nearest neighbour packages R users actually reach for? We ran the <a href="https://ann-benchmarks.com" class="external-link">ann-benchmarks</a> protocol on two of its standard datasets and compared every library at <strong>equal recall</strong>, not at equal settings. Two libraries with the same <code>ef_search</code> can land at different recall, so “faster at the same parameters” says little. Instead each library builds once, its search-time knob is swept, and we read off the best queries per second (QPS) it reaches at recall@10 of 0.90, 0.95 and 0.99.</p>
-<p>These are numbers from one machine on one day with annsearchR 0.2.0 (ann-search-rs 0.12.2), frozen here rather than rebuilt with the package. Everything needed to rerun them is in <a href="https://github.com/GregorLueg/annsearchR/tree/main/inst/benchmarks" class="external-link"><code>inst/benchmarks/</code></a>.</p>
+<p>These are numbers from one machine on one day with annsearchR 0.3.0 (ann-search-rs 0.13.1), frozen here rather than rebuilt with the package. Everything needed to rerun them is in <a href="https://github.com/GregorLueg/annsearchR/tree/main/inst/benchmarks" class="external-link"><code>inst/benchmarks/</code></a>.</p>
 <section class="level2"><h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
 <ul>
@@ -120,106 +120,106 @@
 <tr class="odd">
 <td>hnsw</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">3.7</td>
-<td style="text-align: right;">83,333</td>
-<td style="text-align: right;">63,291</td>
-<td style="text-align: right;">42,194</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">87,719</td>
+<td style="text-align: right;">62,893</td>
+<td style="text-align: right;">42,017</td>
 </tr>
 <tr class="even">
 <td>hnsw</td>
 <td>RcppHNSW</td>
 <td style="text-align: right;">8.6</td>
-<td style="text-align: right;">42,553</td>
-<td style="text-align: right;">30,303</td>
-<td style="text-align: right;">21,186</td>
+<td style="text-align: right;">39,216</td>
+<td style="text-align: right;">28,409</td>
+<td style="text-align: right;">20,080</td>
 </tr>
 <tr class="odd">
 <td>hnsw</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">66.6</td>
-<td style="text-align: right;">13,717</td>
-<td style="text-align: right;">13,717</td>
-<td style="text-align: right;">13,717</td>
+<td style="text-align: right;">67.6</td>
+<td style="text-align: right;">13,089</td>
+<td style="text-align: right;">13,089</td>
+<td style="text-align: right;">13,089</td>
 </tr>
 <tr class="even">
 <td>nndescent</td>
 <td><strong>annsearchR</strong></td>
 <td style="text-align: right;">2.3</td>
-<td style="text-align: right;">71,429</td>
-<td style="text-align: right;">71,429</td>
-<td style="text-align: right;">27,473</td>
+<td style="text-align: right;">68,027</td>
+<td style="text-align: right;">68,027</td>
+<td style="text-align: right;">27,174</td>
 </tr>
 <tr class="odd">
 <td>nndescent</td>
 <td>rnndescent</td>
-<td style="text-align: right;">15.1</td>
-<td style="text-align: right;">16,835</td>
-<td style="text-align: right;">15,198</td>
-<td style="text-align: right;">12,392</td>
+<td style="text-align: right;">16.3</td>
+<td style="text-align: right;">15,873</td>
+<td style="text-align: right;">14,388</td>
+<td style="text-align: right;">12,063</td>
 </tr>
 <tr class="even">
 <td>ivf</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">1.4</td>
-<td style="text-align: right;">33,557</td>
-<td style="text-align: right;">33,557</td>
-<td style="text-align: right;">17,094</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">99,010</td>
+<td style="text-align: right;">99,010</td>
+<td style="text-align: right;">99,010</td>
 </tr>
 <tr class="odd">
 <td>annoy</td>
 <td><strong>annsearchR</strong></td>
 <td style="text-align: right;">1.7</td>
-<td style="text-align: right;">21,739</td>
-<td style="text-align: right;">21,739</td>
-<td style="text-align: right;">11,223</td>
+<td style="text-align: right;">21,368</td>
+<td style="text-align: right;">21,368</td>
+<td style="text-align: right;">10,811</td>
 </tr>
 <tr class="even">
 <td>annoy</td>
-<td>RcppAnnoy (fork)</td>
-<td style="text-align: right;">16.4</td>
-<td style="text-align: right;">10,471</td>
-<td style="text-align: right;">5,956</td>
-<td style="text-align: right;">3,306</td>
+<td>RcppAnnoy (threaded)</td>
+<td style="text-align: right;">16.6</td>
+<td style="text-align: right;">11,074</td>
+<td style="text-align: right;">6,083</td>
+<td style="text-align: right;">3,440</td>
 </tr>
 <tr class="odd">
 <td>annoy</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">15.7</td>
-<td style="text-align: right;">4,845</td>
-<td style="text-align: right;">4,845</td>
+<td style="text-align: right;">16.1</td>
+<td style="text-align: right;">4,737</td>
+<td style="text-align: right;">4,737</td>
 <td style="text-align: right;">n/a</td>
 </tr>
 <tr class="even">
 <td>exhaustive</td>
 <td><strong>annsearchR</strong></td>
 <td style="text-align: right;">0.1</td>
-<td style="text-align: right;">16,313</td>
-<td style="text-align: right;">16,313</td>
-<td style="text-align: right;">16,313</td>
+<td style="text-align: right;">17,036</td>
+<td style="text-align: right;">17,036</td>
+<td style="text-align: right;">17,036</td>
 </tr>
 <tr class="odd">
 <td>kmknn</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">1.3</td>
-<td style="text-align: right;">2,147</td>
-<td style="text-align: right;">2,147</td>
-<td style="text-align: right;">2,147</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">25,000</td>
+<td style="text-align: right;">25,000</td>
+<td style="text-align: right;">25,000</td>
 </tr>
 <tr class="even">
 <td>kmknn</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">116.4</td>
-<td style="text-align: right;">783</td>
-<td style="text-align: right;">783</td>
-<td style="text-align: right;">783</td>
+<td style="text-align: right;">116.0</td>
+<td style="text-align: right;">759</td>
+<td style="text-align: right;">759</td>
+<td style="text-align: right;">759</td>
 </tr>
 <tr class="odd">
 <td>kd_tree</td>
 <td>RANN</td>
 <td style="text-align: right;">-</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">31</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">30</td>
 </tr>
 <tr class="even">
 <td>kd_tree</td>
@@ -249,98 +249,98 @@
 <tr class="odd">
 <td>hnsw</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">42.6</td>
-<td style="text-align: right;">78,125</td>
-<td style="text-align: right;">48,780</td>
-<td style="text-align: right;">26,042</td>
+<td style="text-align: right;">44.1</td>
+<td style="text-align: right;">77,519</td>
+<td style="text-align: right;">43,290</td>
+<td style="text-align: right;">26,810</td>
 </tr>
 <tr class="even">
 <td>hnsw</td>
 <td>RcppHNSW</td>
-<td style="text-align: right;">85.1</td>
-<td style="text-align: right;">38,760</td>
-<td style="text-align: right;">21,645</td>
-<td style="text-align: right;">12,107</td>
+<td style="text-align: right;">84.9</td>
+<td style="text-align: right;">38,911</td>
+<td style="text-align: right;">22,523</td>
+<td style="text-align: right;">13,055</td>
 </tr>
 <tr class="odd">
 <td>hnsw</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">564.3</td>
-<td style="text-align: right;">23,310</td>
-<td style="text-align: right;">23,310</td>
+<td style="text-align: right;">572.6</td>
+<td style="text-align: right;">22,026</td>
+<td style="text-align: right;">22,026</td>
 <td style="text-align: right;">n/a</td>
 </tr>
 <tr class="even">
 <td>nndescent</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">22.0</td>
-<td style="text-align: right;">46,083</td>
-<td style="text-align: right;">25,189</td>
-<td style="text-align: right;">7,874</td>
+<td style="text-align: right;">20.8</td>
+<td style="text-align: right;">43,103</td>
+<td style="text-align: right;">23,641</td>
+<td style="text-align: right;">7,508</td>
 </tr>
 <tr class="odd">
 <td>nndescent</td>
 <td>rnndescent</td>
-<td style="text-align: right;">188.4</td>
-<td style="text-align: right;">1,754</td>
-<td style="text-align: right;">1,588</td>
-<td style="text-align: right;">1,588</td>
+<td style="text-align: right;">188.8</td>
+<td style="text-align: right;">2,338</td>
+<td style="text-align: right;">2,338</td>
+<td style="text-align: right;">2,087</td>
 </tr>
 <tr class="even">
 <td>ivf</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">1.9</td>
-<td style="text-align: right;">13,736</td>
-<td style="text-align: right;">6,920</td>
-<td style="text-align: right;">3,597</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">68,966</td>
+<td style="text-align: right;">54,348</td>
+<td style="text-align: right;">36,232</td>
 </tr>
 <tr class="odd">
 <td>annoy</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">7.0</td>
-<td style="text-align: right;">12,500</td>
-<td style="text-align: right;">7,123</td>
-<td style="text-align: right;">3,369</td>
+<td style="text-align: right;">7.2</td>
+<td style="text-align: right;">12,005</td>
+<td style="text-align: right;">6,887</td>
+<td style="text-align: right;">2,778</td>
 </tr>
 <tr class="even">
 <td>annoy</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">79.0</td>
-<td style="text-align: right;">8,606</td>
+<td style="text-align: right;">82.9</td>
+<td style="text-align: right;">7,911</td>
 <td style="text-align: right;">n/a</td>
 <td style="text-align: right;">n/a</td>
 </tr>
 <tr class="odd">
 <td>annoy</td>
-<td>RcppAnnoy (fork)</td>
-<td style="text-align: right;">83.7</td>
-<td style="text-align: right;">7,267</td>
-<td style="text-align: right;">4,407</td>
-<td style="text-align: right;">1,393</td>
+<td>RcppAnnoy (threaded)</td>
+<td style="text-align: right;">87.4</td>
+<td style="text-align: right;">7,342</td>
+<td style="text-align: right;">4,543</td>
+<td style="text-align: right;">1,400</td>
 </tr>
 <tr class="even">
 <td>exhaustive</td>
 <td><strong>annsearchR</strong></td>
 <td style="text-align: right;">0.4</td>
-<td style="text-align: right;">3,384</td>
-<td style="text-align: right;">3,384</td>
-<td style="text-align: right;">3,384</td>
+<td style="text-align: right;">3,369</td>
+<td style="text-align: right;">3,369</td>
+<td style="text-align: right;">3,369</td>
 </tr>
 <tr class="odd">
 <td>kmknn</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">2.2</td>
-<td style="text-align: right;">500</td>
-<td style="text-align: right;">500</td>
-<td style="text-align: right;">500</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">7,231</td>
+<td style="text-align: right;">7,231</td>
+<td style="text-align: right;">7,231</td>
 </tr>
 <tr class="even">
 <td>kmknn</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">858.3</td>
-<td style="text-align: right;">273</td>
-<td style="text-align: right;">273</td>
-<td style="text-align: right;">273</td>
+<td style="text-align: right;">858.9</td>
+<td style="text-align: right;">255</td>
+<td style="text-align: right;">255</td>
+<td style="text-align: right;">255</td>
 </tr>
 <tr class="odd">
 <td>kd_tree</td>
@@ -379,110 +379,110 @@
 <tr class="odd">
 <td>hnsw</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">15.9</td>
-<td style="text-align: right;">23,981</td>
-<td style="text-align: right;">16,667</td>
-<td style="text-align: right;">10,718</td>
+<td style="text-align: right;">17.3</td>
+<td style="text-align: right;">23,310</td>
+<td style="text-align: right;">15,848</td>
+<td style="text-align: right;">9,970</td>
 </tr>
 <tr class="even">
 <td>hnsw</td>
 <td>RcppHNSW</td>
-<td style="text-align: right;">67.2</td>
-<td style="text-align: right;">5,643</td>
-<td style="text-align: right;">4,054</td>
-<td style="text-align: right;">2,704</td>
+<td style="text-align: right;">67.6</td>
+<td style="text-align: right;">5,568</td>
+<td style="text-align: right;">4,016</td>
+<td style="text-align: right;">2,711</td>
 </tr>
 <tr class="odd">
 <td>hnsw</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">66.8</td>
-<td style="text-align: right;">1,776</td>
-<td style="text-align: right;">1,776</td>
-<td style="text-align: right;">1,776</td>
+<td style="text-align: right;">67.3</td>
+<td style="text-align: right;">1,769</td>
+<td style="text-align: right;">1,769</td>
+<td style="text-align: right;">1,769</td>
 </tr>
 <tr class="even">
 <td>nndescent</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">11.6</td>
-<td style="text-align: right;">15,432</td>
-<td style="text-align: right;">15,432</td>
-<td style="text-align: right;">5,414</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">15,773</td>
+<td style="text-align: right;">15,773</td>
+<td style="text-align: right;">5,519</td>
 </tr>
 <tr class="odd">
 <td>nndescent</td>
 <td>rnndescent</td>
-<td style="text-align: right;">77.0</td>
-<td style="text-align: right;">3,899</td>
-<td style="text-align: right;">3,471</td>
-<td style="text-align: right;">2,556</td>
+<td style="text-align: right;">76.7</td>
+<td style="text-align: right;">3,912</td>
+<td style="text-align: right;">3,495</td>
+<td style="text-align: right;">2,507</td>
 </tr>
 <tr class="even">
 <td>ivf</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">1.9</td>
-<td style="text-align: right;">8,496</td>
-<td style="text-align: right;">8,496</td>
-<td style="text-align: right;">4,608</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">34,602</td>
+<td style="text-align: right;">34,602</td>
+<td style="text-align: right;">29,412</td>
 </tr>
 <tr class="odd">
 <td>annoy</td>
 <td><strong>annsearchR</strong></td>
 <td style="text-align: right;">5.7</td>
-<td style="text-align: right;">4,521</td>
-<td style="text-align: right;">4,521</td>
-<td style="text-align: right;">2,223</td>
+<td style="text-align: right;">4,527</td>
+<td style="text-align: right;">4,527</td>
+<td style="text-align: right;">2,224</td>
 </tr>
 <tr class="even">
 <td>annoy</td>
 <td>RcppAnnoy</td>
-<td style="text-align: right;">15.7</td>
-<td style="text-align: right;">1,528</td>
-<td style="text-align: right;">802</td>
-<td style="text-align: right;">435</td>
+<td style="text-align: right;">15.8</td>
+<td style="text-align: right;">1,510</td>
+<td style="text-align: right;">810</td>
+<td style="text-align: right;">440</td>
 </tr>
 <tr class="odd">
 <td>annoy</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">15.5</td>
-<td style="text-align: right;">611</td>
-<td style="text-align: right;">611</td>
+<td style="text-align: right;">15.2</td>
+<td style="text-align: right;">622</td>
+<td style="text-align: right;">622</td>
 <td style="text-align: right;">n/a</td>
 </tr>
 <tr class="even">
 <td>exhaustive</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">0.1</td>
-<td style="text-align: right;">6,098</td>
-<td style="text-align: right;">6,098</td>
-<td style="text-align: right;">6,098</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">6,039</td>
+<td style="text-align: right;">6,039</td>
+<td style="text-align: right;">6,039</td>
 </tr>
 <tr class="odd">
 <td>kmknn</td>
 <td><strong>annsearchR</strong></td>
-<td style="text-align: right;">1.9</td>
-<td style="text-align: right;">674</td>
-<td style="text-align: right;">674</td>
-<td style="text-align: right;">674</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">5,970</td>
+<td style="text-align: right;">5,970</td>
+<td style="text-align: right;">5,970</td>
 </tr>
 <tr class="even">
 <td>kmknn</td>
 <td>BiocNeighbors</td>
-<td style="text-align: right;">116.5</td>
+<td style="text-align: right;">116.8</td>
 <td style="text-align: right;">100</td>
 <td style="text-align: right;">100</td>
 <td style="text-align: right;">100</td>
 </tr>
 <tr class="odd">
 <td>kd_tree</td>
-<td>RANN</td>
+<td>FNN</td>
 <td style="text-align: right;">-</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">31</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">30</td>
 </tr>
 <tr class="even">
 <td>kd_tree</td>
-<td>FNN</td>
+<td>RANN</td>
 <td style="text-align: right;">-</td>
 <td style="text-align: right;">30</td>
 <td style="text-align: right;">30</td>
@@ -493,13 +493,15 @@
 </h2>
 <ul>
 <li>
-<strong>HNSW:</strong> annsearchR runs about 2x the queries per second of RcppHNSW at every recall target on both datasets with 10 threads, and builds 2 to 2.3x faster. Recall at the same <code>ef_search</code> is within about 0.02 of RcppHNSW’s, so the graphs are of the same quality; the Rust search is just quicker. On one thread the gap widens to 4 to 4.3x: RcppHNSW gains more from extra threads than annsearchR does.</li>
+<strong>HNSW:</strong> annsearchR runs about 2x the queries per second of RcppHNSW at every recall target on both datasets with 10 threads, and builds 1.9 to 2.4x faster. Recall at the same <code>ef_search</code> is within about 0.02 of RcppHNSW’s, so the graphs are of the same quality; the Rust search is just quicker. On one thread the gap widens to 3.7 to 4.2x: RcppHNSW gains more from extra threads than annsearchR does.</li>
 <li>
-<strong>NN-Descent:</strong> against rnndescent, 4.2x faster at recall 0.90 on Fashion-MNIST and 26x on SIFT, with builds 6.5 to 8.5x faster.</li>
+<strong>IVF:</strong> builds in 0.4 s on Fashion-MNIST and 1.1 s on SIFT and, with 10 threads, is the fastest index at every recall target on Fashion-MNIST and at 0.95 and 0.99 on SIFT. HNSW still wins at recall 0.90 on SIFT. No other R package ships IVF.</li>
 <li>
-<strong>Annoy:</strong> RcppAnnoy has no threads and no batch query, so the only way to use more cores from R is forking over query chunks with <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply</a></code>. That’s what the “(fork)” rows are, fork cost included. annsearchR still does 1.6 to 3.7x the QPS and builds 10 to 12x faster.</li>
+<strong>NN-Descent:</strong> against rnndescent, 4.3x faster at recall 0.90 on Fashion-MNIST and 18x on SIFT, with builds 7 to 9x faster.</li>
 <li>
-<strong>Exact search:</strong> annsearchR’s brute force beats every exact competitor by a mile: about 530x the single-threaded FNN and RANN kd-trees on Fashion-MNIST, and 21x BiocNeighbors’ KMKNN. It also beats its own KMKNN on both datasets: at 784 and 128 dimensions, pruning by k-means clusters doesn’t pay against a blocked GEMM.</li>
+<strong>Annoy:</strong> RcppAnnoy has no threaded query of its own. The “(threaded)” rows do what Seurat does: save the index to a temporary file and search it from C++ over a RcppThread pool (an idea from uwot), save cost included. annsearchR still does 1.5 to 3.5x the QPS and builds 10 to 12x faster.</li>
+<li>
+<strong>Exact search:</strong> annsearchR’s KMKNN is now its fastest exact search on 10 threads: 1.5x its own brute force on Fashion-MNIST and 2.1x on SIFT, and 28 to 33x BiocNeighbors’ KMKNN. On one thread the two are level. Both beat the single-threaded FNN and RANN kd-trees by a mile, about 570x for brute force on Fashion-MNIST.</li>
 <li>
 <strong>Builds:</strong> BiocNeighbors builds its HNSW, Annoy and KMKNN indices on one thread whatever <code>num.threads</code> says, which is where its 9.5 and 14.3 minute SIFT builds come from.</li>
 </ul></section><section class="level2"><h2 id="caveats">Caveats<a class="anchor" aria-label="anchor" href="#caveats"></a>

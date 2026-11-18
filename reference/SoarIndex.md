@@ -14,6 +14,10 @@ indexing for approximate nearest neighbor search. *Advances in Neural
 Information Processing Systems*, 36, 3189-3204.
 <https://arxiv.org/abs/2404.00774>
 
+Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+(2026). e-means: outperforming k-means (in one-tenth the epochs).
+*arXiv*. <https://arxiv.org/abs/2611.09501>
+
 ## Super class
 
 [`AnnIndex`](https://gregorlueg.github.io/annsearchR/reference/AnnIndex.md)
@@ -97,11 +101,15 @@ Build the index.
 
 - `kmeans_iters`:
 
-  Integer or `NULL`. Lloyd iterations. `NULL` uses 30.
+  Integer or `NULL`. `NULL` trains the centroids with e-means at its own
+  epoch budget. An integer switches to Lloyd's with that many
+  iterations.
 
 - `kmeans_balanced`:
 
-  Boolean. Reseed starved centroids each iteration.
+  Boolean. Reseed starved centroids each iteration. Only affects Lloyd's
+  k-means, i.e. when `kmeans_iters` is set. Ignored otherwise: e-means,
+  the default, has no balancing option.
 
 - `seed`:
 

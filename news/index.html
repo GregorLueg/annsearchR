@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,14 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="annsearchr-030">annsearchR 0.3.0<a class="anchor" aria-label="anchor" href="#annsearchr-030"></a></h2>
+<ul><li>Built on ann-search-rs 0.13.1. Faster IVF and KMKNN, faster NN-Descent builds and lower peak memory for most indices. Indices saved with 0.2.0 still load.</li>
+<li>IVF, SOAR and KMKNN train their centroids with e-means unless <code>kmeans_iters</code> is set, so results differ at the same seed. <code>kmeans_balanced</code> only affects Lloyd’s, i.e. when <code>kmeans_iters</code> is set, and is ignored otherwise.</li>
+<li>
+<code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code> is no longer bit-identical to <code>$extract_knn()</code> at the same seed. Recall is unchanged.</li>
+<li>RNN-Descent results differ at the same seed. NN-Descent distances and k-d forest cosine distances can differ at rounding level.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="annsearchr-020">annsearchR 0.2.0<a class="anchor" aria-label="anchor" href="#annsearchr-020"></a></h2>
 <ul><li>Breaking: new on-disk format. Indices saved with 0.1.0 need rebuilding.</li>
 <li>Built on ann-search-rs 0.12.2. Smaller indices in memory and on disk, e.g. the NN-Descent build on SIFT-128 peaks at 6.3 GB instead of 8.2 GB. Recall and query speed unchanged.</li>
@@ -53,7 +61,7 @@
 <li>Datasets above the 32-bit id limit are refused with an error.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="annsearchr-010">annsearchR 0.1.0<a class="anchor" aria-label="anchor" href="#annsearchr-010"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="annsearchr-010">annsearchR 0.1.0<a class="anchor" aria-label="anchor" href="#annsearchr-010"></a></h2><p class="text-muted">CRAN release: 2026-11-13</p>
 <p>First CRAN release.</p>
 <ul><li>Thirteen CPU indices behind one R6 interface: brute force, kMkNN, Annoy, k-d forest, ball tree, IVF, SOAR, LSH, HNSW, NN-Descent, Vamana, NSG and RNN-Descent. Euclidean, squared Euclidean, cosine and Manhattan distances, f32 or f64 storage, save to disk and load back.</li>
 <li>Built on ann-search-rs 0.11.0. NN-Descent now seeds its graph by joining every forest leaf, as PyNNDescent does, and the default <code>n_trees</code> moved to scanpy’s <code>min(5 + round(sqrt(n) / 20), 64)</code>. Expect different graphs at the same seed than with the r-universe 0.0.1 builds.</li>

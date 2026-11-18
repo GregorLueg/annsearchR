@@ -6,7 +6,7 @@ the converged graph without any search, far cheaper than
 `$query_self()`. It reads the full kNN graph: `diversify_prob` only
 prunes the graph that queries walk. Only need the graph and never query?
 [`knn_graph_nndescent()`](https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.md)
-returns the same graph without keeping an index around.
+builds it without keeping an index around.
 
 ## References
 

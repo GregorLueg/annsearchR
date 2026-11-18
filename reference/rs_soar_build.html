@@ -9,7 +9,7 @@ Use SoarIndex instead."><meta property="og:image" content="https://gregorlueg.gi
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,11 +92,13 @@ Use <a href="SoarIndex.html">SoarIndex</a> instead.</p>
 
 
 <dt id="arg-kmeans-iters">kmeans_iters<a class="anchor" aria-label="anchor" href="#arg-kmeans-iters"></a></dt>
-<dd><p>Integer or <code>NULL</code>. Lloyd iterations.</p></dd>
+<dd><p>Integer or <code>NULL</code>. <code>NULL</code> uses e-means, an integer
+Lloyd's with that many iterations.</p></dd>
 
 
 <dt id="arg-kmeans-balanced">kmeans_balanced<a class="anchor" aria-label="anchor" href="#arg-kmeans-balanced"></a></dt>
-<dd><p>Boolean. Reseed starved centroids.</p></dd>
+<dd><p>Boolean. Reseed starved centroids. Only affects
+Lloyd's (<code>kmeans_iters</code> set), ignored under e-means.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>

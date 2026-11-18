@@ -11,7 +11,7 @@ faster depends on how well the data clusters, so time both. No Manhattan."><meta
 
     <a class="navbar-brand me-2" href="../index.html">annsearchR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,6 +60,9 @@ faster depends on how well the data clusters, so time both. No Manhattan.</p>
 dimensional search using k-means clustering and triangle inequality.
 <em>The 2011 International Joint Conference on Neural Networks</em>, 1293-1299.
 <a href="https://doi.org/10.1109/IJCNN.2011.6033373" class="external-link">doi:10.1109/IJCNN.2011.6033373</a></p>
+<p>Bessa S, Mazaré P-E, Szilvasy G, Touvron H, Picard D, Douze M, Jégou H
+(2026). e-means: outperforming k-means (in one-tenth the epochs). <em>arXiv</em>.
+<a href="https://arxiv.org/abs/2611.09501" class="external-link">https://arxiv.org/abs/2611.09501</a></p>
     </div>
     <div class="section level2">
     <h2 id="super-class">Super class<a class="anchor" aria-label="anchor" href="#super-class"></a></h2>
@@ -104,10 +107,14 @@ pointer is also accepted; <code><a href="load_ann_index.html">load_ann_index()</
 <code>sqrt(n)</code>.</p></dd>
 
       <dt><code>kmeans_iters</code></dt>
-<dd><p>Integer or <code>NULL</code>. Lloyd iterations. <code>NULL</code> uses 30.</p></dd>
+<dd><p>Integer or <code>NULL</code>. <code>NULL</code> trains the centroids with
+e-means at its own epoch budget. An integer switches to Lloyd's with that
+many iterations.</p></dd>
 
       <dt><code>kmeans_balanced</code></dt>
-<dd><p>Boolean. Reseed starved centroids each iteration.</p></dd>
+<dd><p>Boolean. Reseed starved centroids each iteration.
+Only affects Lloyd's k-means, i.e. when <code>kmeans_iters</code> is set. Ignored
+otherwise: e-means, the default, has no balancing option.</p></dd>
 
       <dt><code>seed</code></dt>
 <dd><p>Integer. Fixes the k-means initialisation.</p></dd>

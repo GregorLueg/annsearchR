@@ -3,9 +3,9 @@
 Matrix in, kNN graph out. Runs the same descent as
 [NNDescentIndex](https://gregorlueg.github.io/annsearchR/reference/NNDescentIndex.md),
 but drops the seeding trees as soon as they are joined and keeps no
-index, so peak memory stays near the data plus the graph. At the same
-`seed`, `n_trees` and descent parameters, the result is identical to
-`NNDescentIndex$new(...)$extract_knn()`. Use
+index, so peak memory stays near the data plus the graph. The graph is
+not bit-identical to `NNDescentIndex$new(...)$extract_knn()` at the same
+`seed`, but the recall is the same. Use
 [NNDescentIndex](https://gregorlueg.github.io/annsearchR/reference/NNDescentIndex.md)
 if you also want to query the graph with new data.
 

@@ -67,7 +67,7 @@ found.
 
 truth <- ExhaustiveIndex$new(train)$predict(query, k = 10L)$idx
 knn_recall(truth, res$idx)
-#> [1] 0.9854
+#> [1] 0.986
 ```
 
 Brute force is no slouch here either: it is SIMD accelerated,
@@ -93,10 +93,10 @@ for (ef in c(10L, 20L, 50L, 100L)) {
     t
   ))
 }
-#> ef_search =  10   recall 0.848   0.003s
-#> ef_search =  20   recall 0.938   0.004s
-#> ef_search =  50   recall 0.985   0.008s
-#> ef_search = 100   recall 0.995   0.012s
+#> ef_search =  10   recall 0.846   0.003s
+#> ef_search =  20   recall 0.937   0.004s
+#> ef_search =  50   recall 0.986   0.007s
+#> ef_search = 100   recall 0.995   0.011s
 ```
 
 The knobs per index:
@@ -150,18 +150,18 @@ comparison <- do.call(
 comparison
 #>         index build_s query_s recall
 #> 1  exhaustive   0.003   0.016  1.000
-#> 2       kmknn   0.084   0.005  1.000
+#> 2       kmknn   0.045   0.005  1.000
 #> 3       annoy   0.046   0.016  1.000
 #> 4      kdtree   0.068   0.014  0.999
 #> 5    balltree   0.025   0.005  0.932
-#> 6        hnsw   0.658   0.008  0.985
-#> 7         ivf   0.082   0.004  0.995
-#> 8        soar   0.105   0.011  0.999
-#> 9         lsh   0.012   0.009  0.973
-#> 10  nndescent   0.474   0.005  0.884
-#> 11     vamana   1.561   0.014  0.999
-#> 12        nsg   7.964   0.015  0.999
-#> 13 rnndescent   0.538   0.015  0.989
+#> 6        hnsw   0.653   0.007  0.986
+#> 7         ivf   0.045   0.003  0.986
+#> 8        soar   0.053   0.012  0.998
+#> 9         lsh   0.017   0.009  0.973
+#> 10  nndescent   0.347   0.007  0.884
+#> 11     vamana   1.508   0.015  0.999
+#> 12        nsg   8.120   0.016  0.999
+#> 13 rnndescent   0.467   0.013  0.992
 ```
 
 These are default settings on small, easy data with two threads, so read
@@ -223,14 +223,14 @@ Only need the graph and never query it?
 runs the same descent but drops the seeding trees as they go and keeps
 no index, so less memory sits around at the end. `k_graph` counts true
 neighbours, and the sample itself comes on top with
-`include_self = TRUE`, so ask for one column more from `$extract_knn()`
-to compare like for like:
+`include_self = TRUE`, so ask for one column more to compare against the
+exact graph:
 
 ``` r
 
 graph_only <- knn_graph_nndescent(train, k_graph = 15L)
-identical(graph_only, nnd$extract_knn(k = 16L))
-#> [1] TRUE
+knn_recall(truth_self, graph_only$idx[, 1:15])
+#> [1] 0.9994427
 ```
 
 ## Metrics and precision

@@ -1,5 +1,20 @@
 # Changelog
 
+## annsearchR 0.3.0
+
+- Built on ann-search-rs 0.13.1. Faster IVF and KMKNN, faster NN-Descent
+  builds and lower peak memory for most indices. Indices saved with
+  0.2.0 still load.
+- IVF, SOAR and KMKNN train their centroids with e-means unless
+  `kmeans_iters` is set, so results differ at the same seed.
+  `kmeans_balanced` only affects Lloyd’s, i.e. when `kmeans_iters` is
+  set, and is ignored otherwise.
+- [`knn_graph_nndescent()`](https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.md)
+  is no longer bit-identical to `$extract_knn()` at the same seed.
+  Recall is unchanged.
+- RNN-Descent results differ at the same seed. NN-Descent distances and
+  k-d forest cosine distances can differ at rounding level.
+
 ## annsearchR 0.2.0
 
 - Breaking: new on-disk format. Indices saved with 0.1.0 need
@@ -18,6 +33,8 @@
 - Datasets above the 32-bit id limit are refused with an error.
 
 ## annsearchR 0.1.0
+
+CRAN release: 2026-11-13
 
 First CRAN release.
 

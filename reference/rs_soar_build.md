@@ -45,11 +45,13 @@ rs_soar_build(
 
 - kmeans_iters:
 
-  Integer or `NULL`. Lloyd iterations.
+  Integer or `NULL`. `NULL` uses e-means, an integer Lloyd's with that
+  many iterations.
 
 - kmeans_balanced:
 
-  Boolean. Reseed starved centroids.
+  Boolean. Reseed starved centroids. Only affects Lloyd's
+  (`kmeans_iters` set), ignored under e-means.
 
 - seed:
 
