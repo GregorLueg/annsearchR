@@ -2,8 +2,11 @@
 #
 # Usage: Rscript inst/benchmarks/bench_ann_benchmarks.R [dataset] [threads]
 #
-# dataset: fashion-mnist-784-euclidean (default) or sift-128-euclidean.
-# Downloaded once to tools::R_user_dir("annsearchR", "cache").
+# dataset: fashion-mnist-784-euclidean (default), sift-128-euclidean,
+# tahoe-{100k,500k,1m}-32-euclidean. Downloaded once to
+# tools::R_user_dir("annsearchR", "cache"). The Tahoe sets are PCA embeddings of
+# one Tahoe-100M plate in the same layout (prep_tahoe.R), searched at k = 15,
+# the usual single cell neighbourhood size.
 #
 # One build per library at matched parameters (HNSW M = 16,
 # ef_construction = 200; Annoy 50 trees), then the search-time knob is swept.
@@ -24,10 +27,17 @@ dataset <- if (length(args) >= 1) args[1] else "fashion-mnist-784-euclidean"
 threads <- if (length(args) >= 2) as.integer(args[2]) else 1L
 checkmate::assertChoice(
   dataset,
-  c("fashion-mnist-784-euclidean", "sift-128-euclidean")
+  c(
+    "fashion-mnist-784-euclidean",
+    "sift-128-euclidean",
+    "tahoe-100k-32-euclidean",
+    "tahoe-500k-32-euclidean",
+    "tahoe-1m-32-euclidean"
+  )
 )
+is_tahoe <- startsWith(dataset, "tahoe")
 
-k <- 10L
+k <- if (is_tahoe) 15L else 10L
 n_exact_tree_queries <- 1000L
 hnsw_m <- 16L
 hnsw_efc <- 200L
@@ -47,8 +57,13 @@ load_dataset <- function(name) {
   if (!file.exists(path)) {
     old <- options(timeout = max(3600, getOption("timeout")))
     on.exit(options(old), add = TRUE)
+    url <- if (is_tahoe) {
+      "https://github.com/GregorLueg/annsearchR/releases/download/bench-data/%s.hdf5"
+    } else {
+      "http://ann-benchmarks.com/%s.hdf5"
+    }
     utils::download.file(
-      sprintf("http://ann-benchmarks.com/%s.hdf5", name),
+      sprintf(url, name),
       path,
       mode = "wb"
     )
