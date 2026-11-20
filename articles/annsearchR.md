@@ -67,7 +67,7 @@ found.
 
 truth <- ExhaustiveIndex$new(train)$predict(query, k = 10L)$idx
 knn_recall(truth, res$idx)
-#> [1] 0.9828
+#> [1] 0.9856
 ```
 
 Brute force is no slouch here either: it is SIMD accelerated,
@@ -93,10 +93,10 @@ for (ef in c(10L, 20L, 50L, 100L)) {
     t
   ))
 }
-#> ef_search =  10   recall 0.849   0.004s
-#> ef_search =  20   recall 0.936   0.005s
-#> ef_search =  50   recall 0.983   0.009s
-#> ef_search = 100   recall 0.994   0.015s
+#> ef_search =  10   recall 0.848   0.002s
+#> ef_search =  20   recall 0.938   0.003s
+#> ef_search =  50   recall 0.986   0.006s
+#> ef_search = 100   recall 0.995   0.010s
 ```
 
 The knobs per index:
@@ -149,19 +149,19 @@ comparison <- do.call(
 )
 comparison
 #>         index build_s query_s recall
-#> 1  exhaustive   0.004   0.020  1.000
-#> 2       kmknn   0.058   0.006  1.000
-#> 3       annoy   0.049   0.018  1.000
-#> 4      kdtree   0.082   0.015  0.999
-#> 5    balltree   0.023   0.005  0.932
-#> 6        hnsw   0.739   0.010  0.985
-#> 7         ivf   0.059   0.005  0.986
-#> 8        soar   0.088   0.012  0.998
-#> 9         lsh   0.017   0.015  0.973
-#> 10  nndescent   0.356   0.005  0.884
-#> 11     vamana   1.407   0.017  0.999
-#> 12        nsg   8.095   0.019  0.999
-#> 13 rnndescent   0.472   0.013  0.992
+#> 1  exhaustive   0.004   0.011  1.000
+#> 2       kmknn   0.038   0.003  1.000
+#> 3       annoy   0.031   0.020  1.000
+#> 4      kdtree   0.060   0.015  0.999
+#> 5    balltree   0.019   0.004  0.932
+#> 6        hnsw   0.547   0.006  0.986
+#> 7         ivf   0.037   0.003  0.986
+#> 8        soar   0.044   0.009  0.998
+#> 9         lsh   0.014   0.010  0.973
+#> 10  nndescent   0.290   0.004  0.884
+#> 11     vamana   1.135   0.012  0.999
+#> 12        nsg   6.879   0.012  0.999
+#> 13 rnndescent   0.429   0.011  0.992
 ```
 
 These are default settings on small, easy data with two threads, so read
@@ -215,7 +215,7 @@ graph <- nnd$extract_knn()
 
 truth_self <- ExhaustiveIndex$new(train)$query_self(k = 15L)$idx
 knn_recall(truth_self, graph$idx)
-#> [1] 0.9993333
+#> [1] 0.9994051
 ```
 
 Only need the graph and never query it?

@@ -122,7 +122,7 @@
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/ExhaustiveIndex.html">ExhaustiveIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">query</span>, k <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span><span class="op">$</span><span class="va">idx</span></span>
 <span><span class="fu"><a href="../reference/knn_recall.html">knn_recall</a></span><span class="op">(</span><span class="va">truth</span>, <span class="va">res</span><span class="op">$</span><span class="va">idx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9828</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9856</span></span></code></pre></div>
 </div>
 <p>Brute force is no slouch here either: it is SIMD accelerated, multi-threaded and, on macOS, runs large batches through Apple Accelerate. Up to a few hundred thousand points it’s worth timing before reaching for anything approximate.</p>
 </section><section class="level2"><h2 id="tune-at-query-time">Tune at query time<a class="anchor" aria-label="anchor" href="#tune-at-query-time"></a>
@@ -140,10 +140,10 @@
 <span>    <span class="va">t</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; ef_search =  10   recall 0.849   0.004s</span></span>
-<span><span class="co">#&gt; ef_search =  20   recall 0.936   0.005s</span></span>
-<span><span class="co">#&gt; ef_search =  50   recall 0.983   0.009s</span></span>
-<span><span class="co">#&gt; ef_search = 100   recall 0.994   0.015s</span></span></code></pre></div>
+<span><span class="co">#&gt; ef_search =  10   recall 0.848   0.002s</span></span>
+<span><span class="co">#&gt; ef_search =  20   recall 0.938   0.003s</span></span>
+<span><span class="co">#&gt; ef_search =  50   recall 0.986   0.006s</span></span>
+<span><span class="co">#&gt; ef_search = 100   recall 0.995   0.010s</span></span></code></pre></div>
 </div>
 <p>The knobs per index:</p>
 <table class="table caption-top">
@@ -224,19 +224,19 @@
 <span><span class="op">)</span></span>
 <span><span class="va">comparison</span></span>
 <span><span class="co">#&gt;         index build_s query_s recall</span></span>
-<span><span class="co">#&gt; 1  exhaustive   0.004   0.020  1.000</span></span>
-<span><span class="co">#&gt; 2       kmknn   0.058   0.006  1.000</span></span>
-<span><span class="co">#&gt; 3       annoy   0.049   0.018  1.000</span></span>
-<span><span class="co">#&gt; 4      kdtree   0.082   0.015  0.999</span></span>
-<span><span class="co">#&gt; 5    balltree   0.023   0.005  0.932</span></span>
-<span><span class="co">#&gt; 6        hnsw   0.739   0.010  0.985</span></span>
-<span><span class="co">#&gt; 7         ivf   0.059   0.005  0.986</span></span>
-<span><span class="co">#&gt; 8        soar   0.088   0.012  0.998</span></span>
-<span><span class="co">#&gt; 9         lsh   0.017   0.015  0.973</span></span>
-<span><span class="co">#&gt; 10  nndescent   0.356   0.005  0.884</span></span>
-<span><span class="co">#&gt; 11     vamana   1.407   0.017  0.999</span></span>
-<span><span class="co">#&gt; 12        nsg   8.095   0.019  0.999</span></span>
-<span><span class="co">#&gt; 13 rnndescent   0.472   0.013  0.992</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  exhaustive   0.004   0.011  1.000</span></span>
+<span><span class="co">#&gt; 2       kmknn   0.038   0.003  1.000</span></span>
+<span><span class="co">#&gt; 3       annoy   0.031   0.020  1.000</span></span>
+<span><span class="co">#&gt; 4      kdtree   0.060   0.015  0.999</span></span>
+<span><span class="co">#&gt; 5    balltree   0.019   0.004  0.932</span></span>
+<span><span class="co">#&gt; 6        hnsw   0.547   0.006  0.986</span></span>
+<span><span class="co">#&gt; 7         ivf   0.037   0.003  0.986</span></span>
+<span><span class="co">#&gt; 8        soar   0.044   0.009  0.998</span></span>
+<span><span class="co">#&gt; 9         lsh   0.014   0.010  0.973</span></span>
+<span><span class="co">#&gt; 10  nndescent   0.290   0.004  0.884</span></span>
+<span><span class="co">#&gt; 11     vamana   1.135   0.012  0.999</span></span>
+<span><span class="co">#&gt; 12        nsg   6.879   0.012  0.999</span></span>
+<span><span class="co">#&gt; 13 rnndescent   0.429   0.011  0.992</span></span></code></pre></div>
 </div>
 <p>These are default settings on small, easy data with two threads, so read the table for the shape of things, not as a benchmark. For that, see the <a href="https://gregorlueg.github.io/annsearchR/articles/benchmarks.html">benchmarks article</a>, which compares annsearchR against RcppHNSW, RcppAnnoy, BiocNeighbors, rnndescent, FNN and RANN at equal recall on Fashion-MNIST and SIFT.</p>
 <p>What each family does:</p>
@@ -268,7 +268,7 @@
 <span></span>
 <span><span class="va">truth_self</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/ExhaustiveIndex.html">ExhaustiveIndex</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">$</span><span class="fu">query_self</span><span class="op">(</span>k <span class="op">=</span> <span class="fl">15L</span><span class="op">)</span><span class="op">$</span><span class="va">idx</span></span>
 <span><span class="fu"><a href="../reference/knn_recall.html">knn_recall</a></span><span class="op">(</span><span class="va">truth_self</span>, <span class="va">graph</span><span class="op">$</span><span class="va">idx</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9993333</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9994051</span></span></code></pre></div>
 </div>
 <p>Only need the graph and never query it? <code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code> runs the same descent but drops the seeding trees as they go and keeps no index, so less memory sits around at the end. <code>k_graph</code> counts true neighbours, and the sample itself comes on top with <code>include_self = TRUE</code>, so ask for one column more to compare against the exact graph:</p>
 <div class="cell">

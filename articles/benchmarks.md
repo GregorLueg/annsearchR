@@ -13,6 +13,7 @@ search-time knob is swept, and we read off the best queries per second
 These are numbers from one machine on one day with annsearchR 0.3.0
 (ann-search-rs 0.13.1), frozen here rather than rebuilt with the
 package. Everything needed to rerun them is in
+
 [`inst/benchmarks/`](https://github.com/GregorLueg/annsearchR/tree/main/inst/benchmarks).
 
 ## Setup
@@ -153,9 +154,11 @@ per algorithm family
 
 Queries per second on held-out points is the ann-benchmarks question.
 Single cell asks a different one: how long until I have the kNN graph
-over all my cells? That graph is what `FindNeighbors()`,
-`pp.neighbors()` and every UMAP and Leiden run start from. So here’s
-that, on real data, followed by the usual sweep.
+over all my cells? Every UMAP and Leiden run starts from that graph. In
+the big R frameworks it comes from Annoy: Seurat’s `FindNeighbors()`
+builds it with RcppAnnoy, scrapper’s `buildSnnGraph()` with
+BiocNeighbors’ Annoy. Both build the 50 trees on one thread. So here’s
+the time to the graph on real data, followed by the usual sweep.
 
 - **Data:** one plate of Tahoe-100M, 2,857,393 cells, 32 principal
   components. Random subsets of 500k and 1M cells, plus 10,000 held-out
@@ -173,8 +176,7 @@ no search step: the graph falls out of the descent, either read off the
 index (`$extract_knn()`) or from
 [`knn_graph_nndescent()`](https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.md),
 which never keeps an index around. Recall comes from 10,000 random cells
-against the exact graph. RcppAnnoy builds on one thread and gets queried
-the way Seurat does it.
+against the exact graph.
 
 Seconds to the full graph at each recall target:
 
@@ -188,24 +190,16 @@ Seconds to the full graph at each recall target:
 | hnsw | **annsearchR** | 7.8 | 7.8 | 8.7 | 18.6 | 19.1 | 24.2 |
 | annoy | RcppAnnoy (threaded) | 29.4 | 32.6 | 39.7 | 68.1 | 85.0 | 108.7 |
 
-And what Seurat hands you by default (`search.k = -1`, so 750 here)
-against the obvious alternatives:
-
-|  | 500k | 1M |
-|----|----|----|
-| RcppAnnoy, Seurat default | 29.4 s, recall 0.906 | 61.1 s, recall 0.873 |
-| annsearchR IVF, `nprobe = 4` | 1.2 s, recall 0.979 | 2.9 s, recall 0.967 |
-| annsearchR [`knn_graph_nndescent()`](https://gregorlueg.github.io/annsearchR/reference/knn_graph_nndescent.md) | 2.1 s, recall 0.996 | 4.9 s, recall 0.995 |
-| annsearchR KMKNN, exact | 4.2 s, recall 1.000 | 12.6 s, recall 1.000 |
-
-- **Exact beats Seurat’s approximate.** KMKNN gets the exact graph over
-  1M cells in 12.6 s, 5x faster than RcppAnnoy’s approximate one at
-  recall 0.87. 45 s of RcppAnnoy’s 61 s is the single-threaded build.
+- **Annoy is the slow part of the pipeline.** RcppAnnoy needs 68 s for
+  the 1M graph at recall 0.90, most of it the single-threaded build.
+  annsearchR’s own Annoy gets there in 8.7 s.
+- **Exact beats approximate.** KMKNN gets the exact graph over 1M cells
+  in 12.6 s, 5x faster than RcppAnnoy at recall 0.90.
 - **NN-Descent is the no-brainer.** 0.995 recall in 4.9 s at 1M, nothing
   to tune. The graph is the build, so skipping the index saves another
   20%.
-- **IVF is the fastest at every recall target**, 21x Seurat’s default at
-  1M with better recall.
+- **IVF is the fastest at every recall target**, 23x RcppAnnoy at 1M and
+  recall 0.90.
 - **HNSW is the wrong tool for this job.** Its query is nearly free, but
   the 16.5 s build dominates when you only want one graph.
 
@@ -236,15 +230,10 @@ algorithm family
 | kd_tree    | RANN                 |        \- |        146 |        146 |        146 |
 | kd_tree    | FNN                  |        \- |        138 |        138 |        138 |
 
-- **Annoy needs a bigger budget than Spotify’s.** At the same `search_k`
-  annsearchR’s Annoy lands lower: 0.77 against 0.85 recall at Seurat’s
-  750 on 1M. Our leaves hold 64 items, Spotify’s `dim + 2`, so a small
-  budget touches fewer trees. Matching Spotify’s leaves and queue
-  narrows the gap but costs more speed than it buys back. At equal
-  recall annsearchR is still 2.1 to 3x faster, and it builds 17x faster.
-- **The rest follows the ann-benchmarks picture**: HNSW 1.6 to 2.8x
-  RcppHNSW, NN-Descent 35 to 126x rnndescent, BiocNeighbors’
-  single-threaded builds take 2 to 2.5 minutes at 1M.
+Same picture as ann-benchmarks: annsearchR’s Annoy does 2 to 3x the QPS
+of RcppAnnoy and builds 17x faster, HNSW is 1.6 to 2.8x RcppHNSW,
+NN-Descent 35 to 126x rnndescent, and BiocNeighbors’ single-threaded
+builds take 2 to 2.5 minutes at 1M.
 
 ## Caveats
 
