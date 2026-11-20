@@ -8,8 +8,8 @@ author:
 
 How does annsearchR stack up against the nearest neighbour packages R users
 actually reach for? We ran the [ann-benchmarks](https://ann-benchmarks.com)
-protocol on two of its standard datasets and compared every library at
-**equal recall**, not at equal settings. Two libraries with the same `ef_search`
+protocol on two of its standard datasets, plus single cell PCA data, and
+compared every library at **equal recall**, not at equal settings. Two libraries with the same `ef_search`
 can land at different recall, so "faster at the same parameters" says little.
 Instead each library builds once, its search-time knob is swept, and we read
 off the best queries per second (QPS) it reaches at recall@10 of 0.90, 0.95 and
@@ -139,6 +139,96 @@ RcppAnnoy, FNN and RANN.
   thread whatever `num.threads` says, which is where its 9.5 and 14.3 minute
   SIFT builds come from.
 
+## Single cell: Tahoe PCA
+
+Queries per second on held-out points is the ann-benchmarks question. Single
+cell asks a different one: how long until I have the kNN graph over all my
+cells? That graph is what `FindNeighbors()`, `pp.neighbors()` and every UMAP
+and Leiden run start from. So here's that, on real data, followed by the usual
+sweep.
+
+* **Data:** one plate of Tahoe-100M, 2,857,393 cells, 32 principal components. Random subsets of 500k and 1M
+  cells, plus 10,000 held-out cells for the query sweep. Built by
+  `prep_tahoe.R` in the same HDF5 layout as the ann-benchmarks files.
+* **Settings:** k = 15, Euclidean distance, 10 threads, same machine and same
+  build parameters as above.
+
+### Time to the full kNN graph
+
+Each point is build plus self-query, from the raw matrix to the k = 15 graph
+over every cell, each cell counted as its own first neighbour. Every
+index builds once and its search knob gets swept. NN-Descent has no search
+step: the graph falls out of the descent, either read off the index
+(`$extract_knn()`) or from `knn_graph_nndescent()`, which never keeps an index
+around. Recall comes from 10,000 random cells against the exact graph.
+RcppAnnoy builds on one thread and gets queried the way Seurat does it.
+
+Seconds to the full graph at each recall target:
+
+| Method | Library | 500k @ 0.90 | 500k @ 0.95 | 500k @ 0.99 | 1M @ 0.90 | 1M @ 0.95 | 1M @ 0.99 |
+|---|---|---:|---:|---:|---:|---:|---:|
+| ivf | **annsearchR** | 1.2 | 1.2 | 1.5 | 2.9 | 2.9 | 3.8 |
+| nndescent, `knn_graph_nndescent()` | **annsearchR** | 2.1 | 2.1 | 2.1 | 4.9 | 4.9 | 4.9 |
+| nndescent, `$extract_knn()` | **annsearchR** | 2.4 | 2.4 | 2.4 | 6.2 | 6.2 | 6.2 |
+| kmknn (exact) | **annsearchR** | 4.2 | 4.2 | 4.2 | 12.6 | 12.6 | 12.6 |
+| annoy | **annsearchR** | 3.9 | 6.7 | 6.7 | 8.7 | 15.6 | 23.5 |
+| hnsw | **annsearchR** | 7.8 | 7.8 | 8.7 | 18.6 | 19.1 | 24.2 |
+| annoy | RcppAnnoy (threaded) | 29.4 | 32.6 | 39.7 | 68.1 | 85.0 | 108.7 |
+
+And what Seurat hands you by default (`search.k = -1`, so 750 here) against
+the obvious alternatives:
+
+| | 500k | 1M |
+|---|---|---|
+| RcppAnnoy, Seurat default | 29.4 s, recall 0.906 | 61.1 s, recall 0.873 |
+| annsearchR IVF, `nprobe = 4` | 1.2 s, recall 0.979 | 2.9 s, recall 0.967 |
+| annsearchR `knn_graph_nndescent()` | 2.1 s, recall 0.996 | 4.9 s, recall 0.995 |
+| annsearchR KMKNN, exact | 4.2 s, recall 1.000 | 12.6 s, recall 1.000 |
+
+* **Exact beats Seurat's approximate.** KMKNN gets the exact graph over 1M
+  cells in 12.6 s, 5x faster than RcppAnnoy's approximate one at recall 0.87.
+  45 s of RcppAnnoy's 61 s is the single-threaded build.
+* **NN-Descent is the no-brainer.** 0.995 recall in 4.9 s at 1M, nothing to
+  tune. The graph is the build, so skipping the index saves another 20%.
+* **IVF is the fastest at every recall target**, 21x Seurat's default at 1M
+  with better recall.
+* **HNSW is the wrong tool for this job.** Its query is nearly free, but the
+  16.5 s build dominates when you only want one graph.
+
+### Queries per second, 1M cells
+
+The ann-benchmarks protocol on the 1M subset, with 10,000 held-out cells as
+queries and recall@15.
+
+![Recall vs queries per second on Tahoe 1M with 10 threads, one panel per algorithm family](figures/tahoe-1m-32-euclidean_t10.png)
+
+| Method | Library | Build (s) | QPS @ 0.90 | QPS @ 0.95 | QPS @ 0.99 |
+|---|---|---:|---:|---:|---:|
+| hnsw | **annsearchR** | 16.1 | 357,143 | 217,391 | 125,000 |
+| hnsw | RcppHNSW | 20.7 | 126,582 | 126,582 | 78,740 |
+| hnsw | BiocNeighbors | 152.1 | 77,519 | 77,519 | 77,519 |
+| nndescent | **annsearchR** | 10.1 | 277,778 | 200,000 | 70,423 |
+| nndescent | rnndescent | 151.0 | 2,202 | 2,202 | 1,983 |
+| ivf | **annsearchR** | 0.4 | 250,000 | 250,000 | 192,308 |
+| annoy | **annsearchR** | 2.2 | 83,333 | 43,103 | 29,070 |
+| annoy | RcppAnnoy (threaded) | 39.1 | 27,778 | 15,408 | 13,889 |
+| annoy | BiocNeighbors | 35.4 | 15,408 | 15,408 | 15,408 |
+| exhaustive | **annsearchR** | 0.1 | 4,583 | 4,583 | 4,583 |
+| kmknn | **annsearchR** | 0.4 | 56,497 | 56,497 | 56,497 |
+| kmknn | BiocNeighbors | 125.2 | 15,898 | 15,898 | 15,898 |
+| kd_tree | RANN | - | 146 | 146 | 146 |
+| kd_tree | FNN | - | 138 | 138 | 138 |
+
+* **Annoy needs a bigger budget than Spotify's.** At the same `search_k`
+  annsearchR's Annoy lands lower: 0.77 against 0.85 recall at Seurat's 750 on
+  1M. Our leaves hold 64 items, Spotify's `dim + 2`, so a small budget touches
+  fewer trees. Matching Spotify's leaves and queue narrows the gap but costs
+  more speed than it buys back. At equal recall annsearchR is still 2.1 to 3x
+  faster, and it builds 17x faster.
+* **The rest follows the ann-benchmarks picture**: HNSW 1.6 to 2.8x RcppHNSW,
+  NN-Descent 35 to 126x rnndescent, BiocNeighbors' single-threaded builds take
+  2 to 2.5 minutes at 1M.
+
 ## Caveats
 
 * **Brute force isn't single-core even on "1 thread".** On macOS the
@@ -166,6 +256,12 @@ RcppAnnoy, FNN and RANN.
 # downloads the HDF5 files once into tools::R_user_dir("annsearchR", "cache")
 Rscript inst/benchmarks/bench_ann_benchmarks.R fashion-mnist-784-euclidean 10
 Rscript inst/benchmarks/bench_ann_benchmarks.R sift-128-euclidean 10
+
+# Tahoe: build the HDF5 files from a cells x 32 PCA matrix, then sweep and
+# time the full kNN graph
+Rscript inst/benchmarks/prep_tahoe.R pca_data.qs2 <cache dir>
+Rscript inst/benchmarks/bench_ann_benchmarks.R tahoe-1m-32-euclidean 10
+Rscript inst/benchmarks/bench_knn_graph.R tahoe-1m-32-euclidean 10
 
 # plots from inst/benchmarks/results/*_sweep.csv
 Rscript inst/benchmarks/plot_results.R

@@ -83,7 +83,7 @@ plot_run <- function(sweep_file) {
     ggplot2::facet_wrap(~panel, nrow = 1, drop = TRUE) +
     ggplot2::scale_y_log10(
       labels = scales::label_comma(),
-      expand = ggplot2::expansion(mult = c(0.05, 0.2))
+      expand = ggplot2::expansion(mult = c(0.15, 0.2))
     ) +
     ggplot2::scale_x_continuous(limits = c(min_recall, 1)) +
     ggplot2::scale_colour_manual(values = role_colours, drop = FALSE) +
@@ -92,7 +92,11 @@ plot_run <- function(sweep_file) {
       drop = FALSE
     ) +
     ggplot2::labs(
-      x = sprintf("Recall@10 (from %.1f)", min_recall),
+      x = sprintf(
+        "Recall@%d (from %.1f)",
+        if (startsWith(stem, "tahoe")) 15L else 10L,
+        min_recall
+      ),
       y = "Queries per second (log scale)",
       colour = NULL,
       shape = NULL,
@@ -123,4 +127,6 @@ plot_run <- function(sweep_file) {
 }
 
 sweeps <- list.files(results_dir, pattern = "_sweep\\.csv$", full.names = TRUE)
+# the full kNN graph runs have no QPS; the article tabulates them instead
+sweeps <- grep("knn_graph", sweeps, value = TRUE, invert = TRUE)
 invisible(lapply(sweeps, plot_run))
