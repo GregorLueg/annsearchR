@@ -70,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Benchmarks against the R ecosystem</h1>
 
       <p class="author">Gregor Lueg</p>
-      <p class="date">2026-11-18</p>
+      <p class="date">2026-11-20</p>
 
       <small class="dont-index">Source: <a href="https://github.com/GregorLueg/annsearchR/blob/main/vignettes/articles/benchmarks.qmd" class="external-link"><code>vignettes/articles/benchmarks.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -81,7 +81,7 @@
 
 
 
-    <p>How does annsearchR stack up against the nearest neighbour packages R users actually reach for? We ran the <a href="https://ann-benchmarks.com" class="external-link">ann-benchmarks</a> protocol on two of its standard datasets and compared every library at <strong>equal recall</strong>, not at equal settings. Two libraries with the same <code>ef_search</code> can land at different recall, so “faster at the same parameters” says little. Instead each library builds once, its search-time knob is swept, and we read off the best queries per second (QPS) it reaches at recall@10 of 0.90, 0.95 and 0.99.</p>
+    <p>How does annsearchR stack up against the nearest neighbour packages R users actually reach for? We ran the <a href="https://ann-benchmarks.com" class="external-link">ann-benchmarks</a> protocol on two of its standard datasets, plus single cell PCA data, and compared every library at <strong>equal recall</strong>, not at equal settings. Two libraries with the same <code>ef_search</code> can land at different recall, so “faster at the same parameters” says little. Instead each library builds once, its search-time knob is swept, and we read off the best queries per second (QPS) it reaches at recall@10 of 0.90, 0.95 and 0.99.</p>
 <p>These are numbers from one machine on one day with annsearchR 0.3.0 (ann-search-rs 0.13.1), frozen here rather than rebuilt with the package. Everything needed to rerun them is in <a href="https://github.com/GregorLueg/annsearchR/tree/main/inst/benchmarks" class="external-link"><code>inst/benchmarks/</code></a>.</p>
 <section class="level2"><h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
@@ -504,7 +504,298 @@
 <strong>Exact search:</strong> annsearchR’s KMKNN is now its fastest exact search on 10 threads: 1.5x its own brute force on Fashion-MNIST and 2.1x on SIFT, and 28 to 33x BiocNeighbors’ KMKNN. On one thread the two are level. Both beat the single-threaded FNN and RANN kd-trees by a mile, about 570x for brute force on Fashion-MNIST.</li>
 <li>
 <strong>Builds:</strong> BiocNeighbors builds its HNSW, Annoy and KMKNN indices on one thread whatever <code>num.threads</code> says, which is where its 9.5 and 14.3 minute SIFT builds come from.</li>
-</ul></section><section class="level2"><h2 id="caveats">Caveats<a class="anchor" aria-label="anchor" href="#caveats"></a>
+</ul></section><section class="level2"><h2 id="single-cell-tahoe-pca">Single cell: Tahoe PCA<a class="anchor" aria-label="anchor" href="#single-cell-tahoe-pca"></a>
+</h2>
+<p>Queries per second on held-out points is the ann-benchmarks question. Single cell asks a different one: how long until I have the kNN graph over all my cells? That graph is what <code>FindNeighbors()</code>, <code>pp.neighbors()</code> and every UMAP and Leiden run start from. So here’s that, on real data, followed by the usual sweep.</p>
+<ul>
+<li>
+<strong>Data:</strong> one plate of Tahoe-100M, 2,857,393 cells, 32 principal components. Random subsets of 500k and 1M cells, plus 10,000 held-out cells for the query sweep. Built by <code>prep_tahoe.R</code> in the same HDF5 layout as the ann-benchmarks files.</li>
+<li>
+<strong>Settings:</strong> k = 15, Euclidean distance, 10 threads, same machine and same build parameters as above.</li>
+</ul>
+<section class="level3"><h3 id="time-to-the-full-knn-graph">Time to the full kNN graph<a class="anchor" aria-label="anchor" href="#time-to-the-full-knn-graph"></a>
+</h3>
+<p>Each point is build plus self-query, from the raw matrix to the k = 15 graph over every cell, each cell counted as its own first neighbour. Every index builds once and its search knob gets swept. NN-Descent has no search step: the graph falls out of the descent, either read off the index (<code>$extract_knn()</code>) or from <code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code>, which never keeps an index around. Recall comes from 10,000 random cells against the exact graph. RcppAnnoy builds on one thread and gets queried the way Seurat does it.</p>
+<p>Seconds to the full graph at each recall target:</p>
+<table class="table caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead><tr class="header">
+<th>Method</th>
+<th>Library</th>
+<th style="text-align: right;">500k @ 0.90</th>
+<th style="text-align: right;">500k @ 0.95</th>
+<th style="text-align: right;">500k @ 0.99</th>
+<th style="text-align: right;">1M @ 0.90</th>
+<th style="text-align: right;">1M @ 0.95</th>
+<th style="text-align: right;">1M @ 0.99</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>ivf</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">3.8</td>
+</tr>
+<tr class="even">
+<td>nndescent, <code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code>
+</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">4.9</td>
+</tr>
+<tr class="odd">
+<td>nndescent, <code>$extract_knn()</code>
+</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">2.4</td>
+<td style="text-align: right;">2.4</td>
+<td style="text-align: right;">2.4</td>
+<td style="text-align: right;">6.2</td>
+<td style="text-align: right;">6.2</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="even">
+<td>kmknn (exact)</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">4.2</td>
+<td style="text-align: right;">4.2</td>
+<td style="text-align: right;">4.2</td>
+<td style="text-align: right;">12.6</td>
+<td style="text-align: right;">12.6</td>
+<td style="text-align: right;">12.6</td>
+</tr>
+<tr class="odd">
+<td>annoy</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">6.7</td>
+<td style="text-align: right;">6.7</td>
+<td style="text-align: right;">8.7</td>
+<td style="text-align: right;">15.6</td>
+<td style="text-align: right;">23.5</td>
+</tr>
+<tr class="even">
+<td>hnsw</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">8.7</td>
+<td style="text-align: right;">18.6</td>
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">24.2</td>
+</tr>
+<tr class="odd">
+<td>annoy</td>
+<td>RcppAnnoy (threaded)</td>
+<td style="text-align: right;">29.4</td>
+<td style="text-align: right;">32.6</td>
+<td style="text-align: right;">39.7</td>
+<td style="text-align: right;">68.1</td>
+<td style="text-align: right;">85.0</td>
+<td style="text-align: right;">108.7</td>
+</tr>
+</tbody>
+</table>
+<p>And what Seurat hands you by default (<code>search.k = -1</code>, so 750 here) against the obvious alternatives:</p>
+<table class="table caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>500k</th>
+<th>1M</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>RcppAnnoy, Seurat default</td>
+<td>29.4 s, recall 0.906</td>
+<td>61.1 s, recall 0.873</td>
+</tr>
+<tr class="even">
+<td>annsearchR IVF, <code>nprobe = 4</code>
+</td>
+<td>1.2 s, recall 0.979</td>
+<td>2.9 s, recall 0.967</td>
+</tr>
+<tr class="odd">
+<td>annsearchR <code><a href="../reference/knn_graph_nndescent.html">knn_graph_nndescent()</a></code>
+</td>
+<td>2.1 s, recall 0.996</td>
+<td>4.9 s, recall 0.995</td>
+</tr>
+<tr class="even">
+<td>annsearchR KMKNN, exact</td>
+<td>4.2 s, recall 1.000</td>
+<td>12.6 s, recall 1.000</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<strong>Exact beats Seurat’s approximate.</strong> KMKNN gets the exact graph over 1M cells in 12.6 s, 5x faster than RcppAnnoy’s approximate one at recall 0.87. 45 s of RcppAnnoy’s 61 s is the single-threaded build.</li>
+<li>
+<strong>NN-Descent is the no-brainer.</strong> 0.995 recall in 4.9 s at 1M, nothing to tune. The graph is the build, so skipping the index saves another 20%.</li>
+<li>
+<strong>IVF is the fastest at every recall target</strong>, 21x Seurat’s default at 1M with better recall.</li>
+<li>
+<strong>HNSW is the wrong tool for this job.</strong> Its query is nearly free, but the 16.5 s build dominates when you only want one graph.</li>
+</ul></section><section class="level3"><h3 id="queries-per-second-1m-cells">Queries per second, 1M cells<a class="anchor" aria-label="anchor" href="#queries-per-second-1m-cells"></a>
+</h3>
+<p>The ann-benchmarks protocol on the 1M subset, with 10,000 held-out cells as queries and recall@15.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="figures/tahoe-1m-32-euclidean_t10.png"></p>
+<figcaption>Recall vs queries per second on Tahoe 1M with 10 threads, one panel per algorithm family</figcaption></figure>
+</div>
+<table class="table caption-top">
+<thead><tr class="header">
+<th>Method</th>
+<th>Library</th>
+<th style="text-align: right;">Build (s)</th>
+<th style="text-align: right;">QPS @ 0.90</th>
+<th style="text-align: right;">QPS @ 0.95</th>
+<th style="text-align: right;">QPS @ 0.99</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>hnsw</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">16.1</td>
+<td style="text-align: right;">357,143</td>
+<td style="text-align: right;">217,391</td>
+<td style="text-align: right;">125,000</td>
+</tr>
+<tr class="even">
+<td>hnsw</td>
+<td>RcppHNSW</td>
+<td style="text-align: right;">20.7</td>
+<td style="text-align: right;">126,582</td>
+<td style="text-align: right;">126,582</td>
+<td style="text-align: right;">78,740</td>
+</tr>
+<tr class="odd">
+<td>hnsw</td>
+<td>BiocNeighbors</td>
+<td style="text-align: right;">152.1</td>
+<td style="text-align: right;">77,519</td>
+<td style="text-align: right;">77,519</td>
+<td style="text-align: right;">77,519</td>
+</tr>
+<tr class="even">
+<td>nndescent</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">10.1</td>
+<td style="text-align: right;">277,778</td>
+<td style="text-align: right;">200,000</td>
+<td style="text-align: right;">70,423</td>
+</tr>
+<tr class="odd">
+<td>nndescent</td>
+<td>rnndescent</td>
+<td style="text-align: right;">151.0</td>
+<td style="text-align: right;">2,202</td>
+<td style="text-align: right;">2,202</td>
+<td style="text-align: right;">1,983</td>
+</tr>
+<tr class="even">
+<td>ivf</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">250,000</td>
+<td style="text-align: right;">250,000</td>
+<td style="text-align: right;">192,308</td>
+</tr>
+<tr class="odd">
+<td>annoy</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">83,333</td>
+<td style="text-align: right;">43,103</td>
+<td style="text-align: right;">29,070</td>
+</tr>
+<tr class="even">
+<td>annoy</td>
+<td>RcppAnnoy (threaded)</td>
+<td style="text-align: right;">39.1</td>
+<td style="text-align: right;">27,778</td>
+<td style="text-align: right;">15,408</td>
+<td style="text-align: right;">13,889</td>
+</tr>
+<tr class="odd">
+<td>annoy</td>
+<td>BiocNeighbors</td>
+<td style="text-align: right;">35.4</td>
+<td style="text-align: right;">15,408</td>
+<td style="text-align: right;">15,408</td>
+<td style="text-align: right;">15,408</td>
+</tr>
+<tr class="even">
+<td>exhaustive</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">4,583</td>
+<td style="text-align: right;">4,583</td>
+<td style="text-align: right;">4,583</td>
+</tr>
+<tr class="odd">
+<td>kmknn</td>
+<td><strong>annsearchR</strong></td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">56,497</td>
+<td style="text-align: right;">56,497</td>
+<td style="text-align: right;">56,497</td>
+</tr>
+<tr class="even">
+<td>kmknn</td>
+<td>BiocNeighbors</td>
+<td style="text-align: right;">125.2</td>
+<td style="text-align: right;">15,898</td>
+<td style="text-align: right;">15,898</td>
+<td style="text-align: right;">15,898</td>
+</tr>
+<tr class="odd">
+<td>kd_tree</td>
+<td>RANN</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">146</td>
+<td style="text-align: right;">146</td>
+<td style="text-align: right;">146</td>
+</tr>
+<tr class="even">
+<td>kd_tree</td>
+<td>FNN</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">138</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<strong>Annoy needs a bigger budget than Spotify’s.</strong> At the same <code>search_k</code> annsearchR’s Annoy lands lower: 0.77 against 0.85 recall at Seurat’s 750 on 1M. Our leaves hold 64 items, Spotify’s <code>dim + 2</code>, so a small budget touches fewer trees. Matching Spotify’s leaves and queue narrows the gap but costs more speed than it buys back. At equal recall annsearchR is still 2.1 to 3x faster, and it builds 17x faster.</li>
+<li>
+<strong>The rest follows the ann-benchmarks picture</strong>: HNSW 1.6 to 2.8x RcppHNSW, NN-Descent 35 to 126x rnndescent, BiocNeighbors’ single-threaded builds take 2 to 2.5 minutes at 1M.</li>
+</ul></section></section><section class="level2"><h2 id="caveats">Caveats<a class="anchor" aria-label="anchor" href="#caveats"></a>
 </h2>
 <ul>
 <li>
@@ -521,8 +812,14 @@
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/bench_ann_benchmarks.R fashion-mnist-784-euclidean 10</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/bench_ann_benchmarks.R sift-128-euclidean 10</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plots from inst/benchmarks/results/*_sweep.csv</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/plot_results.R</span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Tahoe: build the HDF5 files from a cells x 32 PCA matrix, then sweep and</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># time the full kNN graph</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/prep_tahoe.R pca_data.qs2 <span class="op">&lt;</span>cache dir<span class="op">&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/bench_ann_benchmarks.R tahoe-1m-32-euclidean 10</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/bench_knn_graph.R tahoe-1m-32-euclidean 10</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plots from inst/benchmarks/results/*_sweep.csv</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> inst/benchmarks/plot_results.R</span></code></pre></div>
 <p>On SIFT the index builds alone add up to about 32 minutes on the machine above, most of it in the single-threaded BiocNeighbors and RcppAnnoy builds.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
