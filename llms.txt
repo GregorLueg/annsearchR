@@ -23,7 +23,8 @@ it as often as you like. The backbone is the Rust crate
 Thirteen CPU indices, all behind the same `$new()` / `$predict()`
 interface:
 
-- **Exact:** brute force (SIMD, and Apple Accelerate on macOS) and kMkNN
+- **Exact:** brute force (SIMD and GEMM with Apple Accelerate on macOS)
+  and kMkNN
 - **Trees:** Annoy, k-d forest and ball tree
 - **Partitions:** IVF, SOAR and LSH
 - **Graphs:** HNSW, NN-Descent, Vamana, NSG and RNN-Descent
